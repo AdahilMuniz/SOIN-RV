@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module INSTRUCTION_MEMORY_tb;
-	parameter WIDTH = 256;
+	parameter HEIGHT = 256;
 	// Inputs
 	reg [31:0] Addr;
 
@@ -9,7 +9,7 @@ module INSTRUCTION_MEMORY_tb;
 	wire [31:0] Instruction;
 
 	// Instantiate the Unit Under Test (UUT)
-	INSTRUCTION_MEMORY #(WIDTH)uut (
+	INSTRUCTION_MEMORY #(HEIGHT)uut (
 		.Instruction(Instruction), 
 		.Addr(Addr)
 	);
