@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `define INITIALIZE
 `define R_TEST
-//`define R_W_TEST
+`define R_W_TEST
 
 //@TODO: Review the Read and Write test;
 
@@ -32,6 +32,7 @@ module REGISTER_FILE_tb;
 	);
 
 	integer i,j;
+	integer last, current;
 
 	initial begin
 		// Initialize Inputs
@@ -65,20 +66,27 @@ module REGISTER_FILE_tb;
 		`endif
 
 		`ifdef R_W_TEST
+		//Read and Write in the same clock period.
 		Wen = 1;
 		for(i=1;i<32;i = i+1) begin
+			Rnum1 = i;//First, the value in the register is read
+			#1;//Delay to read the value of the current register.
+			last = Rd1;
+			//Write the register
 			Wnum = i;
-			j = i;//$random();
-			Wd = j;
+			current = $random()%32;
+			Wd = current;
+			//Read the register
 			Rnum1 = i;
-			#10;
-			if (Rd1 != j) begin
+			//The value need to be the same of the last, because when a reading occurs in the same clock period than a writing
+			//the returned value is the value of the last posedge clock.
+			if (Rd1 != last) begin
 				$display("ERROR");
 				$finish;
 			end
+			#9;
 		end
 		`endif
-		
 
 		$finish;
 
