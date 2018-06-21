@@ -4,32 +4,32 @@
 module DATA_MEMORY_tb;
 
 	// Inputs
-	reg [31:0] Wd;
-	reg [31:0] Addr;
-	reg Wen;
-	reg Ren;
-	reg clk;
+	reg [31:0] i_Wd;
+	reg [31:0] i_Addr;
+	reg i_Wen;
+	reg i_Ren;
+	reg i_clk;
 
 	// Outputs
-	wire [31:0] Rd;
+	wire [31:0] o_Rd;
 
 	// Instantiate the Unit Under Test (UUT)
 	DATA_MEMORY uut (
-		.Rd(Rd), 
-		.Wd(Wd), 
-		.Addr(Addr), 
-		.Wen(Wen), 
-		.Ren(Ren), 
-		.clk(clk)
+		.o_Rd(o_Rd), 
+		.i_Wd(i_Wd), 
+		.i_Addr(i_Addr), 
+		.i_Wen(i_Wen), 
+		.i_Ren(i_Ren), 
+		.i_clk(i_clk)
 	);
 
 	initial begin
 		// Initialize Inputs
-		Wd = 0;
-		Addr = 0;
-		Wen = 0;
-		Ren = 0;
-		clk = 0;
+		i_Wd = 0;
+		i_Addr = 0;
+		i_Wen = 0;
+		i_Ren = 0;
+		i_clk = 0;
 
 		// Wait 100 ns for global reset to finish
 		#100;

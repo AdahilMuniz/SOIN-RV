@@ -3,32 +3,30 @@
 `define R_TEST
 `define R_W_TEST
 
-//@TODO: Review the Read and Write test;
-
 module REGISTER_FILE_tb;
 
 	// Inputs
-	reg [4:0] Rnum1;
-	reg [4:0] Rnum2;
-	reg Wen;
-	reg [4:0] Wnum;
-	reg [31:0] Wd;
-	reg clk;
+	reg [4:0] i_Rnum1;
+	reg [4:0] i_Rnum2;
+	reg i_Wen;
+	reg [4:0] i_Wnum;
+	reg [31:0] i_Wd;
+	reg i_clk;
 
 	// Outputs
-	wire [31:0] Rd1;
-	wire [31:0] Rd2;
+	wire [31:0] o_Rd1;
+	wire [31:0] o_Rd2;
 
 	// Instantiate the Unit Under Test (UUT)
 	REGISTER_FILE uut (
-		.Rd1(Rd1), 
-		.Rd2(Rd2), 
-		.Rnum1(Rnum1), 
-		.Rnum2(Rnum2), 
-		.Wen(Wen), 
-		.Wnum(Wnum), 
-		.Wd(Wd), 
-		.clk(clk)
+		.o_Rd1(o_Rd1), 
+		.o_Rd2(o_Rd2), 
+		.i_Rnum1(i_Rnum1), 
+		.i_Rnum2(i_Rnum2), 
+		.i_Wen(i_Wen), 
+		.i_Wnum(i_Wnum), 
+		.i_Wd(i_Wd), 
+		.i_clk(i_clk)
 	);
 
 	integer i,j;
@@ -37,27 +35,27 @@ module REGISTER_FILE_tb;
 	initial begin
 		// Initialize Inputs
 		
-		clk = 0;
+		i_clk = 0;
 
 		`ifdef INITIALIZE
-		Wen = 1;
+		i_Wen = 1;
 		//Initilize registers(Write Test)
 		for(i=1;i<32;i = i+1) begin
-			Wnum = i;
-			Wd = i;
+			i_Wnum = i;
+			i_Wd = i;
 			#10;
 		end
 		`endif
 
 		`ifdef R_TEST
-		Wen = 0;
+		i_Wen = 0;
 		//Reading Test
 		for(i=0;i<32;i = i+1) begin
 			for(j=0;j<32;j=j+1) begin
-				Rnum1 = i;
-				Rnum2 = j;
+				i_Rnum1 = i;
+				i_Rnum2 = j;
 				#10;
-				if (Rd1 != i || Rd2 != j) begin
+				if (o_Rd1 != i || o_Rd2 != j) begin
 					$display("ERROR");
 					$finish;
 				end
@@ -67,20 +65,20 @@ module REGISTER_FILE_tb;
 
 		`ifdef R_W_TEST
 		//Read and Write in the same clock period.
-		Wen = 1;
+		i_Wen = 1;
 		for(i=1;i<32;i = i+1) begin
-			Rnum1 = i;//First, the value in the register is read
+			i_Rnum1 = i;//First, the value in the register is read
 			#1;//Delay to read the value of the current register.
-			last = Rd1;
+			last = o_Rd1;
 			//Write the register
-			Wnum = i;
+			i_Wnum = i;
 			current = $random()%32;
-			Wd = current;
+			i_Wd = current;
 			//Read the register
-			Rnum1 = i;
+			i_Rnum1 = i;
 			//The value need to be the same of the last, because when a reading occurs in the same clock period than a writing
 			//the returned value is the value of the last posedge clock.
-			if (Rd1 != last) begin
+			if (o_Rd1 != last) begin
 				$display("ERROR");
 				$finish;
 			end
@@ -92,7 +90,7 @@ module REGISTER_FILE_tb;
 
 	end
 	always begin
-		#5 clk = ~clk;
+		#5 i_clk = ~i_clk;
 	end
       
 endmodule

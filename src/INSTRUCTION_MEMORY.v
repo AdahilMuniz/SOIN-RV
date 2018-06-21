@@ -4,8 +4,8 @@
 //@TODO: Make a define file;
 
 module INSTRUCTION_MEMORY(
-    output [31:0] Instruction,
-    input [31:0] Addr
+    output [31:0] o_Instruction,
+    input [31:0] i_Addr
     );
 
 	parameter HEIGHT = 256;//Memory height
@@ -19,7 +19,7 @@ module INSTRUCTION_MEMORY(
 	end
 	`endif
 
-	assign Instruction = {mem[Addr+3], mem[Addr+2], mem[Addr+1], mem[Addr]};//One instruction has 32 bit
+	assign o_Instruction = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};//One instruction has 32 bits
 
 
 
