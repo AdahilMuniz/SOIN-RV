@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 `define R_TEST
+`define W_TEST
 
-//@TODO: Create test logic;
 module DATA_MEMORY_tb;
 	parameter HEIGHT = 256;//Memory height
 	parameter FILE = "test.r32i";
@@ -50,8 +50,26 @@ module DATA_MEMORY_tb;
 			i_Addr = i_Addr+4;//Increment Addr
 			#10;
 		end
+		i_Ren = 0;
+		i_Addr = 0;
 		`endif
 
+		`ifdef W_TEST
+		for(i=0;i<HEIGHT/4;i = i+1) begin
+			i_Wen = 1;
+			i_Wd = $random%32;
+			#10;
+			i_Wen = 0;
+			i_Ren = 1;
+			#10;
+			if(i_Wd != o_Rd) begin
+				$display("ERROR");
+				$finish;
+			end
+			i_Ren = 0;
+			i_Addr = i_Addr+4;//Increment Addr
+		end
+		`endif
 		$finish;
 
 	end  
