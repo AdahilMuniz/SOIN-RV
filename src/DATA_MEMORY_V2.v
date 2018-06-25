@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 `define TEST
 
-//@TODO: Test
-
 /*
 		This Data Memory version has a signal 'i_Wen' with 4 bits. The signal
 	is used to select the byte or word/halfword of the memory that will be written.
@@ -50,7 +48,7 @@ module DATA_MEMORY_V2(
 			endcase
 		end
 		else if(i_Ren) begin
-			o_Rd <= {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};
+			o_Rd <= mem[i_Addr>>2];
 		end
 	end
 
