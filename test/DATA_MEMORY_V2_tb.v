@@ -27,9 +27,10 @@ module DATA_MEMORY_V2_tb;
 		.i_clk(i_clk)
 	);
 
-	integer i;
+	integer i,j;
 	reg [31:0] mem_test [HEIGHT-1:0];//Test Memory
-	reg [31:0] Rd_test;//Test Rd
+	reg [31:0] Rd_test, Wr_test;//Test Rd
+
 	initial begin
 		$readmemh(FILE, mem_test);//Initialize Memory
 		i_Wd = 0;
@@ -57,27 +58,22 @@ module DATA_MEMORY_V2_tb;
 
 		`ifdef W_B_TEST
 		for(i=0;i<HEIGHT;i = i+1) begin
-			i_Wen = 4'b0001;
-			//i_Wd = $random%8;
-			i_Wd = 3;
-			/*
-			i_Wen = 1<<1;
-			i_Wd = $random%8;
-			i_Wen = 1<<2;
-			i_Wd = $random%8;
-			i_Wen = 1<<3;
-			i_Wd = $random%8;
-			*/
-			#10;
-			i_Wen = 0;
-			i_Ren = 1;
-			#10;
-			/*
-			if(i_Wd !== o_Rd) begin
+			for(j=0;j<4;j = j+1) begin
+				i_Wen = 4'b0001<<j;
+				Wr_test = ($random%8)<<(j*8);
+				i_Wd = Wr_test;
+				#10;
+				i_Wen = 0;
+				i_Ren = 1;
+				Rd_test = o_Rd<<(j*8);
+				#10;
+				i_Ren = 0;
+			end
+			if (Wr_test ==! Rd_test) begin
+				$display("Interaction: ", i);
 				$display("ERROR");
 				$finish;
-			end*/
-			i_Ren = 0;
+			end
 			i_Addr = i_Addr+4;//Increment Addr
 		end
 		`endif
