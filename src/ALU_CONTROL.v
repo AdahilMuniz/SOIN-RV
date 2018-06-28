@@ -42,65 +42,65 @@ module ALU_CONTROL(
 
 	always @(*) begin
 		case(i_ALUOp)
-			`ALUOp_MEM : o_ALUControlLines <= `ALU_ADD;
-			`ALUOp_B :  o_ALUControlLines <= `ALU_SUB;
-			`ALUOp_R :
+			`ALUOP_MEM : o_ALUControlLines = `ALU_ADD;
+			`ALUOP_B :  o_ALUControlLines = `ALU_SUB;
+			`ALUOP_R :
 				case(i_Funct3)
 					`F3_TYPE0 : 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_ADD;
-							`F7_TYPE32 : o_ALUControlLines <= `ALU_SUB;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_ADD;
+							`F7_TYPE32 : o_ALUControlLines = `ALU_SUB;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE1: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_SLL;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_SLL;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE2: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_SLT;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_SLT;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE3: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_SLTU;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_SLTU;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE4: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_XOR;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_XOR;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE5: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_SRL;
-							`F7_TYPE32 : o_ALUControlLines <= `ALU_SRA;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_SRL;
+							`F7_TYPE32 : o_ALUControlLines = `ALU_SRA;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE6: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_OR;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_OR;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 					`F3_TYPE7: 
 						case(i_Funct7)
-							`F7_TYPE0 : o_ALUControlLines <= `ALU_AND;
-							default : o_ALUControlLines <= 4'bx;
+							`F7_TYPE0 : o_ALUControlLines = `ALU_AND;
+							default : o_ALUControlLines = 4'bx;
 						endcase
-					default : o_ALUControlLines <= 4'bx;
+					default : o_ALUControlLines = 4'bx;
 				endcase
-			`ALUOp_I :
+			`ALUOP_I :
 				case(i_Funct3)
-				`F3_TYPE0 : o_ALUControlLines <= `ALU_ADD;					
-				`F3_TYPE2: o_ALUControlLines <= `ALU_SLT;					
-				`F3_TYPE3: o_ALUControlLines <= `ALU_SLTU;				
-				`F3_TYPE4: o_ALUControlLines <= `ALU_XOR;					
-				`F3_TYPE6: o_ALUControlLines <= `ALU_OR;				
-				`F3_TYPE7: o_ALUControlLines <= `ALU_AND;
-				default : o_ALUControlLines <= 4'bx;
+				`F3_TYPE0 : o_ALUControlLines = `ALU_ADD;					
+				`F3_TYPE2: o_ALUControlLines = `ALU_SLT;					
+				`F3_TYPE3: o_ALUControlLines = `ALU_SLTU;				
+				`F3_TYPE4: o_ALUControlLines = `ALU_XOR;					
+				`F3_TYPE6: o_ALUControlLines = `ALU_OR;				
+				`F3_TYPE7: o_ALUControlLines = `ALU_AND;
+				default : o_ALUControlLines = 4'bx;
 			endcase
-			default : o_ALUControlLines <= 4'bx;
+			default : o_ALUControlLines = 4'bx;
 		endcase
 	end
 
