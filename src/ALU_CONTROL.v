@@ -30,6 +30,7 @@
 	`define ALUOp_MEM 2'b00
 	`define ALUOp_B 2'b01
 	`define ALUOp_R 2'b10
+	`define ALUOp_I 2'b11
 
 
 module ALU_CONTROL(
@@ -79,6 +80,21 @@ module ALU_CONTROL(
 						case(i_Funct7)
 							`F7_TYPE0 : o_ALUControlLines <= `ALU_AND;
 						endcase
+				endcase
+				`ALUOp_I :
+					case(i_Funct3)
+					`F3_TYPE0 : o_ALUControlLines <= `ALU_ADD;
+						
+					`F3_TYPE2: o_ALUControlLines <= `ALU_SLT;
+						
+					`F3_TYPE3: o_ALUControlLines <= `ALU_SLTU;
+						
+					`F3_TYPE4: o_ALUControlLines <= `ALU_XOR;
+						
+					`F3_TYPE6: o_ALUControlLines <= `ALU_OR;
+						
+					`F3_TYPE7: o_ALUControlLines <= `ALU_AND;
+						
 				endcase
 		endcase
 	end
