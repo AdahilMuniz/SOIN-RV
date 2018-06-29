@@ -92,14 +92,21 @@ module ALU_CONTROL(
 				endcase
 			`ALUOP_I :
 				case(i_Funct3)
-				`F3_TYPE0 : o_ALUControlLines = `ALU_ADD;					
-				`F3_TYPE2: o_ALUControlLines = `ALU_SLT;					
-				`F3_TYPE3: o_ALUControlLines = `ALU_SLTU;				
-				`F3_TYPE4: o_ALUControlLines = `ALU_XOR;					
-				`F3_TYPE6: o_ALUControlLines = `ALU_OR;				
-				`F3_TYPE7: o_ALUControlLines = `ALU_AND;
-				default : o_ALUControlLines = 4'bx;
-			endcase
+					`F3_TYPE0: o_ALUControlLines = `ALU_ADD;
+					`F3_TYPE1: o_ALUControlLines = `ALU_SLL;					
+					`F3_TYPE2: o_ALUControlLines = `ALU_SLT;					
+					`F3_TYPE3: o_ALUControlLines = `ALU_SLTU;				
+					`F3_TYPE4: o_ALUControlLines = `ALU_XOR;
+					`F3_TYPE5: 
+						case(i_Funct7)
+							`F7_TYPE0 : o_ALUControlLines = `ALU_SRL;
+							`F7_TYPE32: o_ALUControlLines = `ALU_SRA;
+						endcase
+											
+					`F3_TYPE6: o_ALUControlLines = `ALU_OR;				
+					`F3_TYPE7: o_ALUControlLines = `ALU_AND;
+					default : o_ALUControlLines = 4'bx;
+				endcase
 			default : o_ALUControlLines = 4'bx;
 		endcase
 	end
