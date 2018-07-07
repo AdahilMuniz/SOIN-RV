@@ -1,26 +1,23 @@
 `timescale 1ns / 1ps
-`define TEST
+`include "PARAMETERS.vh"
 
 module DATA_MEMORY(
-    output reg [31:0] o_Rd,
-    input [31:0] i_Wd,
-    input [31:0] i_Addr,
+    output reg [`WORD_SIZE-1:0] o_Rd,
+    input [`WORD_SIZE-1:0] i_Wd,
+    input [`WORD_SIZE-1:0] i_Addr,
     input i_Wen,
     input i_Ren,
     input i_clk
     );
 
-	parameter HEIGHT = 256;//Memory height
-	parameter FILE = "test.r32i";
+	parameter HEIGHT = `DM_DEPTH;//Memory height
+	parameter FILE = `DM_FILE;
 
 	reg [7:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
 
-	`ifdef TEST
-	//This block is used for tests
 	initial begin
 		$readmemh(FILE, mem);//Initialize Memory
 	end
-	`endif
 
 	//Just one signal must be enabled (Wen or Ren) in one clock period(That's my solution),
 	//So, when the two signal are active, just the 'i_Wen' is considered.

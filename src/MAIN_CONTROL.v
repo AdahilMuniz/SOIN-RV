@@ -1,11 +1,5 @@
 `timescale 1ns / 1ps
-
-//OPCodes
-`define OP_R_TYPE 7'b0110011
-`define OP_I_TYPE 7'b0010011
-`define OP_I_L_TYPE 7'b0000011
-`define OP_S_TYPE 7'b0100011
-`define OP_B_TYPE 7'b1100011
+`include "OPCODES_DEFINES.vh"
 
 module MAIN_CONTROL(
     output reg o_Branch,

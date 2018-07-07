@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-
+`include "PARAMETERS.vh"
 /*
 		This module was built based on the Appendix A.7 of the COMPUTER ORGANIZATION AND DESIGN RISC-V EDITION book.
 		In this way, when the reading of a register occurs in the same clock cycle that the writing in the same register, the returned value
@@ -8,17 +8,17 @@
 */
 
 module REGISTER_FILE(
-    output [31:0] o_Rd1,
-    output [31:0] o_Rd2,
+    output [`WORD_SIZE:0] o_Rd1,
+    output [`WORD_SIZE:0] o_Rd2,
     input [4:0] i_Rnum1,
     input [4:0] i_Rnum2,
     input i_Wen,
     input [4:0] i_Wnum,
-    input [31:0] i_Wd,
+    input [`WORD_SIZE:0] i_Wd,
     input i_clk
     );
 
-	reg [31:0] x [31:0];//Registers [x0-x31]
+	reg [`WORD_SIZE:0] x [31:0];//Registers [x0-x31]
 
 	//Reading is combinational
 	assign o_Rd1 = |i_Rnum1 ? x[i_Rnum1] : 0;
