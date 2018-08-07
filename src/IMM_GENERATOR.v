@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "OPCODES_DEFINES.vh"
+`include "../defines/OPCODES_DEFINES.vh"
 
 module IMM_GENERATOR(
     output [31:0] o_ExtendedImmediate,

@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "PARAMETERS.vh"
+`include "../defines/PARAMETERS.vh"
 
 /*
 		This Data Memory version has a signal 'i_Wen' with 4 bits. The signal

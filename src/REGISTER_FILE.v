@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "PARAMETERS.vh"
+`include "../defines/PARAMETERS.vh"
 /*
 		This module was built based on the Appendix A.7 of the COMPUTER ORGANIZATION AND DESIGN RISC-V EDITION book.
 		In this way, when the reading of a register occurs in the same clock cycle that the writing in the same register, the returned value

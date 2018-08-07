@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
-`include "OPCODES_DEFINES.vh"
-`include "ALU_CONTROL.vh"
+`include "../defines/OPCODES_DEFINES.vh"
+`include "../defines/ALU_CONTROL.vh"
 
 //ALUOp
 `define ALUOP_I_L 2'b00

@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "PARAMETERS.vh"
+`include "../defines/PARAMETERS.vh"
 
 module INSTRUCTION_MEMORY(
     output [`WORD_SIZE:0] o_Instruction,

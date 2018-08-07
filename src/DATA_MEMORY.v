@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "PARAMETERS.vh"
+`include "../defines/PARAMETERS.vh"
 
 module DATA_MEMORY(
     output reg [`WORD_SIZE-1:0] o_Rd,
@@ -28,11 +28,9 @@ module DATA_MEMORY(
 			mem[i_Addr+1] <= i_Wd[15:8];
 			mem[i_Addr] <= i_Wd[7:0];
 		end
-		else if(i_Ren) begin
-			o_Rd <= {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};
-		end
 	end
 
+	assign o_Rd = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};
 
 
 endmodule
