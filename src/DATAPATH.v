@@ -12,12 +12,24 @@ module DATAPATH(
 	//Register File Signals
 	wire [`WORD_SIZE:0] RF_rd1;
 	wire [`WORD_SIZE:0] RF_rd2;
-	wire [`WORD_SIZE:0] RF_rnum1;
-	wire [`WORD_SIZE:0] RF_rnum2;
-	wire [`WORD_SIZE:0] RF_wen;
-	wire [`WORD_SIZE:0] RF_wnum;
+	wire [4:0] RF_rnum1;
+	wire [4:0] RF_rnum2;
+	wire RF_wen;
+	wire [4:0] RF_wnum;
 	wire [`WORD_SIZE:0] RF_wd;
 
+	//Immediate Generator Signals
+	wire [`WORD_SIZE:0] IG_extendedImmediate;
+	wire [`WORD_SIZE:0] IG_instruction;
+
+	//Main Control Signals
+	wire MC_branch;
+	wire MC_memRead;
+	wire MC_memWrite;
+	wire MC_memToReg;
+    wire [1:0] MC_ALUOp;
+    wire MC_ALUSrc;
+    wire MC_regWrite;
 
 	//PC
 	reg [`WORD_SIZE:0] pc;
@@ -30,7 +42,7 @@ module DATAPATH(
 		pc = pc + 1;
 	end
 
-	//Attributions
+	/****Attributions****/
 
 	assign IM_addr = pc; // PC to IM_addr
 
@@ -39,8 +51,14 @@ module DATAPATH(
 	assign RF_rnum2 = IM_instruction[24:20];
 	assign RF_wnum  = IM_instruction[11:7];
 
+	//"Decode" instruction (Immediate)
+	assign IG_Instruction = IM_instruction;
+
+
+	/****Muxes****/
+
 	//Instruction Memory Instantiation
-	INSTRUCTION_MEMORY instruction_memory (
+	INSTRUCTION_MEMORY #(`IM_DEPTH, `IM_FILE)instruction_memory (
 		.o_Instruction(IM_instruction), 
 		.i_Addr(IM_addr)
     );
@@ -55,6 +73,11 @@ module DATAPATH(
 		.i_Wnum(RF_wnum), 
 		.i_Wd(RF_wd), 
 		.i_clk(i_clk)
+    );
+
+    IMM_GENERATOR imm_generator (
+    .o_ExtendedImmediate(IG_wxtendedImmediate), 
+    .i_Instruction(IG_instruction)
     );
 
 endmodule

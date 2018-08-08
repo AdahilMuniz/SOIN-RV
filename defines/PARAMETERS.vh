@@ -4,4 +4,4 @@
 `define IM_DEPTH  256 //Instruction Memory depth
 
 `define DM_FILE "test.r32i" //File tha initialize Data Memory
-`define IM_FILE "test.r32i" //File tha initialize Instruction Memory
+`define IM_FILE "RegisterFileTest.r32i" //File tha initialize Instruction Memory
