@@ -45,6 +45,14 @@ module DATAPATH(
 	wire [`WORD_SIZE-1:0] ALU_Op1;
 	wire [`WORD_SIZE-1:0] ALU_Op2;
 
+	//Data Memory Signals
+	wire [`WORD_SIZE-1:0] DM_rd;
+	wire [`WORD_SIZE-1:0] DM_wd;
+	wire [`WORD_SIZE-1:0] DM_addr;
+	wire DM_wen;
+	wire DM_ren;
+	wire DM_clk;
+
 	//PC
 	reg [`WORD_SIZE:0] pc;
 
@@ -81,7 +89,7 @@ module DATAPATH(
 
 
 	//Instruction Memory Instantiation
-	INSTRUCTION_MEMORY #(`IM_DEPTH, `IM_FILE)instruction_memory (
+	INSTRUCTION_MEMORY #(`IM_DEPTH, `IM_FILE) instruction_memory (
 		.o_Instruction(IM_instruction), 
 		.i_Addr(IM_addr)
     );
@@ -110,6 +118,16 @@ module DATAPATH(
 	    .i_Op1(ALU_Op1), 
 	    .i_Op2(ALU_Op2)
     );
+
+    DATA_MEMORY #(`DM_DEPTH, `DM_FILE) data_memory (
+	    .o_Rd(DM_rd), 
+	    .i_Wd(DM_wd), 
+	    .i_Addr(DM_addr), 
+	    .i_Wen(DM_wen), 
+	    .i_Ren(DM_ren), 
+	    .i_clk(DM_clk)
+    );
+
 
 
 

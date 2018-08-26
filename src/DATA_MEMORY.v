@@ -2,7 +2,7 @@
 `include "../defines/PARAMETERS.vh"
 
 module DATA_MEMORY(
-    output reg [`WORD_SIZE-1:0] o_Rd,
+    output [`WORD_SIZE-1:0] o_Rd,
     input [`WORD_SIZE-1:0] i_Wd,
     input [`WORD_SIZE-1:0] i_Addr,
     input i_Wen,
