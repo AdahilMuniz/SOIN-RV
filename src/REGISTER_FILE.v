@@ -8,17 +8,27 @@
 */
 
 module REGISTER_FILE(
-    output [`WORD_SIZE:0] o_Rd1,
-    output [`WORD_SIZE:0] o_Rd2,
+    output [`WORD_SIZE-1:0] o_Rd1,
+    output [`WORD_SIZE-1:0] o_Rd2,
     input [4:0] i_Rnum1,
     input [4:0] i_Rnum2,
     input i_Wen,
     input [4:0] i_Wnum,
-    input [`WORD_SIZE:0] i_Wd,
+    input [`WORD_SIZE-1:0] i_Wd,
     input i_clk
     );
 
-	reg [`WORD_SIZE:0] x [31:0];//Registers [x0-x31]
+	reg [`WORD_SIZE-1:0] x [31:0];//Registers [x0-x31]
+	
+//Initializing registers for tests
+`ifdef TEST
+	integer i;
+	initial begin
+		for(i=0;i<`WORD_SIZE;i=i+1) begin
+			x[i] = i;
+		end
+	end
+`endif
 
 	//Reading is combinational
 	assign o_Rd1 = |i_Rnum1 ? x[i_Rnum1] : 0;

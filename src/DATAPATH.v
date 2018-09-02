@@ -6,21 +6,21 @@ module DATAPATH(
     );
 
 	//Instruction Memory Signals
-	wire [`WORD_SIZE:0] IM_instruction;
+	wire [`WORD_SIZE-1:0] IM_instruction;
 	wire [`WORD_SIZE:0] IM_addr;
 
 	//Register File Signals
-	wire [`WORD_SIZE:0] RF_rd1;
-	wire [`WORD_SIZE:0] RF_rd2;
+	wire [`WORD_SIZE-1:0] RF_rd1;
+	wire [`WORD_SIZE-1:0] RF_rd2;
 	wire [4:0] RF_rnum1;
 	wire [4:0] RF_rnum2;
 	wire RF_wen;
 	wire [4:0] RF_wnum;
-	wire [`WORD_SIZE:0] RF_wd;
+	wire [`WORD_SIZE-1:0] RF_wd;
 
 	//Immediate Generator Signals
-	wire [`WORD_SIZE:0] IG_extendedImmediate;
-	wire [`WORD_SIZE:0] IG_instruction;
+	wire [`WORD_SIZE-1:0] IG_extendedImmediate;
+	wire [`WORD_SIZE-1:0] IG_instruction;
 
 	//Main Control Signals
 	wire MC_branch;
@@ -54,7 +54,7 @@ module DATAPATH(
 	wire DM_clk;
 
 	//PC
-	reg [`WORD_SIZE:0] pc;
+	reg [`WORD_SIZE-1:0] pc;
 
 	initial begin
 		pc = 0;
@@ -87,6 +87,11 @@ module DATAPATH(
 	//ALU Source 2
 	assign ALU_Op2 = MC_ALUSrc ? IG_extendedImmediate:RF_rd2;
 
+`ifdef TEST
+	initial begin
+		//Here the control signals will be attributed.	
+	end
+`endif
 
 	//Instruction Memory Instantiation
 	INSTRUCTION_MEMORY #(`IM_DEPTH, `IM_FILE) instruction_memory (

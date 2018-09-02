@@ -2,8 +2,8 @@
 `include "../defines/PARAMETERS.vh"
 
 module INSTRUCTION_MEMORY(
-    output [`WORD_SIZE:0] o_Instruction,
-    input [`WORD_SIZE:0] i_Addr
+    output [`WORD_SIZE-1:0] o_Instruction,
+    input [`WORD_SIZE-1:0] i_Addr
     );
 
 	parameter HEIGHT = `IM_DEPTH;//Memory height
@@ -19,7 +19,7 @@ module INSTRUCTION_MEMORY(
 		$readmemh(FILE, mem);//Initialize Memory
 	end
 	
-	assign o_Instruction = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};//One instruction has 32 bits
+	assign o_Instruction = {mem[i_Addr], mem[i_Addr+1], mem[i_Addr+2], mem[i_Addr+3]};//One instruction has 32 bits
 
 
 endmodule
