@@ -23,20 +23,32 @@ module DATAPATH(
 	wire [`WORD_SIZE-1:0] IG_instruction;
 
 	//Main Control Signals
-	wire MC_branch;
-	wire MC_memRead;
-	wire MC_memWrite;
-	wire MC_memToReg;
-    wire [1:0] MC_ALUOp;
-    wire MC_ALUSrc;
-    wire MC_regWrite;
-    wire [6:0] MC_OPCode;
+
+`ifdef TEST
+		reg MC_branch;
+		reg MC_memRead;
+		reg MC_memWrite;
+		reg MC_memToReg;
+	    reg [1:0] MC_ALUOp;
+	    reg MC_ALUSrc;
+	    reg MC_regWrite;
+	    reg [6:0] MC_OPCode;
+`else
+		wire MC_branch;
+		wire MC_memRead;
+		wire MC_memWrite;
+		wire MC_memToReg;
+	    wire [1:0] MC_ALUOp;
+	    wire MC_ALUSrc;
+	    wire MC_regWrite;
+	    wire [6:0] MC_OPCode;
+`endif
 
     //ALU Control Signals
 	wire [3:0] ALUC_ALUControlLines;
 	wire [6:0] ALUC_Funct7;
 	wire [2:0] ALUC_Funct3;
-	wire [1:0] ALUC_ALUO;
+	wire [1:0] ALUC_ALUOP;
 
 	//ALU Signals
 	wire [`WORD_SIZE-1:0] ALU_Result;
@@ -76,8 +88,16 @@ module DATAPATH(
 	//"Decode" instruction (Immediate)
 	assign IG_Instruction = IM_instruction;
 
+	//"Decode" instruction (ALU Control)
+	assign ALUC_Funct3 = IM_instruction[14:12];
+	assign ALUC_Funct7 = IM_instruction[31:25];
+
 	//Main Control Signals attributions
 	assign RF_wen = MC_regWrite;
+	assign ALUC_ALUOP = MC_ALUOp;
+
+	//ALU Control Signals attributions
+	assign ALU_Operation = ALUC_ALUControlLines;
 
 	//ALU Source 1
 	assign ALU_Op1 = RF_rd1;
@@ -86,10 +106,21 @@ module DATAPATH(
 	/****Muxes****/
 	//ALU Source 2
 	assign ALU_Op2 = MC_ALUSrc ? IG_extendedImmediate:RF_rd2;
+	//Write Data (Register File) Source
+	assign RF_wd = MC_memToReg ? DM_rd:ALU_Result;
 
 `ifdef TEST
 	initial begin
 		//Here the control signals will be attributed.	
+		//R-Type tests
+
+		MC_branch = 0;
+		MC_memRead = 0;
+		MC_memWrite = 0;
+		MC_memToReg = 0;
+    	MC_ALUOp = 2'b10;
+    	MC_ALUSrc = 0;
+    	MC_regWrite = 1;
 	end
 `endif
 
@@ -133,7 +164,11 @@ module DATAPATH(
 	    .i_clk(DM_clk)
     );
 
-
-
+    ALU_CONTROL alu_control (
+	    .o_ALUControlLines(ALUC_ALUControlLines), 
+	    .i_Funct7(ALUC_Funct7), 
+	    .i_Funct3(ALUC_Funct3), 
+	    .i_ALUOp(ALUC_ALUOP)
+    );
 
 endmodule
