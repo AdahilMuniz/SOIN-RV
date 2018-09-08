@@ -11,6 +11,7 @@ module IMM_GENERATOR(
 
 	always @(*) begin
 		case(i_Instruction[6:0])
+			`OP_I_TYPE   : imm = i_Instruction[31:20];
 			`OP_I_L_TYPE : imm = i_Instruction[31:20];
 			`OP_S_TYPE   : imm = {i_Instruction[31:25], i_Instruction[11:7]};
 			`OP_B_TYPE   : imm = {i_Instruction[31], i_Instruction[7], i_Instruction[30:25], i_Instruction[11:8]};

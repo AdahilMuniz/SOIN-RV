@@ -13,7 +13,7 @@ module DATAPATH_tb;
 
 	initial begin
 		i_clk = 0;
-		#140;
+		#130;
 	end
 	always begin
 		#5 i_clk = ~i_clk;

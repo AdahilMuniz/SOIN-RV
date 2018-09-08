@@ -86,7 +86,7 @@ module DATAPATH(
 	assign RF_wnum  = IM_instruction[11:7];
 
 	//"Decode" instruction (Immediate)
-	assign IG_Instruction = IM_instruction;
+	assign IG_instruction = IM_instruction;
 
 	//"Decode" instruction (ALU Control)
 	assign ALUC_Funct3 = IM_instruction[14:12];
@@ -112,14 +112,14 @@ module DATAPATH(
 `ifdef TEST
 	initial begin
 		//Here the control signals will be attributed.	
-		//R-Type tests
+		//I-Type tests
 
 		MC_branch = 0;
 		MC_memRead = 0;
 		MC_memWrite = 0;
 		MC_memToReg = 0;
-    	MC_ALUOp = 2'b10;
-    	MC_ALUSrc = 0;
+    	MC_ALUOp = 2'b11;
+    	MC_ALUSrc = 1;
     	MC_regWrite = 1;
 	end
 `endif
