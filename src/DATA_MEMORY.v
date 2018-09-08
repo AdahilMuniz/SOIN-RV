@@ -29,8 +29,8 @@ module DATA_MEMORY(
 			mem[i_Addr] <= i_Wd[7:0];
 		end
 	end
-
-	assign o_Rd = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};
+	assign o_Rd = {mem[i_Addr], mem[(i_Addr)+1], mem[(i_Addr)+2], mem[(i_Addr)+3]};
+	//assign o_Rd = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};
 
 
 endmodule

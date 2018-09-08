@@ -73,7 +73,7 @@ module DATAPATH(
 	end
 
 	always @(posedge i_clk) begin
-		pc = pc + 1;
+		pc = pc + 4;
 	end
 
 	/****Attributions****/
@@ -102,6 +102,13 @@ module DATAPATH(
 	//ALU Source 1
 	assign ALU_Op1 = RF_rd1;
 
+	//Data Memory attributions
+	assign DM_clk = i_clk;
+	assign DM_addr = ALU_Result;
+	assign DM_wd = RF_rd2;
+	assign DM_wen = MC_memWrite;
+	assign DM_ren = MC_memRead;
+
 
 	/****Muxes****/
 	//ALU Source 2
@@ -112,13 +119,13 @@ module DATAPATH(
 `ifdef TEST
 	initial begin
 		//Here the control signals will be attributed.	
-		//I-Type tests
+		//I_L-Type tests
 
 		MC_branch = 0;
-		MC_memRead = 0;
+		MC_memRead = 1;
 		MC_memWrite = 0;
-		MC_memToReg = 0;
-    	MC_ALUOp = 2'b11;
+		MC_memToReg = 1;
+    	MC_ALUOp = 2'b00;
     	MC_ALUSrc = 1;
     	MC_regWrite = 1;
 	end

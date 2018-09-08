@@ -19,7 +19,7 @@ module INSTRUCTION_MEMORY(
 		$readmemh(FILE, mem);//Initialize Memory
 	end
 	
-	assign o_Instruction = {mem[i_Addr*4], mem[(i_Addr*4)+1], mem[(i_Addr*4)+2], mem[(i_Addr*4)+3]};//One instruction has 32 bits
+	assign o_Instruction = {mem[i_Addr], mem[(i_Addr)+1], mem[(i_Addr)+2], mem[(i_Addr)+3]};//One instruction has 32 bits
 	//assign o_Instruction = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};//One instruction has 32 bits
 
 
