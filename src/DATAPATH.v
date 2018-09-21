@@ -23,26 +23,14 @@ module DATAPATH(
 	wire [`WORD_SIZE-1:0] IG_instruction;
 
 	//Main Control Signals
-
-`ifdef TEST
-		reg MC_branch;
-		reg MC_memRead;
-		reg MC_memWrite;
-		reg MC_memToReg;
-	    reg [1:0] MC_ALUOp;
-	    reg MC_ALUSrc;
-	    reg MC_regWrite;
-	    reg [6:0] MC_OPCode;
-`else
-		wire MC_branch;
-		wire MC_memRead;
-		wire MC_memWrite;
-		wire MC_memToReg;
-	    wire [1:0] MC_ALUOp;
-	    wire MC_ALUSrc;
-	    wire MC_regWrite;
-	    wire [6:0] MC_OPCode;
-`endif
+	wire MC_branch;
+	wire MC_memRead;
+	wire MC_memWrite;
+	wire MC_memToReg;
+	wire [1:0] MC_ALUOp;
+	wire MC_ALUSrc;
+	wire MC_regWrite;
+	wire [6:0] MC_OPCode;
 
     //ALU Control Signals
 	wire [3:0] ALUC_ALUControlLines;
@@ -66,6 +54,7 @@ module DATAPATH(
 	wire DM_clk;
 
 	//PC
+	wire [`WORD_SIZE-1:0] pc_aux;
 	reg [`WORD_SIZE-1:0] pc;
 
 	initial begin
@@ -73,8 +62,15 @@ module DATAPATH(
 	end
 
 	always @(posedge i_clk) begin
-		pc = pc + 4;
+		pc = pc_aux;
 	end
+
+	//AND Branch
+	wire A_B;
+	//SHIFT Branch
+	wire [`WORD_SIZE-1:0] SH_B;
+	//SUM Branch
+	wire [`WORD_SIZE-1:0] S_B;
 
 	/****Attributions****/
 
@@ -91,6 +87,9 @@ module DATAPATH(
 	//"Decode" instruction (ALU Control)
 	assign ALUC_Funct3 = IM_instruction[14:12];
 	assign ALUC_Funct7 = IM_instruction[31:25];
+
+	//"Decode" instruction (Main Control)
+	assign MC_OPCode = IM_instruction;
 
 	//Main Control Signals attributions
 	assign RF_wen = MC_regWrite;
@@ -115,21 +114,15 @@ module DATAPATH(
 	assign ALU_Op2 = MC_ALUSrc ? IG_extendedImmediate:RF_rd2;
 	//Write Data (Register File) Source
 	assign RF_wd = MC_memToReg ? DM_rd:ALU_Result;
+	//Branch Mux
+	assign pc_aux = A_B ? S_B:pc+4;
 
-`ifdef TEST
-	initial begin
-		//Here the control signals will be attributed.	
-		//I_L-Type tests
-
-		MC_branch = 0;
-		MC_memRead = 1;
-		MC_memWrite = 0;
-		MC_memToReg = 1;
-    	MC_ALUOp = 2'b00;
-    	MC_ALUSrc = 1;
-    	MC_regWrite = 1;
-	end
-`endif
+	/****AND-Branch****/
+	assign A_B = MC_branch & ALU_Zero;
+	/****SHIFT-Branch****/
+	assign SH_B = IG_extendedImmediate<<1;
+	/****SUM-Branch****/
+	assign S_B = pc + SH_B;
 
 	//Instruction Memory Instantiation
 	INSTRUCTION_MEMORY #(`IM_DEPTH, `IM_FILE) instruction_memory (
@@ -176,6 +169,17 @@ module DATAPATH(
 	    .i_Funct7(ALUC_Funct7), 
 	    .i_Funct3(ALUC_Funct3), 
 	    .i_ALUOp(ALUC_ALUOP)
+    );
+
+    MAIN_CONTROL main_control (
+    .o_Branch(MC_branch), 
+    .o_MemRead(MC_memRead), 
+    .o_MemWrite(MC_memWrite), 
+    .o_MemToReg(MC_memToReg), 
+    .o_ALUOp(MC_ALUOp), 
+    .o_ALUSrc(MC_ALUSrc), 
+    .o_RegWrite(MC_regWrite), 
+    .i_OPCode(MC_OPCode)
     );
 
 endmodule
