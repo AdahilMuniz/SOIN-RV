@@ -115,7 +115,7 @@ module DATAPATH(
 	//Write Data (Register File) Source
 	assign RF_wd = MC_memToReg ? DM_rd:ALU_Result;
 	//Branch Mux
-	assign pc_aux = A_B ? S_B:pc+4;
+	assign pc_aux = A_B ? S_B:(pc+4);
 
 	/****AND-Branch****/
 	assign A_B = MC_branch & ALU_Zero;

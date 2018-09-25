@@ -28,7 +28,15 @@ module ALU(
 			`ALU_AND : o_Result = i_Op1 & i_Op2;
 			default  : o_Result = 32'bx;
 		endcase
+		/*
+		if (o_Result == 0) begin
+			o_Zero = 1'b1;
+		end
+		else begin
+			o_Zero = 1'b0;
+		end*/
 	end
-
+	
+	assign o_Zero = o_Result ? 0:1;
 
 endmodule
