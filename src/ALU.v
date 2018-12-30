@@ -3,7 +3,8 @@
 `include "../defines/OPCODES_DEFINES.vh"
 `include "../defines/ALU_CONTROL.vh"
 `include "../defines/PARAMETERS.vh"
-
+//@TODO:
+// - To use one single adder for ADD, SUB, SLT and AUIPC;
 module ALU(
 	output reg [`WORD_SIZE-1:0] o_Result,
 	output o_Zero,
@@ -26,6 +27,7 @@ module ALU(
 			`ALU_SRA : o_Result = i_Op1 >>> i_Op2[4:0];
 			`ALU_OR  : o_Result = i_Op1 | i_Op2;
 			`ALU_AND : o_Result = i_Op1 & i_Op2;
+			`ALU_LUI : o_Result = {i_Op2<<12, {12{1'b0}}};
 			default  : o_Result = 32'bx;
 		endcase
 		/*

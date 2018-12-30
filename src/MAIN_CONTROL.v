@@ -6,7 +6,7 @@ module MAIN_CONTROL(
     output reg o_MemRead,
     output reg o_MemWrite,
     output reg o_MemToReg,
-    output reg [1:0] o_ALUOp,
+    output reg [2:0] o_ALUOp,
     output reg o_ALUSrc,
     output reg o_RegWrite,
     input [6:0] i_OPCode
@@ -22,7 +22,7 @@ module MAIN_CONTROL(
 				o_MemToReg = 0;
 				o_ALUSrc = 0;
 				o_RegWrite = 1;
-				o_ALUOp = 2'b10;
+				o_ALUOp = 3'b010;
 			end
 
 			`OP_I_TYPE : begin
@@ -32,7 +32,7 @@ module MAIN_CONTROL(
 				o_MemToReg = 0;
 				o_ALUSrc = 1;
 				o_RegWrite = 1;
-				o_ALUOp = 2'b11;
+				o_ALUOp = 3'b011;
 			end
 
 			`OP_I_L_TYPE : begin
@@ -42,7 +42,7 @@ module MAIN_CONTROL(
 				o_MemToReg = 1;
 				o_ALUSrc = 1;
 				o_RegWrite = 1;
-				o_ALUOp = 2'b00;
+				o_ALUOp = 3'b000;
 			end
 
 			`OP_S_TYPE : begin
@@ -52,7 +52,7 @@ module MAIN_CONTROL(
 				o_MemToReg = 1'bx; //Don't Care
 				o_ALUSrc = 1;
 				o_RegWrite = 0; 
-				o_ALUOp = 2'b00;
+				o_ALUOp = 3'b000;
 			end
 
 			`OP_B_TYPE : begin
@@ -62,17 +62,27 @@ module MAIN_CONTROL(
 				o_MemToReg = 1'bx; //Don't Care
 				o_ALUSrc = 0;
 				o_RegWrite = 0; 
-				o_ALUOp = 2'b01;
+				o_ALUOp = 3'b001;
+			end
+
+			`OP_LUI : begin
+				o_Branch = 0;
+				o_MemRead = 0;
+				o_MemWrite = 0;
+				o_MemToReg = 1'bx; //Don't Care
+				o_ALUSrc = 0;
+				o_RegWrite = 0; 
+				o_ALUOp = 3'b100;
 			end
 
 			default : begin
 				o_Branch = 1'bx;
 				o_MemRead = 1'bx;
 				o_MemWrite = 1'bx;
-				o_MemToReg = 1'bx; //Don't Care
-				o_ALUSrc = 1'bx;
-				o_RegWrite = 1'bx; 
-				o_ALUOp = 2'bx;
+				o_MemToReg = 1'b0;
+				o_ALUSrc = 1'b1;
+				o_RegWrite = 1'b1; 
+				o_ALUOp = 3'bx;
 			end
 
 		endcase

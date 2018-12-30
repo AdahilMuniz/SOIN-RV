@@ -4,16 +4,18 @@
 `include "../defines/ALU_CONTROL.vh"
 
 //ALUOp
-`define ALUOP_I_L 2'b00
-`define ALUOP_B   2'b01
-`define ALUOP_R   2'b10
-`define ALUOP_I   2'b11
+`define ALUOP_I_L   3'b000
+`define ALUOP_B     3'b001
+`define ALUOP_R     3'b010
+`define ALUOP_I     3'b011
+`define ALUOP_LUI   3'b100
+`define ALUOP_AUIPC 3'b101
 
 module ALU_CONTROL(
     output reg [3:0] o_ALUControlLines,
     input [6:0] i_Funct7,
     input [2:0] i_Funct3,
-    input [1:0] i_ALUOp
+    input [2:0] i_ALUOp
     );
 
 	always @(*) begin
@@ -83,6 +85,7 @@ module ALU_CONTROL(
 					`F3_TYPE7: o_ALUControlLines = `ALU_AND;
 					default : o_ALUControlLines = 4'bx;
 				endcase
+			`ALUOP_LUI : o_ALUControlLines = `ALU_LUI;
 			default : o_ALUControlLines = 4'bx;
 		endcase
 	end
