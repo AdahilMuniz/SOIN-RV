@@ -28,7 +28,8 @@ module DATAPATH(
 	wire MC_memWrite;
 	wire MC_memToReg;
 	wire [1:0] MC_ALUOp;
-	wire MC_ALUSrc;
+	wire MC_ALUSrc1;
+	wire MC_ALUSrc2;
 	wire MC_regWrite;
 	wire [6:0] MC_OPCode;
 
@@ -98,9 +99,6 @@ module DATAPATH(
 	//ALU Control Signals attributions
 	assign ALU_Operation = ALUC_ALUControlLines;
 
-	//ALU Source 1
-	assign ALU_Op1 = RF_rd1;
-
 	//Data Memory attributions
 	assign DM_clk = i_clk;
 	assign DM_addr = ALU_Result;
@@ -110,8 +108,11 @@ module DATAPATH(
 
 
 	/****Muxes****/
+	
+	//ALU Source 1
+	assign ALU_Op1 = MC_ALUSrc1 ? pc:RF_rd1;
 	//ALU Source 2
-	assign ALU_Op2 = MC_ALUSrc ? IG_extendedImmediate:RF_rd2;
+	assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
 	//Write Data (Register File) Source
 	assign RF_wd = MC_memToReg ? DM_rd:ALU_Result;
 	//Branch Mux
@@ -172,14 +173,15 @@ module DATAPATH(
     );
 
     MAIN_CONTROL main_control (
-    .o_Branch(MC_branch), 
-    .o_MemRead(MC_memRead), 
-    .o_MemWrite(MC_memWrite), 
-    .o_MemToReg(MC_memToReg), 
-    .o_ALUOp(MC_ALUOp), 
-    .o_ALUSrc(MC_ALUSrc), 
-    .o_RegWrite(MC_regWrite), 
-    .i_OPCode(MC_OPCode)
+    	.o_Branch(MC_branch), 
+    	.o_MemRead(MC_memRead), 
+    	.o_MemWrite(MC_memWrite), 
+    	.o_MemToReg(MC_memToReg), 
+    	.o_ALUOp(MC_ALUOp),
+    	.o_ALUSrc2(MC_ALUSrc1),  
+    	.o_ALUSrc2(MC_ALUSrc2), 
+    	.o_RegWrite(MC_regWrite), 
+    	.i_OPCode(MC_OPCode)
     );
 
 endmodule

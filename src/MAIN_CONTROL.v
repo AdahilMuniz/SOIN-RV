@@ -7,7 +7,8 @@ module MAIN_CONTROL(
     output reg o_MemWrite,
     output reg o_MemToReg,
     output reg [2:0] o_ALUOp,
-    output reg o_ALUSrc,
+    output reg o_ALUSrc1,
+    output reg o_ALUSrc2,
     output reg o_RegWrite,
     input [6:0] i_OPCode
     );
@@ -20,7 +21,9 @@ module MAIN_CONTROL(
 				o_MemRead = 0;
 				o_MemWrite = 0;
 				o_MemToReg = 0;
-				o_ALUSrc = 0;
+				o_ALUSrc1 = 0;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 0;
 				o_RegWrite = 1;
 				o_ALUOp = 3'b010;
 			end
@@ -30,7 +33,8 @@ module MAIN_CONTROL(
 				o_MemRead = 0;
 				o_MemWrite = 0;
 				o_MemToReg = 0;
-				o_ALUSrc = 1;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 1;
 				o_RegWrite = 1;
 				o_ALUOp = 3'b011;
 			end
@@ -40,7 +44,8 @@ module MAIN_CONTROL(
 				o_MemRead = 1;
 				o_MemWrite = 0;
 				o_MemToReg = 1;
-				o_ALUSrc = 1;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 1;
 				o_RegWrite = 1;
 				o_ALUOp = 3'b000;
 			end
@@ -50,7 +55,8 @@ module MAIN_CONTROL(
 				o_MemRead = 0;
 				o_MemWrite = 1;
 				o_MemToReg = 1'bx; //Don't Care
-				o_ALUSrc = 1;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 1;
 				o_RegWrite = 0; 
 				o_ALUOp = 3'b000;
 			end
@@ -60,7 +66,8 @@ module MAIN_CONTROL(
 				o_MemRead = 0;
 				o_MemWrite = 0;
 				o_MemToReg = 1'bx; //Don't Care
-				o_ALUSrc = 0;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 0;
 				o_RegWrite = 0; 
 				o_ALUOp = 3'b001;
 			end
@@ -70,7 +77,19 @@ module MAIN_CONTROL(
 				o_MemRead = 0;
 				o_MemWrite = 0;
 				o_MemToReg = 1'bx; //Don't Care
-				o_ALUSrc = 0;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 0;
+				o_RegWrite = 0; 
+				o_ALUOp = 3'b100;
+			end
+
+			`OP_AUIPC : begin
+				o_Branch = 0;
+				o_MemRead = 0;
+				o_MemWrite = 0;
+				o_MemToReg = 1'bx; //Don't Care
+				o_ALUSrc1 = 1;
+				o_ALUSrc2 = 0;
 				o_RegWrite = 0; 
 				o_ALUOp = 3'b100;
 			end
@@ -80,7 +99,8 @@ module MAIN_CONTROL(
 				o_MemRead = 1'bx;
 				o_MemWrite = 1'bx;
 				o_MemToReg = 1'b0;
-				o_ALUSrc = 1'b1;
+				o_ALUSrc1 = 0;
+				o_ALUSrc2 = 1'b1;
 				o_RegWrite = 1'b1; 
 				o_ALUOp = 3'bx;
 			end
