@@ -78,7 +78,7 @@ module MAIN_CONTROL(
 				o_MemWrite = 0;
 				o_MemToReg = 1'bx; //Don't Care
 				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 0;
+				o_ALUSrc2 = 1;
 				o_RegWrite = 0; 
 				o_ALUOp = 3'b100;
 			end
@@ -89,9 +89,9 @@ module MAIN_CONTROL(
 				o_MemWrite = 0;
 				o_MemToReg = 1'bx; //Don't Care
 				o_ALUSrc1 = 1;
-				o_ALUSrc2 = 0;
+				o_ALUSrc2 = 1;
 				o_RegWrite = 0; 
-				o_ALUOp = 3'b100;
+				o_ALUOp = 3'b101;
 			end
 
 			default : begin

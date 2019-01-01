@@ -27,8 +27,8 @@ module ALU(
 			`ALU_SRA   : o_Result = i_Op1 >>> i_Op2[4:0];
 			`ALU_OR    : o_Result = i_Op1 | i_Op2;
 			`ALU_AND   : o_Result = i_Op1 & i_Op2;
-			`ALU_LUI   : o_Result = {i_Op2<<12, {12{1'b0}}};
-			`ALU_AUIPC : o_Result = {i_Op2<<12, {12{1'b0}}} + i_Op1;
+			`ALU_LUI   : o_Result = {i_Op2[19:0], {12{1'b0}}};
+			`ALU_AUIPC : o_Result = {i_Op2[19:0], {12{1'b0}}} + i_Op1;
 			default    : o_Result = 32'bx;
 		endcase
 		/*

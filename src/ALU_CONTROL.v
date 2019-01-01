@@ -85,7 +85,8 @@ module ALU_CONTROL(
 					`F3_TYPE7: o_ALUControlLines = `ALU_AND;
 					default : o_ALUControlLines = 4'bx;
 				endcase
-			`ALUOP_LUI : o_ALUControlLines = `ALU_LUI;
+			`ALUOP_LUI 	 : o_ALUControlLines = `ALU_LUI;
+			`ALUOP_AUIPC : o_ALUControlLines = `ALU_AUIPC;
 			default : o_ALUControlLines = 4'bx;
 		endcase
 	end
