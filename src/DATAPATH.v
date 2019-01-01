@@ -27,7 +27,7 @@ module DATAPATH(
 	wire MC_memRead;
 	wire MC_memWrite;
 	wire MC_memToReg;
-	wire [1:0] MC_ALUOp;
+	wire [2:0] MC_ALUOp;
 	wire MC_ALUSrc1;
 	wire MC_ALUSrc2;
 	wire MC_regWrite;
@@ -37,7 +37,7 @@ module DATAPATH(
 	wire [3:0] ALUC_ALUControlLines;
 	wire [6:0] ALUC_Funct7;
 	wire [2:0] ALUC_Funct3;
-	wire [1:0] ALUC_ALUOP;
+	wire [2:0] ALUC_ALUOP;
 
 	//ALU Signals
 	wire [`WORD_SIZE-1:0] ALU_Result;
@@ -178,7 +178,7 @@ module DATAPATH(
     	.o_MemWrite(MC_memWrite), 
     	.o_MemToReg(MC_memToReg), 
     	.o_ALUOp(MC_ALUOp),
-    	.o_ALUSrc2(MC_ALUSrc1),  
+    	.o_ALUSrc1(MC_ALUSrc1),  
     	.o_ALUSrc2(MC_ALUSrc2), 
     	.o_RegWrite(MC_regWrite), 
     	.i_OPCode(MC_OPCode)
