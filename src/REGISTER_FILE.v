@@ -37,7 +37,7 @@ module REGISTER_FILE(
 	//Writing occurs just in the positive edge clk;
 	always @(posedge i_clk) begin
 		if (i_Wen) begin
-			x[i_Wnum] = i_Wd;
+			x[i_Wnum] <= i_Wd;
 		end
 	end
 

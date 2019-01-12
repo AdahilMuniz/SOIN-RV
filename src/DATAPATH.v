@@ -7,7 +7,7 @@ module DATAPATH(
 
 	//Instruction Memory Signals
 	wire [`WORD_SIZE-1:0] IM_instruction;
-	wire [`WORD_SIZE:0] IM_addr;
+	wire [`WORD_SIZE-1:0] IM_addr;
 
 	//Register File Signals
 	wire [`WORD_SIZE-1:0] RF_rd1;
@@ -63,7 +63,7 @@ module DATAPATH(
 	end
 
 	always @(posedge i_clk) begin
-		pc = pc_aux;
+		pc <= pc_aux;
 	end
 
 	//AND Branch
@@ -90,7 +90,7 @@ module DATAPATH(
 	assign ALUC_Funct7 = IM_instruction[31:25];
 
 	//"Decode" instruction (Main Control)
-	assign MC_OPCode = IM_instruction;
+	assign MC_OPCode = IM_instruction[6:0];
 
 	//Main Control Signals attributions
 	assign RF_wen = MC_regWrite;

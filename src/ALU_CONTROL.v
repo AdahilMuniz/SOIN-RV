@@ -79,6 +79,7 @@ module ALU_CONTROL(
 						case(i_Funct7)
 							`F7_TYPE0 : o_ALUControlLines = `ALU_SRL;
 							`F7_TYPE32: o_ALUControlLines = `ALU_SRA;
+							default : o_ALUControlLines = 4'bx;
 						endcase
 											
 					`F3_TYPE6: o_ALUControlLines = `ALU_OR;				
