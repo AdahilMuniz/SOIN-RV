@@ -1,6 +1,3 @@
-`timescale 1ns / 1ps
-`include "../defines/PARAMETERS.vh"
-
 /*
 		This Data Memory version has a signal 'i_Wen' with 4 bits. The signal
 	is used to select the byte or word/halfword of the memory that will be written.

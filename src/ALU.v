@@ -1,8 +1,3 @@
-`timescale 1ns / 1ps
-
-`include "../defines/OPCODES_DEFINES.vh"
-`include "../defines/ALU_CONTROL.vh"
-`include "../defines/PARAMETERS.vh"
 //@TODO:
 // - To use one single adder for ADD, SUB, SLT and AUIPC;
 module ALU(
@@ -31,13 +26,6 @@ module ALU(
 			`ALU_AUIPC : o_Result = {i_Op2[19:0], {12{1'b0}}} + i_Op1;
 			default    : o_Result = 32'bx;
 		endcase
-		/*
-		if (o_Result == 0) begin
-			o_Zero = 1'b1;
-		end
-		else begin
-			o_Zero = 1'b0;
-		end*/
 	end
 	
 	assign o_Zero = o_Result == 0;

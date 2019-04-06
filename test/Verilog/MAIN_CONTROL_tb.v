@@ -23,7 +23,7 @@ module MAIN_CONTROL_tb;
 	wire o_RegWrite;
 
 	// Instantiate the Unit Under Test (UUT)
-	MAIN_CONTROL uut (
+	MAIN_CONTROL dut (
 		.o_Branch(o_Branch), 
 		.o_MemRead(o_MemRead), 
 		.o_MemWrite(o_MemWrite), 

@@ -1,11 +1,11 @@
-`timescale 1ns / 1ps
-`include "../defines/PARAMETERS.vh"
 /*
 		This module was built based on the Appendix A.7 of the COMPUTER ORGANIZATION AND DESIGN RISC-V EDITION book.
 		In this way, when the reading of a register occurs in the same clock cycle that the writing in the same register, the returned value
 	will be the value written in the earlier clock cycle.
 		However, it's possible make changes to change this behavior.
 */
+
+//@TODO: Should I add a reset to the register file?
 
 module REGISTER_FILE(
     output [`WORD_SIZE-1:0] o_Rd1,
@@ -31,6 +31,7 @@ module REGISTER_FILE(
 `endif
 
 	//Reading is combinational
+	//Read R0 return 0
 	assign o_Rd1 = |i_Rnum1 ? x[i_Rnum1] : 0;
 	assign o_Rd2 = |i_Rnum2 ? x[i_Rnum2] : 0;
 

@@ -1,6 +1,3 @@
-`timescale 1ns / 1ps
-`include "../defines/OPCODES_DEFINES.vh"
-
 module MAIN_CONTROL(
     output reg o_Branch,
     output reg o_MemRead,

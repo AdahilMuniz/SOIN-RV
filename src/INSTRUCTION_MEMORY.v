@@ -1,6 +1,3 @@
-`timescale 1ns / 1ps
-`include "../defines/PARAMETERS.vh"
-
 module INSTRUCTION_MEMORY(
     output [`WORD_SIZE-1:0] o_Instruction,
     input [`WORD_SIZE-1:0] i_Addr

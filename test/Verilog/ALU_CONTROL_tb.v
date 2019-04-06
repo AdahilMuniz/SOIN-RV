@@ -15,7 +15,7 @@ module ALU_CONTROL_tb;
 	wire [3:0] o_ALUControlLines;
 
 	// Instantiate the Unit Under Test (UUT)
-	ALU_CONTROL uut (
+	ALU_CONTROL dut (
 		.o_ALUControlLines(o_ALUControlLines), 
 		.i_Funct7(i_Funct7), 
 		.i_Funct3(i_Funct3), 

@@ -18,7 +18,7 @@ module DATA_MEMORY_V2_tb;
 	wire [31:0] o_Rd;
 
 	// Instantiate the Unit Under Test (UUT)
-	DATA_MEMORY_V2 uut (
+	DATA_MEMORY_V2 dut (
 		.o_Rd(o_Rd), 
 		.i_Wd(i_Wd), 
 		.i_Addr(i_Addr), 

@@ -18,7 +18,7 @@ module REGISTER_FILE_tb;
 	wire [31:0] o_Rd2;
 
 	// Instantiate the Unit Under Test (UUT)
-	REGISTER_FILE uut (
+	REGISTER_FILE dut (
 		.o_Rd1(o_Rd1), 
 		.o_Rd2(o_Rd2), 
 		.i_Rnum1(i_Rnum1), 

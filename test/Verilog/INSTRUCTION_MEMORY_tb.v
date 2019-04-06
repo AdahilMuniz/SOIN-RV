@@ -10,7 +10,7 @@ module INSTRUCTION_MEMORY_tb;
 	wire [31:0] o_Instruction;
 
 	// Instantiate the Unit Under Test (UUT)
-	INSTRUCTION_MEMORY #(HEIGHT)uut (
+	INSTRUCTION_MEMORY #(HEIGHT)dut (
 		.o_Instruction(o_Instruction), 
 		.i_Addr(i_Addr)
 	);

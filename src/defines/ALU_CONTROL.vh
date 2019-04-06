@@ -11,3 +11,11 @@
 `define ALU_AND   4'b0111
 `define ALU_LUI	  4'b1001
 `define ALU_AUIPC 4'b1011	
+
+//ALUOp
+`define ALUOP_I_L   3'b000
+`define ALUOP_B     3'b001
+`define ALUOP_R     3'b010
+`define ALUOP_I     3'b011
+`define ALUOP_LUI   3'b100
+`define ALUOP_AUIPC 3'b101

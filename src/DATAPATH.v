@@ -1,8 +1,6 @@
-`timescale 1ns / 1ps
-`include "../defines/PARAMETERS.vh"
-
 module DATAPATH(
-		input i_clk
+		input i_clk,
+		input i_rstn
     );
 
 	//Instruction Memory Signals
@@ -55,16 +53,7 @@ module DATAPATH(
 	wire DM_clk;
 
 	//PC
-	wire [`WORD_SIZE-1:0] pc_aux;
 	reg [`WORD_SIZE-1:0] pc;
-
-	initial begin
-		pc = 0;
-	end
-
-	always @(posedge i_clk) begin
-		pc <= pc_aux;
-	end
 
 	//AND Branch
 	wire A_B;
@@ -72,6 +61,25 @@ module DATAPATH(
 	wire [`WORD_SIZE-1:0] SH_B;
 	//SUM Branch
 	wire [`WORD_SIZE-1:0] S_B;
+
+	/****PC Update****/
+	initial begin
+		pc = 0;
+	end
+
+	always @(posedge i_clk, negedge i_rstn) begin
+		if(~i_rstn) begin
+			pc <= 0;
+		end
+		else begin 
+			if(A_B) begin
+				pc <= S_B;
+			end
+			else begin
+				pc <= pc + 4;
+			end
+		end
+	end
 
 	/****Attributions****/
 
@@ -115,8 +123,6 @@ module DATAPATH(
 	assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
 	//Write Data (Register File) Source
 	assign RF_wd = MC_memToReg ? DM_rd:ALU_Result;
-	//Branch Mux
-	assign pc_aux = A_B ? S_B:(pc+4);
 
 	/****AND-Branch****/
 	assign A_B = MC_branch & ALU_Zero;

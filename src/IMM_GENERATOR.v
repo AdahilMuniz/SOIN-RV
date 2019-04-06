@@ -1,7 +1,3 @@
-`timescale 1ns / 1ps
-`include "../defines/PARAMETERS.vh"
-`include "../defines/OPCODES_DEFINES.vh"
-
 module IMM_GENERATOR(
     output [`WORD_SIZE-1:0] o_ExtendedImmediate,
     input [`WORD_SIZE-1:0] i_Instruction

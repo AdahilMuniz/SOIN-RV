@@ -1,16 +1,3 @@
-`timescale 1ns / 1ps
-
-`include "../defines/OPCODES_DEFINES.vh"
-`include "../defines/ALU_CONTROL.vh"
-
-//ALUOp
-`define ALUOP_I_L   3'b000
-`define ALUOP_B     3'b001
-`define ALUOP_R     3'b010
-`define ALUOP_I     3'b011
-`define ALUOP_LUI   3'b100
-`define ALUOP_AUIPC 3'b101
-
 module ALU_CONTROL(
     output reg [3:0] o_ALUControlLines,
     input [6:0] i_Funct7,
