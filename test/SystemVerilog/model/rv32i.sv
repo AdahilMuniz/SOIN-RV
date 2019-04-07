@@ -16,6 +16,8 @@ class rv32i;
         this.alu = new;
         this.imem = new;
         this.dmem = new;
+
+        this.fetch(); //Necessary to be aligned with the dut
     endfunction 
 
     function void run_model ();

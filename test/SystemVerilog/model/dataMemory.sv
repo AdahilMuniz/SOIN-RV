@@ -9,13 +9,13 @@ class dataMemory;
 
 	function data_t get_mem (data_t addr);
 		data_t actual_addr;
-		actual_addr = (addr/4)*4;
+		actual_addr = (addr/4);
 		return this.mem[actual_addr];
 	endfunction
 
 	function void set_mem (data_t addr, data_t data);
 		data_t actual_addr;
-		actual_addr = (addr/4)*4;
+		actual_addr = (addr/4);
 		this.mem[actual_addr] = data;
 	endfunction
 
