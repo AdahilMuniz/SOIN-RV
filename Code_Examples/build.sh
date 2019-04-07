@@ -36,9 +36,10 @@ fi
 rm $OUTPUT_FILE
 
 
-test=$(hexdump -e '16/1 "%02x " "\n"' $BINARY_FILE)
+#test=$(hexdump -e '16/1 "%02x " "\n"' $BINARY_FILE)
+test=$(hexdump -e ' "%08x " ' $BINARY_FILE)
 
 for i in $test
 do
-   echo "$i" >> "$RV32I_FILE"
+    echo "$i" >> "$RV32I_FILE"
 done
