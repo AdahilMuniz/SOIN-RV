@@ -11,6 +11,7 @@ class rv32i;
     protected logic [11:0] imm;
 
     function new ();
+        this.pc = 0;
         this.reg_f = new;
         this.alu = new;
         this.imem = new;
@@ -19,16 +20,21 @@ class rv32i;
 
     function void run_model ();
         instruction_t inst;
+        this.update_pc();
         this.fetch();
         inst = this.decode();
         this.execute(inst);
     endfunction
 
-    function void fetch ();
+    function void reset_model ();
+        this.pc = 0;
+    endfunction
+
+    protected function void fetch ();
         this.instruction = imem.get_mem(this.pc);
     endfunction
 
-    function void execute(instruction_t inst);
+    protected function void execute(instruction_t inst);
         case (inst)
             ADDI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm));
             SLLI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm));
@@ -79,7 +85,7 @@ class rv32i;
 
     endfunction
 
-    function instruction_t decode();
+    protected function instruction_t decode();
         logic [6:0]  opcode = this.instruction[6:0];
         logic [2:0]  funct3;
         logic [6:0]  funct7;
