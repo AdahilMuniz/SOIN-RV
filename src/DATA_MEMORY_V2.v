@@ -5,9 +5,9 @@
 */
 
 module DATA_MEMORY_V2(
-    output reg [`WORD_SIZE:0] o_Rd,
-    input [`WORD_SIZE:0] i_Wd,
-    input [`WORD_SIZE:0] i_Addr,
+    output reg [`WORD_SIZE-1:0] o_Rd,
+    input [`WORD_SIZE-1:0] i_Wd,
+    input [`WORD_SIZE-1:0] i_Addr,
     input [3:0]i_Wen,
     input i_Ren,
     input i_clk
@@ -15,7 +15,7 @@ module DATA_MEMORY_V2(
 	parameter HEIGHT = `DM_DEPTH;//Memory height
 	parameter FILE = `DM_FILE;
 
-	reg [`WORD_SIZE:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
+	reg [`WORD_SIZE-1:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
 
 	initial begin
 		$readmemh(FILE, mem);//Initialize Memory

@@ -11,7 +11,7 @@ module DATA_MEMORY(
 	parameter HEIGHT = `DM_DEPTH;//Memory height
 	parameter FILE = `DM_FILE;
 
-	reg [7:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
+	reg [`WORD_SIZE-1:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
 
 	initial begin
 		$readmemh(FILE, mem);//Initialize Memory
@@ -28,7 +28,7 @@ module DATA_MEMORY(
 		end
 	end
 	//This is temporary just to ignore the verilator warning
-	assign o_Rd = i_Ren ? {mem[i_Addr], mem[(i_Addr)+1], mem[(i_Addr)+2], mem[(i_Addr)+3]} : 32'bx;
+	assign o_Rd = i_Ren ? mem[(i_Addr>>2)] : 32'bx;
 	//assign o_Rd = {mem[i_Addr+3], mem[i_Addr+2], mem[i_Addr+1], mem[i_Addr]};
 
 
