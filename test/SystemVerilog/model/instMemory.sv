@@ -10,7 +10,7 @@ class instMemory;
 	function data_t get_mem (data_t addr);
 		data_t actual_addr;
 		actual_addr = (addr/4)*4;
-		return this.mem[addr];
+		return this.mem[actual_addr];
 	endfunction
 
 	function void load ();

@@ -20,6 +20,7 @@ class rv32i;
 
     function void run_model ();
         instruction_t inst;
+
         this.update_pc();
         this.fetch();
         inst = this.decode();
@@ -29,6 +30,14 @@ class rv32i;
     function void reset_model ();
         this.pc = 0;
     endfunction
+
+    function data_t get_pc ();
+        return this.pc;
+    endfunction 
+
+    function data_t get_instruction ();
+        return this.instruction;
+    endfunction 
 
     protected function void fetch ();
         this.instruction = imem.get_mem(this.pc);
@@ -286,7 +295,7 @@ class rv32i;
     endfunction
 
     function void update_pc();
-        this.pc++;
+        this.pc = this.pc+4;
     endfunction
 
     //BRANCHES

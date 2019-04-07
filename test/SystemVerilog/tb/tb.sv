@@ -13,28 +13,32 @@ module tb;
 	reg i_clk;
 	reg i_rstn;
 
-	//tb_program tb_prog(
-	//	.clk(i_clk), 
-	//	.rstn(i_rstn)
-	//);
-
 	DATAPATH dut (
 		.i_clk(i_clk),
 		.i_rstn(i_rstn)
 	);
 
-	initial begin
-		model = new;
-		forever begin
-			if(~i_rstn) begin
-				model.reset_model();
-			end
-			@(posedge i_clk);
+	//initial begin
+	//	model = new;
+	//	forever begin
+	//		if(~i_rstn) begin
+	//			model.reset_model();
+	//		end
+	//		@(posedge i_clk);
+	//		model.run_model();
+	//	end
+	//end
+
+	always @(posedge i_clk or negedge i_rstn) begin
+		if(~i_rstn) begin
+			model.reset_model();
+		end else begin
 			model.run_model();
 		end
 	end
 
 	initial begin
+		model = new;
 		i_clk = 1'b0;
 	end
 
