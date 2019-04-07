@@ -129,7 +129,7 @@ module DATAPATH(
 	/****SHIFT-Branch****/
 	assign SH_B = IG_extendedImmediate<<1;
 	/****SUM-Branch****/
-	assign S_B = pc + SH_B;
+	assign S_B = pc + SH_B; //we have to use $sigend()?
 
 	//Instruction Memory Instantiation
 	INSTRUCTION_MEMORY #(`IM_DEPTH, `IM_FILE) instruction_memory (

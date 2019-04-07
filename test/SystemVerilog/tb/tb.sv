@@ -1,7 +1,7 @@
 `timescale 1ns/1ps 
 `define CLK_PERIOD 40 //25MHz
 
-module DATAPATH_tb;
+module tb;
 
 	//Inputs
 	reg i_clk;

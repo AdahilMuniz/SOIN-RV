@@ -1,8 +1,8 @@
 //DEFINES
-`include "defines/ALU_CONTROL.vh"
-`include "defines/OPCODES_DEFINES.vh"
-`include "defines/PARAMETERS.vh"
-`include "defines/PROJECT_CONFIG.vh"
+`include "../defines/ALU_CONTROL.vh"
+`include "../defines/OPCODES_DEFINES.vh"
+`include "../defines/PARAMETERS.vh"
+`include "../defines/PROJECT_CONFIG.vh"
 
 //RV32I Files
 `include "ALU.v"
