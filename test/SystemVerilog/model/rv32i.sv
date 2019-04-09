@@ -6,9 +6,11 @@ class rv32i;
     protected static instMemory imem;
     protected static dataMemory dmem;
 
-    protected data_t instruction;
-    protected logic [4:0]  rs1, rs2, rd;
-    protected logic [11:0] imm;
+
+    data_t instruction_encoded;
+    instruction_t instruction;
+    logic [4:0]  rs1, rs2, rd;
+    data_t imm;
 
     function new ();
         this.pc = 0;
@@ -16,40 +18,54 @@ class rv32i;
         this.alu = new;
         this.imem = new;
         this.dmem = new;
-
-        this.fetch(); //Necessary to be aligned with the dut
     endfunction 
 
+    //Control Methods
     function void run_model ();
-        instruction_t inst;
-
-        this.update_pc();
         this.fetch();
-        inst = this.decode();
-        this.execute(inst);
+        this.decode();
+        this.execute();
+        this.update_pc();
     endfunction
 
     function void reset_model ();
         this.pc = 0;
     endfunction
 
+    //Get Methods
+
     function data_t get_pc ();
         return this.pc;
     endfunction 
 
     function data_t get_instruction ();
-        return this.instruction;
+        return this.instruction_encoded;
     endfunction 
 
-    protected function void fetch ();
-        this.instruction = imem.get_mem(this.pc);
+    function data_t get_reg(logic [4:0] rx);
+        return this.reg_f.get_reg(rx);
     endfunction
 
-    protected function void execute(instruction_t inst);
-        case (inst)
+    function data_t get_mem(data_t addr);
+        return this.imem.get_mem(addr);
+    endfunction
+
+    function reg [4:0] get_rd ();
+        return this.rd;
+    endfunction
+
+    //Simulation Methods
+
+    protected function void fetch ();
+        this.instruction_encoded = imem.get_mem(this.pc);
+    endfunction
+
+    protected function void execute();
+        case (this.instruction)
             ADDI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm));
             SLLI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm));
             SLTI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.imm));
+            SLTIU : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.imm));
             XORI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.imm));
             SRLI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.imm));
             SRAI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.imm));
@@ -96,47 +112,46 @@ class rv32i;
 
     endfunction
 
-    protected function instruction_t decode();
-        logic [6:0]  opcode = this.instruction[6:0];
+    protected function void decode();
+        logic [6:0]  opcode = this.instruction_encoded[6:0];
         logic [2:0]  funct3;
         logic [6:0]  funct7;
-        logic [4:0]  rs1, rs2, rd;
+        //logic [4:0]  rs1, rs2, rd;
         logic [11:0] imm;
-        instruction_t inst;
 
         case (opcode)
             `OP_R_TYPE : begin 
-                rs1    = this.instruction[19:15];
-                rs2    = this.instruction[24:20];
-                rd     = this.instruction[11:7 ];
-                funct3 = this.instruction[14:12];
-                funct7 = this.instruction[31:25];
+                this.rs1    = this.instruction_encoded[19:15];
+                this.rs2    = this.instruction_encoded[24:20];
+                this.rd     = this.instruction_encoded[11:7 ];
+                funct3 = this.instruction_encoded[14:12];
+                funct7 = this.instruction_encoded[31:25];
                 case (funct7)
                     `F7_TYPE0: begin
                         case (funct3)
                             `F3_TYPE0: begin
-                                inst = ADD;
+                                this.instruction = ADD;
                             end
                             `F3_TYPE1: begin
-                                inst = SLL;
+                                this.instruction = SLL;
                             end
                             `F3_TYPE2: begin
-                                inst = SLT;
+                                this.instruction = SLT;
                             end
                             `F3_TYPE3: begin
-                                inst = SLTU;
+                                this.instruction = SLTU;
                             end
                             `F3_TYPE4: begin
-                                inst = XOR;
+                                this.instruction = XOR;
                             end
                             `F3_TYPE5: begin
-                                inst = SRL;
+                                this.instruction = SRL;
                             end
                             `F3_TYPE6: begin
-                                inst = OR;
+                                this.instruction = OR;
                             end
                             `F3_TYPE7: begin
-                                inst = XOR;
+                                this.instruction = XOR;
                             end
                             default : /* default */;
                         endcase
@@ -144,10 +159,10 @@ class rv32i;
                     `F7_TYPE32: begin
                         case (funct3)
                             `F3_TYPE0: begin
-                                inst = SUB;
+                                this.instruction = SUB;
                             end
                             `F3_TYPE5: begin
-                                inst = SRA;
+                                this.instruction = SRA;
                             end
                             default : /* default */;
                         endcase
@@ -156,116 +171,116 @@ class rv32i;
                 endcase
             end
             `OP_I_TYPE : begin 
-                rs1 = this.instruction[19:15];
-                imm = this.instruction[24:20];
-                rd  = this.instruction[11:7];
-                funct3 = this.instruction[14:12];
-                funct7 = this.instruction[31:25];
+                this.rs1 = this.instruction_encoded[19:15];
+                this.imm = 32'(signed'(this.instruction_encoded[31:20]));
+                this.rd  = this.instruction_encoded[11:7];
+                funct3 = this.instruction_encoded[14:12];
+                funct7 = this.instruction_encoded[31:25];
                 case (funct3)
                     `F3_TYPE0: begin
-                        inst = ADDI;
+                        this.instruction = ADDI;
                     end
                     `F3_TYPE1: begin
-                        imm  = this.instruction[24:20];
-                        inst = SLLI;
+                        this.imm  = 32'(signed'(this.instruction_encoded[24:20]));
+                        this.instruction = SLLI;
                     end
                     `F3_TYPE2: begin
-                        inst = SLTI;
+                        this.instruction = SLTI;
                     end
                     `F3_TYPE3: begin
-                        inst = SLTIU;
+                        this.instruction = SLTIU;
                     end
                     `F3_TYPE4: begin
-                        inst = XORI;
+                        this.instruction = XORI;
                     end
                     `F3_TYPE5: begin
-                        imm  = this.instruction[24:20];
+                        this.imm  = 32'(signed'(this.instruction_encoded[24:20]));
                         case (funct7)
-                            `F7_TYPE0: inst = SRLI;
-                            `F7_TYPE0: inst = SRAI;
+                            `F7_TYPE0: this.instruction = SRLI;
+                            `F7_TYPE0: this.instruction = SRAI;
                             default : /* default */;
                         endcase
                         
                     end
                     `F3_TYPE6: begin
-                        inst = ORI;
+                        this.instruction = ORI;
                     end
                     `F3_TYPE7: begin
-                        inst = ANDI;
+                        this.instruction = ANDI;
                     end
                     default : /* default */;
                 endcase
             end
             `OP_I_L_TYPE : begin 
-                rs1 = this.instruction[19:15];
-                imm = this.instruction[24:20];
-                rd  = this.instruction[11:7];
-                funct3 = this.instruction[14:12];
+                this.rs1 = this.instruction_encoded[19:15];
+                this.imm = 32'(signed'(this.instruction_encoded[24:20]));
+                this.rd  = this.instruction_encoded[11:7];
+                funct3   = this.instruction_encoded[14:12];
 
                 case (funct3)
                     `F3_TYPE0: begin
-                        inst = LB;
+                        this.instruction = LB;
                     end
                     `F3_TYPE1: begin
-                        inst = LH;
+                        this.instruction = LH;
                     end
                     `F3_TYPE2: begin
-                        inst = LW;
+                        this.instruction = LW;
                     end
                     `F3_TYPE4: begin
-                        inst = LBU;
+                        this.instruction = LBU;
                     end
                     `F3_TYPE5: begin
-                        inst = LHU;
+                        this.instruction = LHU;
                     end
                     default : /* default */;
                 endcase
 
             end
             `OP_S_TYPE : begin 
-                rs1 = this.instruction[19:15];
-                imm = {this.instruction[31:25], this.instruction[11:7 ]};
-                rd  = this.instruction[11:7 ];
-                funct3 = this.instruction[14:12];
+                this.rs1 = this.instruction_encoded[19:15];
+                this.imm = 32'(signed'({this.instruction_encoded[31:25], this.instruction_encoded[11:7 ]}));
+                this.rd  = this.instruction_encoded[11:7 ];
+                funct3 = this.instruction_encoded[14:12];
 
                 case (funct3)
                     `F3_TYPE0: begin
-                        inst = SB;
+                        this.instruction = SB;
                     end
                     `F3_TYPE1: begin
-                        inst = SH;
+                        this.instruction = SH;
                     end
                     `F3_TYPE2: begin
-                        inst = SW;
+                        this.instruction = SW;
                     end
                     default : /* default */;
                 endcase
 
             end
             `OP_B_TYPE : begin 
-                rs1    = this.instruction[19:15];
-                rs2    = this.instruction[24:20];
-                imm    = {this.instruction[31], this.instruction[7], this.instruction[30:25], this.instruction[11:8]};
-                funct3 = this.instruction[14:12];
+                this.rs1    = this.instruction_encoded[19:15];
+                this.rs2    = this.instruction_encoded[24:20];
+                this.imm    = 32'(signed'({this.instruction_encoded[31], this.instruction_encoded[7], this.instruction_encoded[30:25], this.instruction_encoded[11:8]}));
+                funct3 = this.instruction_encoded[14:12];
                 
                 case (funct3)
                     `F3_TYPE0: begin
-                        inst = BEQ;
+                        this.instruction = BEQ;
                     end
                     `F3_TYPE1: begin
-                        inst = BNE;
+                        this.instruction = BNE;
                     end
                     `F3_TYPE4: begin
-                        inst = BLT;
+                        this.instruction = BLT;
                     end
                     `F3_TYPE5: begin
-                        inst = BGE;
+                        this.instruction = BGE;
                     end
                     `F3_TYPE6: begin
-                        inst = BLTU;
+                        this.instruction = BLTU;
                     end
                     `F3_TYPE7: begin
-                        inst = BGEU;
+                        this.instruction = BGEU;
                     end
                     default : /* default */;
                 endcase
@@ -273,26 +288,25 @@ class rv32i;
 
             end
             `OP_JAL : begin 
-                imm    = {this.instruction[31], this.instruction[19:12], this.instruction[20], this.instruction[30:21]};
-                inst   = JAL;
+                this.imm    = signed'({this.instruction_encoded[31], this.instruction_encoded[19:12], this.instruction_encoded[20], this.instruction_encoded[30:21]});
+                this.instruction   = JAL;
             end
             `OP_JALR : begin 
-                imm    = this.instruction[31:12];
-                inst   = JALR;
+                this.imm    = signed'(this.instruction_encoded[31:12]);
+                this.instruction   = JALR;
             end
 
             `OP_LUI : begin 
-                imm    = instruction[31:12];
-                inst   = LUI;
+                this.imm    = instruction_encoded[31:12];
+                this.instruction   = LUI;
             end
             `OP_AUIPC : begin 
-                imm    = instruction[31:12];
-                inst   = AUIPC;
+                this.imm    = instruction_encoded[31:12];
+                this.instruction   = AUIPC;
             end
             default : /* default */;
         endcase
         
-        return inst;
 
     endfunction
 
@@ -303,103 +317,103 @@ class rv32i;
     //BRANCHES
     protected function void beq(data_t rs1, data_t rs2, data_t imm);
         if(rs1 === rs2 ) begin 
-            this.pc = this.pc + $signed(imm << 1);
+            this.pc = this.pc + signed'(imm << 1);
         end
     endfunction
 
     protected function void bne(data_t rs1, data_t rs2, data_t imm);
         if(rs1 !== rs2 ) begin 
-            this.pc = this.pc + $signed(imm[11:0] << 1);
+            this.pc = this.pc + signed'(imm[11:0] << 1);
         end
     endfunction
 
     protected function void bltu(data_t rs1, data_t rs2, data_t imm);
         if(rs1 < rs2 ) begin 
-            this.pc = this.pc + $signed(imm[11:0] << 1);
+            this.pc = this.pc + signed'(imm[11:0] << 1);
         end
     endfunction
 
     protected function void blt(data_t rs1, data_t rs2, data_t imm);
-        if($signed(rs1) === $signed(rs2) ) begin 
-           this.pc = this.pc + $signed(imm[11:0] << 1);
+        if(signed'(rs1) === signed'(rs2) ) begin 
+           this.pc = this.pc + signed'(imm[11:0] << 1);
         end
     endfunction
 
     protected function void bgeu(data_t rs1, data_t rs2, data_t imm);
         if(rs1 >= rs2 ) begin 
-           this.pc = this.pc + $signed(imm[11:0] << 1);
+           this.pc = this.pc + signed'(imm[11:0] << 1);
         end
     endfunction
 
     protected function void bge(data_t rs1, data_t rs2, data_t imm);
-        if($signed(rs1) >= $signed(rs2) ) begin 
-           this.pc = this.pc + $signed(imm[11:0] << 1);
+        if(signed'(rs1) >= signed'(rs2) ) begin 
+           this.pc = this.pc + signed'(imm[11:0] << 1);
         end
     endfunction
 
 
     //LOAD
     protected function data_t lw(data_t rs1, data_t imm);
-        return dmem.get_mem($signed(imm)+rs1);
+        return dmem.get_mem(signed'(imm)+rs1);
     endfunction
 
     protected function data_t lh(data_t rs1, data_t imm);
         data_t temp_data;
-        temp_data = dmem.get_mem($signed(imm)+rs1);
+        temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {{16{temp_data[31]}}, temp_data[15:0]};
         return temp_data;
     endfunction
 
     protected function data_t lb(data_t rs1, data_t imm);
         data_t temp_data;
-        temp_data = dmem.get_mem($signed(imm)+rs1);
+        temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {{24{temp_data[31]}}, temp_data[7:0]};
         return temp_data;
     endfunction
 
     protected function data_t lhu(data_t rs1, data_t imm);
         data_t temp_data;
-        temp_data = dmem.get_mem($signed(imm)+rs1);
+        temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {16'h0, temp_data[15:0]};
         return temp_data;
     endfunction
 
     protected function data_t lbu(data_t rs1, data_t imm);
         data_t temp_data;
-        temp_data = dmem.get_mem($signed(imm)+rs1);
+        temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {24'h0, temp_data[7:0]};
         return temp_data;
     endfunction
 
     //Store
     protected function void sw(data_t rs1, data_t rs2, data_t imm);
-        dmem.set_mem($signed(imm)+rs1, rs2);
+        dmem.set_mem(signed'(imm)+rs1, rs2);
     endfunction
 
     protected function void sh(data_t rs1, data_t rs2, data_t imm);
         data_t temp_data;
         temp_data = {{16{rs2[31]}}, rs2[15:0]};
-        dmem.set_mem($signed(imm)+rs1, temp_data);
+        dmem.set_mem(signed'(imm)+rs1, temp_data);
     endfunction
 
     protected function void sb(data_t rs1, data_t rs2, data_t imm);
         data_t temp_data;
         temp_data = {{24{rs2[31]}}, rs2[7:0]};
-        dmem.set_mem($signed(imm)+rs1, temp_data);
+        dmem.set_mem(signed'(imm)+rs1, temp_data);
     endfunction
 
     //JAL
     protected function data_t jal (data_t imm);
         data_t current_pc;
         current_pc = this.pc + 4;
-        this.pc = this.pc + $signed(imm[11:0] << 1);
+        this.pc = this.pc + signed'(imm[11:0] << 1);
         return current_pc;
     endfunction 
 
     protected function data_t jalr (data_t rs1, data_t imm);
         data_t current_pc;
         current_pc = this.pc + 4;
-        this.pc = this.pc + $signed(imm[11:0]) + $signed(rs1);
+        this.pc = this.pc + signed'(imm[11:0]) + signed'(rs1);
         return current_pc;
     endfunction 
 

@@ -61,14 +61,20 @@ class alu_t;
     endfunction
 
     protected function data_t slt(data_t op1, data_t op2);
-        if($signed(op1)<$signed(op2)) begin
+        if(signed'(op1)<signed'(op2)) begin
             return 1;
+        end
+        else begin 
+            return 0;
         end
     endfunction
 
     protected function data_t sltu(data_t op1, data_t op2);
         if(op1<op2) begin
             return 1;
+        end
+        else begin 
+            return 0;
         end
     endfunction
 
@@ -85,7 +91,7 @@ class alu_t;
     endfunction
 
     protected function data_t auipc(data_t op1, data_t op2);
-        return lui(op2) + op1;
+        return this.lui(op2) + op1;
     endfunction
 
 endclass

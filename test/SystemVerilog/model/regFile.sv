@@ -1,18 +1,21 @@
 class regFile;
-    protected static data_t x [REG_FILE_SIZE-1:0];
+    protected static data_t x [31:0];
 
     function new ();
-    	x[0] = 32'h0;
+    	integer i;
+        for (i = 0; i < 32; i++) begin
+            this.x[i] = i;
+        end
     endfunction
 
     function void set_reg(addr_t addr, data_t data);
         if(addr !== 0) begin 
-        	x[addr] = data;
+        	this.x[addr] = data;
         end
     endfunction
 
     function data_t get_reg(addr_t addr);
-        return x[addr];
+        return this.x[addr];
     endfunction
 
 endclass
