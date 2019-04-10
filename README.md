@@ -3,7 +3,7 @@ RV32I - One More Implmentation
 
 Hi! This is just a simple Risc-V implementation.
 
-My goal with this project is to ~get rich~ learn about computer architecture implmentation as well as simulation tools/process and verification technics.
+My goal with this project is to ~get rich~ learn about computer architecture implementation as well as simulation tools/process and verification techniques.
 
 I pretend to work on this project for the time necessary to learn and to get skills in the subjects that I like ~that means a lot of time~. I hope too that this project could help other students interested in this subjects.
 
