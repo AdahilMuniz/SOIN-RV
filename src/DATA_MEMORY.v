@@ -1,11 +1,11 @@
 //@TODO: Fix it
 module DATA_MEMORY(
     output [`WORD_SIZE-1:0] o_Rd,
-    input [`WORD_SIZE-1:0] i_Wd,
-    input [`WORD_SIZE-1:0] i_Addr,
-    input i_Wen,
-    input i_Ren,
-    input i_clk
+    input  [`WORD_SIZE-1:0] i_Wd,
+    input  [`WORD_SIZE-1:0] i_Addr,
+    input  i_Wen,
+    input  i_Ren,
+    input  i_clk
     );
 
 	parameter HEIGHT = `DM_DEPTH;//Memory height

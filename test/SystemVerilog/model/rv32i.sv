@@ -12,11 +12,11 @@ class rv32i;
     logic [4:0]  rs1, rs2, rd;
     data_t imm;
 
-    function new ();
+    function new (string IM_FILE);
         this.pc = 0;
         this.reg_f = new;
         this.alu = new;
-        this.imem = new;
+        this.imem = new(IM_FILE);
         this.dmem = new;
     endfunction 
 
@@ -52,6 +52,14 @@ class rv32i;
 
     function reg [4:0] get_rd ();
         return this.rd;
+    endfunction
+
+    function reg [4:0] get_rs1 ();
+        return this.rs1;
+    endfunction
+
+    function reg [4:0] get_imm ();
+        return this.imm;
     endfunction
 
     //Simulation Methods

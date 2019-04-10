@@ -14,3 +14,4 @@
 `include "MAIN_CONTROL.v"
 `include "REGISTER_FILE.v"
 `include "DATAPATH.v"
+`include "CORE.v"

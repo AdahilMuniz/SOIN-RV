@@ -1,8 +1,10 @@
 class instMemory;
 
 	protected data_t mem [(`IM_DEPTH/4)-1:0];//Memory
+	protected string IM_FILE;
 
-	function new ();
+	function new (string IM_FILE = `IM_FILE);
+		this.IM_FILE = IM_FILE;
 		this.load();
 	endfunction
 
@@ -14,7 +16,7 @@ class instMemory;
 	endfunction
 
 	function void load ();
-		$readmemh(`IM_FILE, this.mem);
+		$readmemh(this.IM_FILE, this.mem);
 	endfunction
 
 endclass

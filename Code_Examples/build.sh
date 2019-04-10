@@ -13,7 +13,7 @@ then
 	echo "The file $ASSEMBLY_FILE will be assembled."
 else
 	echo "There is no file with this name: $1."
-	echo "Please, verify whether the file is in the directory 'Assembly' and that it has no extension (.S)"
+	echo "Please, verify whether the file is in the directory 'Assembly' and that the name provided has no extension (.S)"
 	exit 0
 fi
 
