@@ -7,7 +7,7 @@ My goal with this project is to ~get rich~ learn about computer architecture imp
 
 I pretend to work on this project for the time necessary to learn and to get skills in the subjects that I like ~that means a lot of time~. I hope too that this project could help other students interested in this subjects.
 
-##Compiling and Running
+<h2>Compiling and Running</h2>
 
 To compile the codes present in the *Code_Examples* repository and run the simulation loading the generated binary in the core instruction memory execute the *build.sh* script passing the file name as argument. 
 
