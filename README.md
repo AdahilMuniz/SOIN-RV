@@ -1,4 +1,4 @@
-RV32I - One More Implmentation
+RV32I - One More Implementation
 ======
 
 Hi! This is just a simple Risc-V implementation.

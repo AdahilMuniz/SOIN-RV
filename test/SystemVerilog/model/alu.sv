@@ -57,7 +57,7 @@ class alu_t;
     endfunction
 
     protected function data_t sll(data_t op1, data_t op2);
-        return op1 << op2;
+        return op1 << op2[4:0];
     endfunction
 
     protected function data_t slt(data_t op1, data_t op2);
@@ -79,11 +79,11 @@ class alu_t;
     endfunction
 
     protected function data_t srl(data_t op1, data_t op2);
-        return op1 >> op2;
+        return op1 >> op2[4:0];
     endfunction
 
     protected function data_t sra(data_t op1, data_t op2);
-        return op1 >>> op2;
+        return op1 >>> op2[4:0];
     endfunction
 
     protected function data_t lui(data_t op2);

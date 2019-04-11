@@ -47,7 +47,7 @@ class rv32i;
     endfunction
 
     function data_t get_mem(data_t addr);
-        return this.imem.get_mem(addr);
+        return this.dmem.get_mem(addr);
     endfunction
 
     function reg [4:0] get_rd ();
@@ -108,8 +108,8 @@ class rv32i;
             LBU   : this.reg_f.set_reg(this.rd, this.lbu(reg_f.get_reg(this.rs1), this.imm));
 
             SW    : this.sw(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
-            SH    : this.sw(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
-            SB    : this.sw(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
+            SH    : this.sh(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
+            SB    : this.sb(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
 
             JAL   : this.reg_f.set_reg(this.rd, this.jal(this.imm));
             JALR  : this.reg_f.set_reg(this.rd, this.jalr(this.reg_f.get_reg(rs1), this.imm));
@@ -159,7 +159,7 @@ class rv32i;
                                 this.instruction = OR;
                             end
                             `F3_TYPE7: begin
-                                this.instruction = XOR;
+                                this.instruction = AND;
                             end
                             default : /* default */;
                         endcase
@@ -247,6 +247,7 @@ class rv32i;
             end
             `OP_S_TYPE : begin 
                 this.rs1 = this.instruction_encoded[19:15];
+                this.rs2 = this.instruction_encoded[24:20];
                 this.imm = 32'(signed'({this.instruction_encoded[31:25], this.instruction_encoded[11:7 ]}));
                 this.rd  = this.instruction_encoded[11:7 ];
                 funct3 = this.instruction_encoded[14:12];

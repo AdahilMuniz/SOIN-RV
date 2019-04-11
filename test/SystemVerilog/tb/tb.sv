@@ -10,6 +10,9 @@
 `define REGISTER_FILE_PATH dut.core.register_file
 `define DATA_MEMORY_PATH dut.data_memory
 
+//@TODO: Add a interface betwen the testbench and the memories to take the data
+
+
 module tb;
 
     import tb_pkg::*;
@@ -24,7 +27,6 @@ module tb;
     reg i_rstn;
 
     //Testbench Attributes
-    //string IM_FILE;
 
     task verification();
         begin 
@@ -50,9 +52,9 @@ module tb;
                     end
                 end
                 `OP_S_TYPE : begin
-                    if(`DATA_MEMORY_PATH.mem[model.get_imm()+model.get_rs1()] !== model.get_mem(model.get_imm()+model.get_rs1())) begin
-                        $display("dut.x[%d] = %d, model.x[%d] = %d", model.get_rd(), `REGISTER_FILE_PATH.x[model.get_rd()], model.get_rd(),  model.get_reg(model.get_rd()));
-                        $display("|I_L-type| **ERROR ");
+                    if(`DATA_MEMORY_PATH.mem[(model.get_imm()+model.get_rs1())>>2] !== model.get_mem(signed'(model.get_imm())+model.get_rs1())) begin
+                        $display("dut.dmem[%d] = %d, model.dmem[%d] = %d", (model.get_imm()+model.get_rs1())>>2, `DATA_MEMORY_PATH.mem[(model.get_imm()+model.get_rs1())>>2], (model.get_imm()+model.get_rs1())>>2,  model.get_mem((model.get_imm()+model.get_rs1())));
+                        $display("|S-type| **ERROR ");
                     end
                 end
             
