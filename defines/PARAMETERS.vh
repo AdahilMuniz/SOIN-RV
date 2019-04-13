@@ -1,4 +1,5 @@
 `define WORD_SIZE 32
+`define INST_SIZE 32
 
 `define DM_DEPTH  256 //Data Memory depth
 `define IM_DEPTH  256 //Instruction Memory depth
