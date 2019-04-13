@@ -125,7 +125,7 @@ class rv32i;
         logic [2:0]  funct3;
         logic [6:0]  funct7;
         //logic [4:0]  rs1, rs2, rd;
-        logic [11:0] imm;
+        //logic [11:0] imm;
 
         case (opcode)
             `OP_R_TYPE : begin 

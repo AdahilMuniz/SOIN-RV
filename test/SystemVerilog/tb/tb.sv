@@ -5,10 +5,14 @@
 `include "PARAMETERS.vh"
 `include "PROJECT_CONFIG.vh"
 
+
+`include "memory_if.sv"
+
 `define CLK_PERIOD 40 //25MHz
 
 `define REGISTER_FILE_PATH dut.core.register_file
 `define DATA_MEMORY_PATH dut.data_memory
+`define INST_MEMORY_PATH dut.instruction_memory
 
 //@TODO: Add a interface betwen the testbench and the memories to take the data
 
@@ -20,11 +24,13 @@ module tb;
     //Parameters
     parameter IM_FILE="dafault";
 
+    //Classes
     rv32i model;
+    test test0;
 
     //Inputs
-    reg i_clk;
-    reg i_rstn;
+    logic i_clk;
+    logic i_rstn;
 
     //Testbench Attributes
 
@@ -76,24 +82,37 @@ module tb;
         end
     endtask
 
+    //Interfaces
+    //memory_if memory_if2(i_clk, i_rstn); // Intruction Memory Interface
+    //memory_if memory_if3(i_clk, i_rstn); // Data Memory Interface
+
+    bind `INST_MEMORY_PATH memory_if memory_if0(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Instruction)); //Binding: Intruction Memory Interface
+    bind `DATA_MEMORY_PATH memory_if memory_if1(.clk(i_clk), .rstn(i_rstn)); //Binding: Intruction Memory Interface
+
+    //DUT
     DATAPATH #(IM_FILE) dut (
         .i_clk(i_clk),
         .i_rstn(i_rstn)
     );
 
-    always @(posedge i_clk or negedge i_rstn) begin
-        if(~i_rstn) begin
-            model.reset_model();
-        end else begin
-            verification();
-            model.run_model();
-        end
-    end
+    //always @(posedge i_clk or negedge i_rstn) begin
+    //    if(~i_rstn) begin
+    //        model.reset_model();
+    //    end else begin
+    //        verification();
+    //        model.run_model();
+    //    end
+    //end
 
     initial begin
         $display("IM_FILE: %s", IM_FILE);
-        model = new(IM_FILE);
+        //model = new(IM_FILE);
+        test0 = new(`INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1);
         i_clk = 1'b0;
+        forever begin 
+            //#10ns;
+            test0.run();
+        end
     end
 
     //Clock generation
