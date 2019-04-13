@@ -6,7 +6,7 @@ RV32I_FILE="RV32I/$1.rv32i"
 
 
 #Initializing
-cd $(dirname $0) #I have to look for something more elegant
+cd $(dirname $0) #I must look for something more elegant
 
 if [ -f "$ASSEMBLY_FILE" ]
 then
