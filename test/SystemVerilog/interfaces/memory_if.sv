@@ -11,8 +11,8 @@ interface memory_if(
 					);
 
 
-    modport monitor (input rdata, wdata, addr, wen, ren);
+    modport monitor (input rdata, wdata, addr, wen, ren, clk, rstn);
 
-    modport memory  (output rdata, input wdata, addr, wen, ren);
+    modport memory  (output rdata, input wdata, addr, wen, ren, clk, rstn);
 
 endinterface

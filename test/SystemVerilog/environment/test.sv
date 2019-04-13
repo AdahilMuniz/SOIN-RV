@@ -2,8 +2,7 @@
 //Create class to encpsulate the instruction item "traduction".
 class test;
 
-    //virtual memory_if vif_inst_mem;
-    //virtual memory_if vif_data_mem;
+    virtual test_if vif;
 
     //Attributes
     instruction_item_t inst_item;//Instruction Item
@@ -11,16 +10,16 @@ class test;
     rv32i model;
 
 
-    function new(virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem);
-        //this.vif_inst_mem = vif_inst_mem;
-        //this.vif_data_mem = vif_data_mem;
+    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem);
+        this.vif           = vif;
         this.inst_monitor0 = new(vif_inst_mem.monitor);
         this.model         = new("test");
     endfunction
 
     task run();
         //Control Race Condition
-        semaphore mutex = new(1);//Mutex
+        semaphore mutex = new(1);
+
         fork
             begin : thread_inst_monitor
                 forever begin 
@@ -33,17 +32,24 @@ class test;
             begin : thread_model
                 forever begin 
                     mutex.get(1);
-                    this.model.instruction = this.inst_item.instruction;
-                    this.model.rs1         = this.inst_item.rs1;
-                    this.model.rs2         = this.inst_item.rs2;
-                    this.model.rd          = this.inst_item.rd;
-                    this.model.imm         = this.inst_item.imm;
+                    if(~vif.rstn) begin
+                        model.reset();
+                        $display("TEST: Waiting reset");
+                        @(vif.rstn);
+                    end
+                    else begin 
+                        this.model.instruction = this.inst_item.instruction;
+                        this.model.rs1         = this.inst_item.rs1;
+                        this.model.rs2         = this.inst_item.rs2;
+                        this.model.rd          = this.inst_item.rd;
+                        this.model.imm         = this.inst_item.imm;
+                        this.model.run();
+                    end
                     mutex.put(1);
-                    this.model.run();
                 end
             end
+        join_none
 
-        join
     endtask
 
 endclass

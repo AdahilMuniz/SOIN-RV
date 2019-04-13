@@ -18,7 +18,10 @@ class inst_minitor;
 
 
 	task run();
-        //$display("inst_mem: Run");
+        if(vif.rstn) begin
+            $display("INST_MONITOR: Waiting reset");
+            @(vif.rstn);
+        end
 		@(this.vif.addr);
 		this.decode();
 	endtask 
