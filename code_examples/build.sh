@@ -1,7 +1,7 @@
 #!/bin/bash
-ASSEMBLY_FILE="Assembly/$1.S"
-BINARY_FILE="Bin/$1.bin"
-OUTPUT_FILE="Bin/$1.o"
+ASSEMBLY_FILE="assembly/$1.S"
+BINARY_FILE="bin/$1.bin"
+OUTPUT_FILE="bin/$1.o"
 RV32I_FILE="RV32I/$1.rv32i"
 
 
