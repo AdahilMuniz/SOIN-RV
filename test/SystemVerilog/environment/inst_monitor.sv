@@ -18,7 +18,7 @@ class inst_minitor;
 
 
 	task run();
-        $display("inst_mem: Run");
+        //$display("inst_mem: Run");
 		@(this.vif.addr);
 		this.decode();
 	endtask 
@@ -217,14 +217,12 @@ class inst_minitor;
             default : this.instruction = NO_INST;
         endcase
 
-
-        
-        $display("inst_mem:\n Intruction:%s \n RS1: %d RS2: %d RD: %d IMM: %d\n",
-            this.instruction,
-            this.rs1,
-            this.rs2,
-            this.rd,
-            signed'(this.imm));
+        $display("Intruction:%s \n RS1: %d RS2: %d RD: %d IMM: %d\n",
+        this.instruction,
+        this.rs1,
+        this.rs2,
+        this.rd,
+        signed'(this.imm));
 
         this.inst_item.instruction = this.instruction;
         this.inst_item.rs1         = this.rs1;

@@ -25,7 +25,6 @@ module tb;
     parameter IM_FILE="dafault";
 
     //Classes
-    rv32i model;
     test test0;
 
     //Inputs
@@ -83,9 +82,6 @@ module tb;
     endtask
 
     //Interfaces
-    //memory_if memory_if2(i_clk, i_rstn); // Intruction Memory Interface
-    //memory_if memory_if3(i_clk, i_rstn); // Data Memory Interface
-
     bind `INST_MEMORY_PATH memory_if memory_if0(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Instruction)); //Binding: Intruction Memory Interface
     bind `DATA_MEMORY_PATH memory_if memory_if1(.clk(i_clk), .rstn(i_rstn)); //Binding: Intruction Memory Interface
 
@@ -95,22 +91,11 @@ module tb;
         .i_rstn(i_rstn)
     );
 
-    //always @(posedge i_clk or negedge i_rstn) begin
-    //    if(~i_rstn) begin
-    //        model.reset_model();
-    //    end else begin
-    //        verification();
-    //        model.run_model();
-    //    end
-    //end
-
     initial begin
         $display("IM_FILE: %s", IM_FILE);
-        //model = new(IM_FILE);
         test0 = new(`INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1);
         i_clk = 1'b0;
         forever begin 
-            //#10ns;
             test0.run();
         end
     end
