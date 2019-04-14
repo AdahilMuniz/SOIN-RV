@@ -2,31 +2,43 @@
 //Create class to encpsulate the instruction item "traduction".
 class test;
 
+    //Interfaces
     virtual test_if vif;
 
     //Attributes
     instruction_item_t inst_item;//Instruction Item
-    inst_minitor inst_monitor0;//Intruction Monitor
+    data_item_t data_trans;//Data Memory Transaction
+    inst_monitor inst_monitor0;//Intruction Monitor
+    data_monitor data_monitor0;//Data Monitor
     rv32i model;
 
 
     function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem);
         this.vif           = vif;
-        this.inst_monitor0 = new(vif_inst_mem.monitor);
+        this.inst_monitor0 = new(vif_inst_mem);
+        this.data_monitor0 = new(vif_data_mem);
         this.model         = new("test");
     endfunction
 
     task run();
-        //Control Race Condition
+        //Control Process communication
         semaphore mutex = new(1);
-
+        
         fork
             begin : thread_inst_monitor
                 forever begin 
-                    mutex.get(1);
-                    this.inst_monitor0.run();
-                    this.inst_item = this.inst_monitor0.inst_item;
-                    mutex.put(1);
+                  mutex.get(1);
+                  this.inst_monitor0.run();
+                  this.inst_item = this.inst_monitor0.inst_item;
+                  mutex.put(1);
+                end
+            end
+            begin : thread_data_monitor
+                forever begin 
+
+                    this.data_monitor0.run();
+                    this.data_trans = this.data_monitor0.data_trans;
+
                 end
             end
             begin : thread_model

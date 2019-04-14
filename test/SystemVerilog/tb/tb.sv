@@ -83,7 +83,7 @@ module tb;
 
     //Interfaces
     bind `INST_MEMORY_PATH memory_if memory_if0(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Instruction)); //Binding: Intruction Memory Interface
-    bind `DATA_MEMORY_PATH memory_if memory_if1(.clk(i_clk), .rstn(i_rstn)); //Binding: Intruction Memory Interface
+    bind `DATA_MEMORY_PATH memory_if memory_if1(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Rd), .wdata(i_Wd), .ren(i_Ren), .wen(i_Wen)); //Binding: Intruction Memory Interface
     test_if test_if0(.clk(clk), .rstn(rstn));
     //DUT
     DATAPATH #(IM_FILE) dut (

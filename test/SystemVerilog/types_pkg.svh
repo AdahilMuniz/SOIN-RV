@@ -11,13 +11,20 @@ package types_pkg;
     typedef logic [`WORD_SIZE -1:0] addr_t;
     typedef enum logic [3:0] {ALU_ADD, ALU_SUB, ALU_SLL, ALU_SLT, ALU_SLTU, ALU_XOR, ALU_SRL, ALU_SRA, ALU_OR, ALU_AND, ALU_LUI, ALU_AUIPC} alu_operation_t;
     typedef enum logic [5:0] {ADDI, SLTI, SLTIU, ORI, XORI, ANDI, SLLI, SRLI, SRAI, JALR, LW, LB, LH, LBU, LHU, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND, LUI, AUIPC, JAL, SW, SB, SH, BEQ, BNE, BLT, BLTU, BGE, BGEU, NO_INST} instruction_t;
+    typedef enum logic       {READ, WRITE} direction_t;
 
     typedef struct {
-    	instruction_t instruction;
-    	reg_t rs1;
-    	reg_t rs2;
-    	reg_t rd;
-    	data_t imm;
+        instruction_t instruction;
+        reg_t         rs1;
+        reg_t         rs2;
+        reg_t         rd;
+        data_t        imm;
     }instruction_item_t;
+
+    typedef struct {
+        data_t      data;
+        addr_t      addr;
+        direction_t direction;
+    }data_item_t;
 
 endpackage

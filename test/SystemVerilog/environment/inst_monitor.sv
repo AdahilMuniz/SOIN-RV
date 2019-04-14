@@ -1,6 +1,5 @@
-//`include "memory_if.sv"
 
-class inst_minitor;
+class inst_monitor;
 
 	//Virtual Interface
 	virtual memory_if.monitor vif;
