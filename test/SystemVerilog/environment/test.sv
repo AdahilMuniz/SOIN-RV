@@ -31,7 +31,7 @@ class test;
                   mutex.get(1);
                   this.inst_monitor0.run();
                   this.inst_item = this.inst_monitor0.inst_item;
-                  -> a;
+                  -> get_data;
                   mutex.put(1);
                 end
             end
