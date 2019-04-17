@@ -7,23 +7,32 @@ class test;
 
     //Attributes
     instruction_item_t inst_item;//Instruction Item
-    data_item_t data_trans;//Data Memory Transaction
+    data_item_t dut_data_trans;//Data Memory Transaction from DUT
+    data_item_t model_data_trans;//Data Memory Transaction from model
+    
     inst_monitor inst_monitor0;//Intruction Monitor
     data_monitor data_monitor0;//Data Monitor
+
+    data_checker data_checker0;
+   
     rv32i model;
 
 
     function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem);
         this.vif           = vif;
+
         this.inst_monitor0 = new(vif_inst_mem);
         this.data_monitor0 = new(vif_data_mem);
+
+        this.data_checker0 = new();
+
         this.model         = new("test");
     endfunction
 
     task run();
         //Control Process communication
         semaphore mutex = new(1);
-        event     get_data;
+        event     get_data, check_data;
         
         fork
             begin : thread_inst_monitor
@@ -39,8 +48,8 @@ class test;
                 forever begin 
                     @(get_data);
                     this.data_monitor0.run();
-                    this.data_trans = this.data_monitor0.data_trans;
-
+                    this.dut_data_trans = this.data_monitor0.data_trans;
+                    ->check_data;
                 end
             end
             begin : thread_model
@@ -58,8 +67,17 @@ class test;
                         this.model.rd          = this.inst_item.rd;
                         this.model.imm         = this.inst_item.imm;
                         this.model.run();
+
+                        this.model_data_trans = this.model.data_trans;
                     end
                     mutex.put(1);
+                end
+            end
+
+            begin : thread_data_checker
+                forever begin 
+                    @(check_data);
+                    data_checker0.check(this.model_data_trans, this.dut_data_trans, this.inst_item);
                 end
             end
         join_none

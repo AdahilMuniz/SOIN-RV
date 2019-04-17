@@ -6,11 +6,12 @@ class rv32i;
     static instMemory imem;
     static dataMemory dmem;
 
-
     data_t instruction_encoded;
     instruction_t instruction;
     logic [4:0]  rs1, rs2, rd;
     data_t imm;
+
+    data_item_t data_trans;
 
     function new (string IM_FILE);
         this.pc = 0;
@@ -137,13 +138,22 @@ class rv32i;
 
     //LOAD
     protected function data_t lw(data_t rs1, data_t imm);
-        return dmem.get_mem(signed'(imm)+rs1);
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = READ;
+        data_trans.data      = dmem.get_mem(signed'(imm)+rs1);
+
+        return data_trans.data;
     endfunction
 
     protected function data_t lh(data_t rs1, data_t imm);
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {{16{temp_data[31]}}, temp_data[15:0]};
+
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = READ;
+        data_trans.data      = temp_data;
+
         return temp_data;
     endfunction
 
@@ -151,6 +161,11 @@ class rv32i;
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {{24{temp_data[31]}}, temp_data[7:0]};
+
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = READ;
+        data_trans.data      = temp_data;
+
         return temp_data;
     endfunction
 
@@ -158,6 +173,11 @@ class rv32i;
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {16'h0, temp_data[15:0]};
+
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = READ;
+        data_trans.data      = temp_data;
+
         return temp_data;
     endfunction
 
@@ -165,23 +185,40 @@ class rv32i;
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
         temp_data = {24'h0, temp_data[7:0]};
+
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = READ;
+        data_trans.data      = temp_data;
+
         return temp_data;
     endfunction
 
     //Store
     protected function void sw(data_t rs1, data_t rs2, data_t imm);
+        data_trans.data      = rs2;
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = WRITE;
+
         dmem.set_mem(signed'(imm)+rs1, rs2);
     endfunction
 
     protected function void sh(data_t rs1, data_t rs2, data_t imm);
         data_t temp_data;
         temp_data = {{16{rs2[31]}}, rs2[15:0]};
+        data_trans.data      = temp_data;
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = WRITE;
+
         dmem.set_mem(signed'(imm)+rs1, temp_data);
     endfunction
 
     protected function void sb(data_t rs1, data_t rs2, data_t imm);
         data_t temp_data;
         temp_data = {{24{rs2[31]}}, rs2[7:0]};
+        data_trans.data      = temp_data;
+        data_trans.addr      = signed'(imm)+rs1;
+        data_trans.direction = WRITE;
+
         dmem.set_mem(signed'(imm)+rs1, temp_data);
     endfunction
 

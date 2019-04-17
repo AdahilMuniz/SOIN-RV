@@ -219,7 +219,7 @@ class inst_monitor;
             default : this.instruction = NO_INST;
         endcase
 
-        $display("Intruction:%s \n RS1: %d RS2: %d RD: %d IMM: %d\n",
+        $display("Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %10d\n",
         this.instruction,
         this.rs1,
         this.rs2,
