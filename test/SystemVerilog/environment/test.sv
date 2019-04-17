@@ -23,6 +23,7 @@ class test;
     task run();
         //Control Process communication
         semaphore mutex = new(1);
+        event     get_data;
         
         fork
             begin : thread_inst_monitor
@@ -30,12 +31,13 @@ class test;
                   mutex.get(1);
                   this.inst_monitor0.run();
                   this.inst_item = this.inst_monitor0.inst_item;
+                  -> a;
                   mutex.put(1);
                 end
             end
             begin : thread_data_monitor
                 forever begin 
-
+                    @(get_data);
                     this.data_monitor0.run();
                     this.data_trans = this.data_monitor0.data_trans;
 
