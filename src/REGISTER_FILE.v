@@ -2,7 +2,6 @@
 		This module was built based on the Appendix A.7 of the COMPUTER ORGANIZATION AND DESIGN RISC-V EDITION book.
 		In this way, when the reading of a register occurs in the same clock cycle that the writing in the same register, the returned value
 	will be the value written in the earlier clock cycle.
-		However, it's possible make changes to change this behavior.
 */
 
 //@TODO: Should I add a reset to the register file?

@@ -12,6 +12,7 @@ class rv32i;
     data_t imm;
 
     data_item_t data_trans;
+    reg_file_item_t reg_file_trans;
 
     function new (string IM_FILE);
         this.pc = 0;
@@ -43,30 +44,101 @@ class rv32i;
     //Simulation Methods
 
     protected function void execute();
+        this.reg_file_trans.regn[2] = this.rd;
+        this.reg_file_trans.regn[1] = this.rs2;
+        this.reg_file_trans.regn[0] = this.rs1;
+
+        //this.reg_file_trans.data[2] = this.
+        this.reg_file_trans.data[1] = this.reg_f.get_reg(rs2);
+        this.reg_file_trans.data[0] = this.reg_f.get_reg(rs1);
+
         case (this.instruction)
-            ADDI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm));
-            SLLI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm));
-            SLTI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.imm));
-            SLTIU : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.imm));
-            XORI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.imm));
-            SRLI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.imm));
-            SRAI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.imm));
-            ORI   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_OR  , this.reg_f.get_reg(this.rs1), this.imm));
-            ANDI  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.imm));
+            ADDI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            SLLI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            SLTI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            SLTIU : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SLTU , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            XORI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            SRLI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            SRAI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            ORI   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_OR , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_OR  , this.reg_f.get_reg(this.rs1), this.imm));
+            end
+            ANDI  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.imm));
+            end
 
-            ADD   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            SUB   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SUB , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            SLL   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            SLT   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            SLTU  : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            XOR   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            SRL   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            SRA   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            OR    : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_OR  , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
-            AND   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            ADD   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            SUB   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SUB , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SUB , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            SLL   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            SLT   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            SLTU  : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SLTU , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            XOR   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            SRL   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            SRA   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            OR    : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_OR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_OR  , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
+            AND   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+            end
 
-            LUI   : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_LUI, null, this.imm));
-            AUIPC : this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AUIPC, this.reg_f.get_reg(this.rs1), this.pc));
+            LUI   : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_LUI, null, this.imm);
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_LUI, null, this.imm));
+            end
+            AUIPC : begin
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_AUIPC, this.reg_f.get_reg(this.rs1), this.pc); 
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AUIPC, this.reg_f.get_reg(this.rs1), this.pc));
+            end
 
             BEQ   : this.beq (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
             BNE   : this.bne (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
@@ -75,18 +147,39 @@ class rv32i;
             BGE   : this.beq (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
             BGEU  : this.bgeu(reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
 
-            LW    : this.reg_f.set_reg(this.rd, this.lw (reg_f.get_reg(this.rs1), this.imm));
-            LH    : this.reg_f.set_reg(this.rd, this.lh (reg_f.get_reg(this.rs1), this.imm));
-            LHU   : this.reg_f.set_reg(this.rd, this.lhu(reg_f.get_reg(this.rs1), this.imm));
-            LB    : this.reg_f.set_reg(this.rd, this.lb (reg_f.get_reg(this.rs1), this.imm));
-            LBU   : this.reg_f.set_reg(this.rd, this.lbu(reg_f.get_reg(this.rs1), this.imm));
+            LW    : begin 
+                this.reg_file_trans.data[2] = this.lw (reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.lw (reg_f.get_reg(this.rs1), this.imm));
+            end
+            LH    : begin 
+                this.reg_file_trans.data[2] = this.lh (reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.lh (reg_f.get_reg(this.rs1), this.imm));
+            end
+            LHU   : begin 
+                this.reg_file_trans.data[2] = this.lhu (reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.lhu(reg_f.get_reg(this.rs1), this.imm));
+            end
+            LB    : begin 
+                this.reg_file_trans.data[2] = this.lb (reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.lb (reg_f.get_reg(this.rs1), this.imm));
+            end
+            LBU   : begin 
+                this.reg_file_trans.data[2] = this.lbu (reg_f.get_reg(this.rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.lbu(reg_f.get_reg(this.rs1), this.imm));
+            end
 
             SW    : this.sw(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
             SH    : this.sh(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
             SB    : this.sb(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
 
-            JAL   : this.reg_f.set_reg(this.rd, this.jal(this.imm));
-            JALR  : this.reg_f.set_reg(this.rd, this.jalr(this.reg_f.get_reg(rs1), this.imm));
+            JAL   : begin
+                this.reg_file_trans.data[2] = this.jal(this.imm);
+                this.reg_f.set_reg(this.rd, this.jal(this.imm));
+            end
+            JALR  : begin
+                this.reg_file_trans.data[2] = this.jalr(this.reg_f.get_reg(rs1), this.imm);
+                this.reg_f.set_reg(this.rd, this.jalr(this.reg_f.get_reg(rs1), this.imm));
+            end
 
 
             default : /* default */;

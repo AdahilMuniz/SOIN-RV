@@ -27,6 +27,11 @@ package types_pkg;
         direction_t direction;
     }data_item_t;
 
+    typedef struct {
+        data_t     data[3];
+        reg_t      regn[3];
+    }reg_file_item_t;
+
     typedef struct{
         instruction_item_t input_instruction;
         data_item_t        model_result;

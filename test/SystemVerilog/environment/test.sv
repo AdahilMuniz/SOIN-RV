@@ -1,5 +1,3 @@
-//@TODO:
-//Create class to encpsulate the instruction item "traduction".
 class test;
 
     //Interfaces
@@ -9,20 +7,24 @@ class test;
     instruction_item_t inst_item;//Instruction Item
     data_item_t dut_data_trans;//Data Memory Transaction from DUT
     data_item_t model_data_trans;//Data Memory Transaction from model
-    
+    reg_file_item_t dut_reg_file_trans; //Reg File Transaction from DUT
+    reg_file_item_t model_reg_file_trans;//Reg File Transaction from model
+
     inst_monitor inst_monitor0;//Intruction Monitor
     data_monitor data_monitor0;//Data Monitor
+    reg_file_monitor reg_file_monitor0;//Register File Monitor
 
     data_checker data_checker0;
    
     rv32i model;
 
 
-    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem);
+    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem, virtual reg_file_if vif_reg_file);
         this.vif           = vif;
 
-        this.inst_monitor0 = new(vif_inst_mem);
-        this.data_monitor0 = new(vif_data_mem);
+        this.inst_monitor0     = new(vif_inst_mem);
+        this.data_monitor0     = new(vif_data_mem);
+        this.reg_file_monitor0 = new(vif_reg_file);
 
         this.data_checker0 = new();
 
@@ -33,6 +35,7 @@ class test;
         //Control Process communication
         semaphore mutex = new(1);
         event     get_data, check_data;
+        event     get_reg, check_reg;
         
         fork
             begin : thread_inst_monitor
@@ -41,6 +44,7 @@ class test;
                   this.inst_monitor0.run();
                   this.inst_item = this.inst_monitor0.inst_item;
                   -> get_data;
+                  -> get_reg;
                   mutex.put(1);
                 end
             end
@@ -50,6 +54,14 @@ class test;
                     this.data_monitor0.run();
                     this.dut_data_trans = this.data_monitor0.data_trans;
                     ->check_data;
+                end
+            end
+            begin : thread_reg_file_monitor
+                forever begin 
+                    @(get_reg);
+                    this.reg_file_monitor0.run();
+                    this.dut_reg_file_trans = this.reg_file_monitor0.reg_trans;
+                    //->check_data;
                 end
             end
             begin : thread_model
@@ -68,7 +80,8 @@ class test;
                         this.model.imm         = this.inst_item.imm;
                         this.model.run();
 
-                        this.model_data_trans = this.model.data_trans;
+                        this.model_data_trans     = this.model.data_trans;
+                        this.model_reg_file_trans = this.model.reg_file_trans;
                     end
                     mutex.put(1);
                 end

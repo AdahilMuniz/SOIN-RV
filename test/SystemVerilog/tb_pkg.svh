@@ -18,6 +18,7 @@ package tb_pkg;
 	//Test environment classes
 	`include "inst_monitor.sv"
 	`include "data_monitor.sv"
+	`include "reg_file_monitor.sv"
 	`include "data_checker.sv"
 	`include "test.sv"
 
