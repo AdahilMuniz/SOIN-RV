@@ -1,5 +1,5 @@
 //@TODO:
-//      Think about concurrent readin and writing
+//      Think about concurrent reading and writing
 class data_monitor;
 
     //Virtual Interface

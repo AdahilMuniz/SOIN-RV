@@ -20,6 +20,7 @@ package tb_pkg;
 	`include "data_monitor.sv"
 	`include "reg_file_monitor.sv"
 	`include "data_checker.sv"
+	`include "reg_file_checker.sv"
 	`include "test.sv"
 
 endpackage

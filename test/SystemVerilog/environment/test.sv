@@ -15,6 +15,7 @@ class test;
     reg_file_monitor reg_file_monitor0;//Register File Monitor
 
     data_checker data_checker0;
+    reg_file_checker reg_file_checker0;
    
     rv32i model;
 
@@ -26,9 +27,10 @@ class test;
         this.data_monitor0     = new(vif_data_mem);
         this.reg_file_monitor0 = new(vif_reg_file);
 
-        this.data_checker0 = new();
+        this.data_checker0     = new();
+        this.reg_file_checker0 = new();
 
-        this.model         = new("test");
+        this.model             = new("test");
     endfunction
 
     task run();
@@ -61,7 +63,7 @@ class test;
                     @(get_reg);
                     this.reg_file_monitor0.run();
                     this.dut_reg_file_trans = this.reg_file_monitor0.reg_trans;
-                    //->check_data;
+                    ->check_reg;
                 end
             end
             begin : thread_model
@@ -90,9 +92,17 @@ class test;
             begin : thread_data_checker
                 forever begin 
                     @(check_data);
-                    data_checker0.check(this.model_data_trans, this.dut_data_trans, this.inst_item);
+                    this.data_checker0.check(this.model_data_trans, this.dut_data_trans, this.inst_item);
                 end
             end
+
+            begin : thread_reg_checker
+                forever begin 
+                    @(check_reg);
+                    this.reg_file_checker0.check(this.model_reg_file_trans, this.dut_reg_file_trans, this.inst_item);
+                end
+            end
+
         join_none
 
     endtask

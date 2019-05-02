@@ -39,4 +39,11 @@ package types_pkg;
         logic [2:0]        error_champ;
     }error_data_item_t;
 
+    typedef struct{
+        instruction_item_t     input_instruction;
+        reg_file_item_t        model_result;
+        reg_file_item_t        dut_result;
+        logic [2:0]            error_champ;
+    }error_reg_file_item_t;
+
 endpackage

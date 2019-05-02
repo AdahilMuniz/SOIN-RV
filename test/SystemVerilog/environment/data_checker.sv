@@ -20,7 +20,7 @@ class data_checker;
         end
 
         if(flag) begin
-            wrong_transactions++;
+            this.wrong_transactions++;
             error_item.model_result = model_data_trans;
             error_item.dut_result = dut_data_trans;
             error_item.input_instruction = input_instruction;
