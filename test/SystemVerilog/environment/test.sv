@@ -45,6 +45,11 @@ class test;
                   mutex.get(1);
                   this.inst_monitor0.run();
                   this.inst_item = this.inst_monitor0.inst_item;
+                  if(this.inst_item.instruction == NO_INST) begin
+                      $display("No instruction fetch");
+                      //Is it the best way?
+                      break;
+                  end
                   -> get_data;
                   -> get_reg;
                   mutex.put(1);
@@ -103,7 +108,7 @@ class test;
                 end
             end
 
-        join_none
+        join_any
 
     endtask
 
