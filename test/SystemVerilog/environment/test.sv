@@ -110,6 +110,9 @@ class test;
 
         join_any
 
+        this.data_checker0.print();
+        this.reg_file_checker0.print();
+
     endtask
 
 endclass
