@@ -12,15 +12,37 @@ class reg_file_checker;
 
         foreach(model_reg_file_trans.data[i]) begin
             if(model_reg_file_trans.data[i] !== dut_reg_file_trans.data[i]) begin
-                flag = 1;
-                error_item.error_champ[i] = 1;
+                if(i === 1) begin
+                    if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE})) begin
+                        flag = 1;
+                        error_item.error_champ[i] = 1;
+                    end
+                end
+                else begin 
+                    flag = 1;
+                    error_item.error_champ[i] = 1;
+                end
             end
         end
 
         foreach(model_reg_file_trans.regn[i]) begin
             if(model_reg_file_trans.regn[i] !== dut_reg_file_trans.regn[i]) begin
-                flag = 1;
-                error_item.error_champ[i] = 1;
+                if(i === 1) begin
+                    if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE})) begin
+                        flag = 1;
+                        error_item.error_champ[i] = 1;
+                    end
+                end
+                else if(i === 2) begin
+                    if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
+                        flag = 1;
+                        error_item.error_champ[i] = 1;
+                    end
+                end
+                else begin 
+                    flag = 1;
+                    error_item.error_champ[i] = 1;
+                end
             end
         end
 

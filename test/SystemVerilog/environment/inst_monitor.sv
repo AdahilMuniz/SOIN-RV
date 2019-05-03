@@ -6,6 +6,7 @@ class inst_monitor;
 
 	//Attributes
 	instruction_t instruction;
+    instruction_type_t instruction_type;
 	data_t rs1, rs2, rd;
 	data_t [11:0] imm;
 
@@ -32,6 +33,7 @@ class inst_monitor;
 
         case (opcode)
             `OP_R_TYPE : begin 
+                this.instruction_type = R_TYPE;
                 this.rs1    = this.vif.rdata[19:15];
                 this.rs2    = this.vif.rdata[24:20];
                 this.rd     = this.vif.rdata[11:7 ];
@@ -82,6 +84,7 @@ class inst_monitor;
                 endcase
             end
             `OP_I_TYPE : begin 
+                this.instruction_type = I_TYPE;
                 this.rs1 = this.vif.rdata[19:15];
                 this.imm = 32'(signed'(this.vif.rdata[31:20]));
                 this.rd  = this.vif.rdata[11:7];
@@ -123,6 +126,7 @@ class inst_monitor;
                 endcase
             end
             `OP_I_L_TYPE : begin 
+                this.instruction_type = I_L_TYPE;
                 this.rs1 = this.vif.rdata[19:15];
                 this.imm = 32'(signed'(this.vif.rdata[24:20]));
                 this.rd  = this.vif.rdata[11:7];
@@ -149,6 +153,7 @@ class inst_monitor;
 
             end
             `OP_S_TYPE : begin 
+                this.instruction_type = S_TYPE;
                 this.rs1 = this.vif.rdata[19:15];
                 this.rs2 = this.vif.rdata[24:20];
                 this.imm = 32'(signed'({this.vif.rdata[31:25], this.vif.rdata[11:7 ]}));
@@ -170,6 +175,7 @@ class inst_monitor;
 
             end
             `OP_B_TYPE : begin 
+                this.instruction_type = B_TYPE;
                 this.rs1    = this.vif.rdata[19:15];
                 this.rs2    = this.vif.rdata[24:20];
                 this.imm    = 32'(signed'({this.vif.rdata[31], this.vif.rdata[7], this.vif.rdata[30:25], this.vif.rdata[11:8]}));
@@ -226,11 +232,12 @@ class inst_monitor;
         this.rd,
         signed'(this.imm));
 
-        this.inst_item.instruction = this.instruction;
-        this.inst_item.rs1         = this.rs1;
-        this.inst_item.rs2         = this.rs2;
-        this.inst_item.rd          = this.rd;
-        this.inst_item.imm         = this.imm;
+        this.inst_item.instruction_type = this.instruction_type;
+        this.inst_item.instruction      = this.instruction;
+        this.inst_item.rs1              = this.rs1;
+        this.inst_item.rs2              = this.rs2;
+        this.inst_item.rd               = this.rd;
+        this.inst_item.imm              = this.imm;
 
     endfunction
 

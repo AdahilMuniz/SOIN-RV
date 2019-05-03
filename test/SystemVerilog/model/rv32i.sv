@@ -48,7 +48,6 @@ class rv32i;
         this.reg_file_trans.regn[1] = this.rs2;
         this.reg_file_trans.regn[0] = this.rs1;
 
-        //this.reg_file_trans.data[2] = this.
         this.reg_file_trans.data[1] = this.reg_f.get_reg(rs2);
         this.reg_file_trans.data[0] = this.reg_f.get_reg(rs1);
 
