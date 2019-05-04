@@ -214,13 +214,16 @@ class inst_monitor;
                 this.instruction   = JALR;
             end
 
-            `OP_LUI : begin 
-                this.imm    = this.vif.rdata[31:12];
-                this.instruction   = LUI;
+            `OP_LUI : begin
+                this.rs1         = this.vif.rdata[11:7];
+                this.rd          = this.vif.rdata[11:7];
+                this.imm         = this.vif.rdata[31:12];
+                this.instruction = LUI;
             end
             `OP_AUIPC : begin 
-                this.imm    = this.vif.rdata[31:12];
-                this.instruction   = AUIPC;
+                this.rd          = this.vif.rdata[11:7];
+                this.imm         = this.vif.rdata[31:12];
+                this.instruction = AUIPC;
             end
             default : this.instruction = NO_INST;
         endcase

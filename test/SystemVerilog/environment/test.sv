@@ -19,8 +19,10 @@ class test;
    
     rv32i model;
 
+    addr_t pc;
 
-    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem, virtual reg_file_if vif_reg_file);
+
+    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem, virtual reg_file_if vif_reg_file, addr_t pc);
         this.vif           = vif;
 
         this.inst_monitor0     = new(vif_inst_mem);
@@ -105,6 +107,17 @@ class test;
                 forever begin 
                     @(check_reg);
                     this.reg_file_checker0.check(this.model_reg_file_trans, this.dut_reg_file_trans, this.inst_item);
+                end
+            end
+
+            begin : thread_pc_checker
+                forever begin
+                    @(vif.clk);
+                    if(this.pc !== this.model.pc) begin
+                        $display("PC are differente: \n |[DUT] pc: 0x%8x  |[MODEL] pc: 0x%8x", this.pc, this.model.pc);
+                        //Is it the best way?
+                        break;
+                    end
                 end
             end
 

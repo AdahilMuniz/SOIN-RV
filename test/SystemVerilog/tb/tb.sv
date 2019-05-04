@@ -12,8 +12,9 @@
 `define CLK_PERIOD 40 //25MHz
 
 `define REGISTER_FILE_PATH dut.core.register_file
-`define DATA_MEMORY_PATH dut.data_memory
-`define INST_MEMORY_PATH dut.instruction_memory
+`define DATA_MEMORY_PATH   dut.data_memory
+`define INST_MEMORY_PATH   dut.instruction_memory
+`define CORE_PATH          dut.core
 
 module tb;
 
@@ -42,7 +43,7 @@ module tb;
 
     initial begin
         $display("IM_FILE: %s", IM_FILE);
-        test0 = new(test_if0, `INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1, `REGISTER_FILE_PATH.reg_file_if0);
+        test0 = new(test_if0, `INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1, `REGISTER_FILE_PATH.reg_file_if0, `CORE_PATH.pc);
         i_clk = 1'b0;
         test0.run();
         $display("End Simulation");
