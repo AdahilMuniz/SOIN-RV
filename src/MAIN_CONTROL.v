@@ -73,10 +73,10 @@ module MAIN_CONTROL(
 				o_Branch = 0;
 				o_MemRead = 0;
 				o_MemWrite = 0;
-				o_MemToReg = 1'bx; //Don't Care
+				o_MemToReg = 1'b0;
 				o_ALUSrc1 = 0;
 				o_ALUSrc2 = 1;
-				o_RegWrite = 0; 
+				o_RegWrite = 1; 
 				o_ALUOp = 3'b100;
 			end
 
@@ -84,10 +84,10 @@ module MAIN_CONTROL(
 				o_Branch = 0;
 				o_MemRead = 0;
 				o_MemWrite = 0;
-				o_MemToReg = 1'bx; //Don't Care
+				o_MemToReg = 1'b0;
 				o_ALUSrc1 = 1;
 				o_ALUSrc2 = 1;
-				o_RegWrite = 0; 
+				o_RegWrite = 1; 
 				o_ALUOp = 3'b101;
 			end
 
