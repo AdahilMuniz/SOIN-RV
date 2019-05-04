@@ -126,7 +126,7 @@ class inst_monitor;
                 endcase
             end
             `OP_I_L_TYPE : begin 
-                this.instruction_type = I_L_TYPE;
+                this.instruction_type = I_TYPE;
                 this.rs1 = this.vif.rdata[19:15];
                 this.imm = 32'(signed'(this.vif.rdata[31:20]));
                 this.rd  = this.vif.rdata[11:7];
@@ -206,24 +206,27 @@ class inst_monitor;
 
             end
             `OP_JAL : begin 
+                this.instruction_type = J_TYPE;
                 this.imm    = signed'({this.vif.rdata[31], this.vif.rdata[19:12], this.vif.rdata[20], this.vif.rdata[30:21]});
                 this.instruction   = JAL;
             end
             `OP_JALR : begin 
+                this.instruction_type = I_TYPE;
                 this.imm    = signed'(this.vif.rdata[31:12]);
                 this.instruction   = JALR;
             end
 
             `OP_LUI : begin
-                this.rs1         = this.vif.rdata[11:7];
-                this.rd          = this.vif.rdata[11:7];
-                this.imm         = this.vif.rdata[31:12];
-                this.instruction = LUI;
+                this.instruction_type = U_TYPE;
+                this.rd               = this.vif.rdata[11:7];
+                this.imm              = this.vif.rdata[31:12];
+                this.instruction      = LUI;
             end
             `OP_AUIPC : begin 
-                this.rd          = this.vif.rdata[11:7];
-                this.imm         = this.vif.rdata[31:12];
-                this.instruction = AUIPC;
+                this.instruction_type = U_TYPE;
+                this.rd               = this.vif.rdata[11:7];
+                this.imm              = this.vif.rdata[31:12];
+                this.instruction      = AUIPC;
             end
             default : this.instruction = NO_INST;
         endcase
