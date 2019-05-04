@@ -14,7 +14,8 @@ module REGISTER_FILE(
     input i_Wen,
     input [4:0] i_Wnum,
     input [`WORD_SIZE-1:0] i_Wd,
-    input i_clk
+    input i_clk,
+    input i_rstn
     );
 
 	reg [`WORD_SIZE-1:0] x [31:0];//Registers [x0-x31]
@@ -35,10 +36,18 @@ module REGISTER_FILE(
 	assign o_Rd2 = |i_Rnum2 ? x[i_Rnum2] : 0;
 
 	//Writing occurs just in the positive edge clk;
-	always @(posedge i_clk) begin
-		if (i_Wen) begin
-			x[i_Wnum] <= i_Wd;
+	always @(posedge i_clk or negedge i_rstn) begin
+		if(~i_rstn) begin
+			for(i=0;i<`WORD_SIZE;i=i+1) begin
+				x[i] = 0;
+			end
 		end
+		else begin 
+			if (i_Wen) begin
+				x[i_Wnum] <= i_Wd;
+			end
+		end
+		
 	end
 
 endmodule

@@ -136,7 +136,8 @@ module CORE(
 		.i_Wen(RF_wen), 
 		.i_Wnum(RF_wnum), 
 		.i_Wd(RF_wd), 
-		.i_clk(i_clk)
+		.i_clk(i_clk),
+		.i_rstn(i_rstn)
     );
 
     IMM_GENERATOR imm_generator (
