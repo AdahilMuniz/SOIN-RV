@@ -50,7 +50,7 @@ class data_checker;
     endfunction 
 
     protected function void print_error (instruction_item_t input_instruction);
-        $display("** DATA_ERROR\n Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %10d\n",
+        $display("** DATA_ERROR\n Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %8x\n",
             input_instruction.instruction,
             input_instruction.rs1,
             input_instruction.rs2,

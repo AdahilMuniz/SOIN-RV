@@ -8,7 +8,7 @@ class inst_monitor;
 	instruction_t instruction;
     instruction_type_t instruction_type;
 	data_t rs1, rs2, rd;
-	data_t [11:0] imm;
+	data_t imm;
 
     instruction_item_t inst_item;
 
@@ -128,7 +128,7 @@ class inst_monitor;
             `OP_I_L_TYPE : begin 
                 this.instruction_type = I_L_TYPE;
                 this.rs1 = this.vif.rdata[19:15];
-                this.imm = 32'(signed'(this.vif.rdata[24:20]));
+                this.imm = 32'(signed'(this.vif.rdata[31:20]));
                 this.rd  = this.vif.rdata[11:7];
                 funct3   = this.vif.rdata[14:12];
 
@@ -225,7 +225,7 @@ class inst_monitor;
             default : this.instruction = NO_INST;
         endcase
 
-        $display("Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %10d\n",
+        $display("Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %8x\n",
         this.instruction,
         this.rs1,
         this.rs2,

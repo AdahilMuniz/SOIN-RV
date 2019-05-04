@@ -31,7 +31,7 @@ class reg_file_monitor;
         this.reg_trans.data[1] = this.vif.rd2;
         this.reg_trans.regn[1] = this.vif.rn2;
 
-        $display("Reg File Transaction: \n Rn1:%d   Rd1:%d | Rn2:%d   Rd2:%d | Wn:%d   Wd:%d \n",
+        $display("Reg File Transaction: \n Rn1:%d   Rd1:%8x | Rn2:%d   Rd2:%8x | Wn:%d   Wd:%8x \n",
         this.reg_trans.regn[0],
         this.reg_trans.data[0],
         this.reg_trans.regn[1],

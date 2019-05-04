@@ -28,7 +28,7 @@ class data_monitor;
             this.data_trans.data      = this.vif.rdata;
             this.data_trans.direction = READ;
 
-            $display("Data Transaction: \n Direction: %s \n Data: %d Addr: %d \n",
+            $display("Data Transaction: \n Direction: %s \n Data: %8x Addr: %8x \n",
             this.data_trans.direction,
             this.data_trans.data,
             this.data_trans.addr);
@@ -37,7 +37,7 @@ class data_monitor;
             this.data_trans.data      = this.vif.wdata;
             this.data_trans.direction = WRITE;
 
-            $display("Data Transaction: \n Direction: %s \n Data: %d Addr: %d \n",
+            $display("Data Transaction: \n Direction: %s \n Data: %8x Addr: %8x \n",
             this.data_trans.direction,
             this.data_trans.data,
             this.data_trans.addr);

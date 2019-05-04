@@ -62,9 +62,9 @@ class reg_file_checker;
             $display("Number of Errors: %d\n", this.wrong_transactions);
             
             foreach(error_table[i]) begin
-                $display("|Instruction: %s |[DUT]   Rn1: %8x  |[DUT]   Rd1: %8x  |[DUT]   Rn2:%8x  |[DUT]   Rd2:%8x  |[DUT]   Wn:%8x  |[DUT]   Wd:%8x  \n",
+                $display("|Instruction: %s |[DUT]   Rn1: %2d  |[DUT]   Rd1: 0x%8x  |[DUT]   Rn2:%2d  |[DUT]   Rd2: 0x%8x  |[DUT]   Wn:%2d  |[DUT]   Wd: 0x%8x  \n",
                 error_table[i].input_instruction.instruction, error_table[i].dut_result.regn[0], error_table[i].dut_result.data[0], error_table[i].dut_result.regn[1], error_table[i].dut_result.data[1],error_table[i].dut_result.regn[2], error_table[i].dut_result.data[2]);
-                $display("                 |[MODEL] Rn1: %8x  |[MODEL] Rd1: %8x  |[MODEL] Rn2:%8x  |[MODEL] Rd2:%8x  |[MODEL] Wn:%8x  |[MODEL] Wd:%8x  \n",
+                $display("                 |[MODEL] Rn1: %2d  |[MODEL] Rd1: 0x%8x  |[MODEL] Rn2:%2d  |[MODEL] Rd2: 0x%8x  |[MODEL] Wn:%2d  |[MODEL] Wd: 0x%8x  \n",
                 error_table[i].model_result.regn[0], error_table[i].model_result.data[0], error_table[i].model_result.regn[1], error_table[i].model_result.data[1],error_table[i].model_result.regn[2], error_table[i].model_result.data[2]);
             end
         end
@@ -75,14 +75,14 @@ class reg_file_checker;
 
 
     protected function void print_error (reg_file_item_t model_reg_file_trans, reg_file_item_t dut_reg_file_trans, instruction_item_t input_instruction);
-        $display("** REG_FILE_ERROR\n Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %10d\n",
+        $display("** REG_FILE_ERROR\n Instruction:%s \n RS1: %2d RS2: %2d RD: %2d IMM: %8x\n",
             input_instruction.instruction,
             input_instruction.rs1,
             input_instruction.rs2,
             input_instruction.rd,
             signed'(input_instruction.imm)
             );
-        $display("DUT Register File interface:\n Rn1:%d   Rd1:%d | Rn2:%d   Rd2:%d | Wn:%d   Wd:%d \n",
+        $display("DUT Register File interface:\n Rn1:%2d   Rd1:%8x | Rn2:%2d   Rd2:%8x | Wn:%2d   Wd:%8x \n",
             dut_reg_file_trans.regn[0],
             dut_reg_file_trans.data[0],
             dut_reg_file_trans.regn[1],
@@ -90,7 +90,7 @@ class reg_file_checker;
             dut_reg_file_trans.regn[2],
             dut_reg_file_trans.data[2]
             );
-        $display("MODEL Register File interface:\n Rn1:%d   Rd1:%d | Rn2:%d   Rd2:%d | Wn:%d   Wd:%d \n",
+        $display("MODEL Register File interface:\n Rn1:%2d   Rd1:%8x | Rn2:%2d   Rd2:%8x | Wn:%d   Wd:%8x \n",
             model_reg_file_trans.regn[0],
             model_reg_file_trans.data[0],
             model_reg_file_trans.regn[1],
