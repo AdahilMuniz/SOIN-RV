@@ -1,8 +1,8 @@
 module ALU_CONTROL(
-    output reg [3:0] o_ALUControlLines,
-    input [6:0] i_Funct7,
-    input [2:0] i_Funct3,
-    input [2:0] i_ALUOp
+    output logic [3:0] o_ALUControlLines,
+    input  [6:0] i_Funct7,
+    input  [2:0] i_Funct3,
+    input  [2:0] i_ALUOp
     );
 
 	always @(*) begin

@@ -1,13 +1,13 @@
 module MAIN_CONTROL(
-    output reg o_Branch,
-    output reg o_MemRead,
-    output reg o_MemWrite,
-    output reg o_MemToReg,
-    output reg [2:0] o_ALUOp,
-    output reg o_ALUSrc1,
-    output reg o_ALUSrc2,
-    output reg o_RegWrite,
-    input [6:0] i_OPCode
+    output logic o_Branch,
+    output logic o_MemRead,
+    output logic o_MemWrite,
+    output logic o_MemToReg,
+    output logic [2:0] o_ALUOp,
+    output logic o_ALUSrc1,
+    output logic o_ALUSrc2,
+    output logic o_RegWrite,
+    input  [6:0] i_OPCode
     );
 
 	always @(*) begin

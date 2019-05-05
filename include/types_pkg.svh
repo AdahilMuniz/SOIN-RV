@@ -1,10 +1,10 @@
 package types_pkg;
 
     //Defines
-    `include "ALU_CONTROL.vh"
-    `include "OPCODES_DEFINES.vh"
-    `include "PARAMETERS.vh"
-    `include "PROJECT_CONFIG.vh"
+    `include "ALU_CONTROL.svh"
+    `include "OPCODES_DEFINES.svh"
+    `include "PARAMETERS.svh"
+    `include "PROJECT_CONFIG.svh"
 
     typedef logic [4:0] reg_t;
     typedef logic [`WORD_SIZE -1:0] data_t;

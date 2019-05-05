@@ -7,18 +7,18 @@
 //@TODO: Should I add a reset to the register file?
 
 module REGISTER_FILE(
-    output [`WORD_SIZE-1:0] o_Rd1,
-    output [`WORD_SIZE-1:0] o_Rd2,
-    input [4:0] i_Rnum1,
-    input [4:0] i_Rnum2,
-    input i_Wen,
-    input [4:0] i_Wnum,
-    input [`WORD_SIZE-1:0] i_Wd,
-    input i_clk,
-    input i_rstn
+    output data_t o_Rd1,
+    output data_t o_Rd2,
+    input  reg_t i_Rnum1,
+    input  reg_t i_Rnum2,
+    input  i_Wen,
+    input  reg_t i_Wnum,
+    input  data_t i_Wd,
+    input  i_clk,
+    input  i_rstn
     );
 
-	reg [`WORD_SIZE-1:0] x [31:0];//Registers [x0-x31]
+	data_t x [31:0];//Registers [x0-x31]
 	integer i; // Syntetizable?
 //Initializing registers for tests
 `ifdef TEST

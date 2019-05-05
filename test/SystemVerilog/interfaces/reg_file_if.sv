@@ -1,15 +1,15 @@
 import types_pkg::*;
 
 interface reg_file_if(
-						  data_t rd1,
-						  data_t rd2,
-						  data_t wd,
-						  reg_t  rn1,
-						  reg_t  rn2,
-						  reg_t  wn,
-						  logic  wen,
-						  logic  clk,
-						  logic  rstn
+						  input data_t rd1,
+						  input data_t rd2,
+						  input data_t wd,
+						  input reg_t  rn1,
+						  input reg_t  rn2,
+						  input reg_t  wn,
+						  input logic  wen,
+						  input logic  clk,
+						  input logic  rstn
 						 );
 
 endinterface

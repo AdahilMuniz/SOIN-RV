@@ -1,12 +1,12 @@
 module CORE(
-		output [`WORD_SIZE-1:0] o_IM_addr,
-		output [`WORD_SIZE-1:0] o_DM_wd,
-		output [`WORD_SIZE-1:0] o_DM_addr,
+		output addr_t o_IM_addr,
+		output data_t o_DM_wd,
+		output addr_t o_DM_addr,
 		output o_DM_wen,
 		output o_DM_ren,
 
-		input [`WORD_SIZE-1:0] i_IM_instruction,
-		input [`WORD_SIZE-1:0] i_DM_rd,
+		input data_t i_IM_instruction,
+		input data_t i_DM_rd,
 
 		input i_clk,
 		input i_rstn
@@ -14,51 +14,51 @@ module CORE(
 
 
 	//Register File Signals
-	wire [`WORD_SIZE-1:0] RF_rd1;
-	wire [`WORD_SIZE-1:0] RF_rd2;
-	wire [4:0] RF_rnum1;
-	wire [4:0] RF_rnum2;
-	wire RF_wen;
-	wire [4:0] RF_wnum;
-	wire [`WORD_SIZE-1:0] RF_wd;
+	data_t RF_rd1;
+	data_t RF_rd2;
+	logic [4:0] RF_rnum1;
+	logic [4:0] RF_rnum2;
+	logic RF_wen;
+	logic [4:0] RF_wnum;
+	data_t RF_wd;
 
 	//Immediate Generator Signals
-	wire [`WORD_SIZE-1:0] IG_extendedImmediate;
-	wire [`WORD_SIZE-1:0] IG_instruction;
+	data_t IG_extendedImmediate;
+	data_t IG_instruction;
 
 	//Main Control Signals
-	wire MC_branch;
-	wire MC_memRead;
-	wire MC_memWrite;
-	wire MC_memToReg;
-	wire [2:0] MC_ALUOp;
-	wire MC_ALUSrc1;
-	wire MC_ALUSrc2;
-	wire MC_regWrite;
-	wire [6:0] MC_OPCode;
+	logic MC_branch;
+	logic MC_memRead;
+	logic MC_memWrite;
+	logic MC_memToReg;
+	logic [2:0] MC_ALUOp;
+	logic MC_ALUSrc1;
+	logic MC_ALUSrc2;
+	logic MC_regWrite;
+	logic [6:0] MC_OPCode;
 
     //ALU Control Signals
-	wire [3:0] ALUC_ALUControlLines;
-	wire [6:0] ALUC_Funct7;
-	wire [2:0] ALUC_Funct3;
-	wire [2:0] ALUC_ALUOP;
+	logic [3:0] ALUC_ALUControlLines;
+	logic [6:0] ALUC_Funct7;
+	logic [2:0] ALUC_Funct3;
+	logic [2:0] ALUC_ALUOP;
 
 	//ALU Signals
-	wire [`WORD_SIZE-1:0] ALU_Result;
-	wire ALU_Zero;
-	wire [3:0] ALU_Operation;
-	wire [`WORD_SIZE-1:0] ALU_Op1;
-	wire [`WORD_SIZE-1:0] ALU_Op2;
+	data_t ALU_Result;
+	logic ALU_Zero;
+	logic [3:0] ALU_Operation;
+	data_t ALU_Op1;
+	data_t ALU_Op2;
 
 	//PC
-	reg [`WORD_SIZE-1:0] pc;
+	data_t pc;
 
 	//AND Branch
-	wire A_B;
+	logic A_B;
 	//SHIFT Branch
-	wire [`WORD_SIZE-1:0] SH_B;
+	data_t SH_B;
 	//SUM Branch
-	wire [`WORD_SIZE-1:0] S_B;
+	data_t S_B;
 
 	/****PC Update****/
 	initial begin

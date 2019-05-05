@@ -1,11 +1,12 @@
 //@TODO:
 // - To use one single adder for ADD, SUB, SLT and AUIPC;
+
 module ALU(
-	output reg [`WORD_SIZE-1:0] o_Result,
+	output data_t o_Result,
 	output o_Zero,
-	input [3:0] i_Operation,
-	input [`WORD_SIZE-1:0] i_Op1,
-	input [`WORD_SIZE-1:0] i_Op2
+	input  [3:0] i_Operation,
+	input  data_t i_Op1,
+	input  data_t i_Op2
     );
 
 

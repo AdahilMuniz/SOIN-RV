@@ -3,10 +3,10 @@ package tb_pkg;
 	import types_pkg::*;
 
 	//Defines
-	`include "ALU_CONTROL.vh"
-	`include "OPCODES_DEFINES.vh"
-	`include "PARAMETERS.vh"
-	`include "PROJECT_CONFIG.vh"
+	`include "ALU_CONTROL.svh"
+	`include "OPCODES_DEFINES.svh"
+	`include "PARAMETERS.svh"
+	`include "PROJECT_CONFIG.svh"
 
 	//Model classes
 	`include "alu.sv"

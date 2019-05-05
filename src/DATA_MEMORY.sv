@@ -1,8 +1,8 @@
 //@TODO: Fix it
 module DATA_MEMORY(
-    output [`WORD_SIZE-1:0] o_Rd,
-    input  [`WORD_SIZE-1:0] i_Wd,
-    input  [`WORD_SIZE-1:0] i_Addr,
+    output data_t o_Rd,
+    input  data_t i_Wd,
+    input  addr_t i_Addr,
     input  i_Wen,
     input  i_Ren,
     input  i_clk
@@ -11,7 +11,7 @@ module DATA_MEMORY(
 	parameter HEIGHT = `DM_DEPTH;//Memory height
 	parameter FILE = `DM_FILE;
 
-	reg [`WORD_SIZE-1:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
+	data_t mem [HEIGHT-1:0];//Memory: Word: 4byte
 
 	initial begin
 		$readmemh(FILE, mem);//Initialize Memory

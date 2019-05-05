@@ -1,9 +1,9 @@
 module IMM_GENERATOR(
-    output [`WORD_SIZE-1:0] o_ExtendedImmediate,
-    input [`WORD_SIZE-1:0] i_Instruction
+    output data_t o_ExtendedImmediate,
+    input  data_t i_Instruction
     );
 
-	reg [`WORD_SIZE-1:0] ExtendedImmediate;
+	data_t ExtendedImmediate;
 
 	/*
 	- Immediate Generator V1:

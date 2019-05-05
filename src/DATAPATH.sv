@@ -7,15 +7,15 @@ module DATAPATH(
 	parameter IM_FILE = `IM_FILE;
 
 	//Instruction Memory Signals
-	wire [`WORD_SIZE-1:0] IM_instruction;
-	wire [`WORD_SIZE-1:0] IM_addr;
+	data_t IM_instruction;
+	addr_t IM_addr;
 
 	//Data Memory Signals
-	wire [`WORD_SIZE-1:0] DM_rd;
-	wire [`WORD_SIZE-1:0] DM_wd;
-	wire [`WORD_SIZE-1:0] DM_addr;
-	wire DM_wen;
-	wire DM_ren;
+	data_t DM_rd;
+	data_t DM_wd;
+	addr_t DM_addr;
+	logic  DM_wen;
+	logic  DM_ren;
 
 	CORE core (
 		.o_IM_addr(IM_addr),
