@@ -1,9 +1,9 @@
 `timescale 1ns/1ps 
 
-`include "ALU_CONTROL.vh"
-`include "OPCODES_DEFINES.vh"
-`include "PARAMETERS.vh"
-`include "PROJECT_CONFIG.vh"
+`include "ALU_CONTROL.svh"
+`include "OPCODES_DEFINES.svh"
+`include "PARAMETERS.svh"
+`include "PROJECT_CONFIG.svh"
 
 
 `include "memory_if.sv"
@@ -16,9 +16,9 @@
 `define INST_MEMORY_PATH   dut.instruction_memory
 `define CORE_PATH          dut.core
 
-module tb;
+import tb_pkg::*;
 
-    import tb_pkg::*;
+module tb;
 
     //Parameters
     parameter IM_FILE="dafault";
