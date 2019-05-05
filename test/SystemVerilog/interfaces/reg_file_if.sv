@@ -8,7 +8,8 @@ interface reg_file_if(
 						  reg_t  rn2,
 						  reg_t  wn,
 						  logic  wen,
-						  logic  clk
+						  logic  clk,
+						  logic  rstn
 						 );
 
 endinterface

@@ -11,16 +11,15 @@ class reg_file_monitor;
     endfunction
 
     task run();
-        //if(this.vif.rstn) begin
-        //    $display("REG_FILE_MONITOR: Waiting reset");
-        //    @(this.vif.rstn);
-        //end
+        if(~this.vif.rstn) begin
+            $display("REG_FILE_MONITOR: Reset");
+        end
         this.mount();
     endtask 
 
 
     protected task mount();
-        @(this.vif.clk);
+        @(posedge this.vif.clk);
         if(this.vif.wen) begin
             this.reg_trans.data[2] = this.vif.wd;
             this.reg_trans.regn[2] = this.vif.wn;

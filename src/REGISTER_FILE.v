@@ -19,10 +19,9 @@ module REGISTER_FILE(
     );
 
 	reg [`WORD_SIZE-1:0] x [31:0];//Registers [x0-x31]
-	
+	integer i; // Syntetizable?
 //Initializing registers for tests
 `ifdef TEST
-	integer i;
 	initial begin
 		for(i=0;i<`WORD_SIZE;i=i+1) begin
 			x[i] = i;

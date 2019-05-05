@@ -2,9 +2,13 @@ class regFile;
     protected static data_t x [31:0];
 
     function new ();
-    	integer i;
-        for (i = 0; i < 32; i++) begin
-            this.x[i] = i;
+    	//this.reset();
+        x[0] = 0;
+    endfunction
+
+    function void reset();
+        foreach(x[i]) begin
+            x[i] = 0;
         end
     endfunction
 

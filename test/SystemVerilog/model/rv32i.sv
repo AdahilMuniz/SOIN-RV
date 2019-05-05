@@ -30,6 +30,7 @@ class rv32i;
 
     function void reset ();
         this.pc = 0;
+        this.reg_f.reset();
     endfunction
 
     //Get Methods
@@ -43,7 +44,7 @@ class rv32i;
 
     //Simulation Methods
 
-    protected function void execute();
+    function void execute();
         this.reg_file_trans.regn[2] = this.rd;
         this.reg_file_trans.regn[1] = this.rs2;
         this.reg_file_trans.regn[0] = this.rs1;

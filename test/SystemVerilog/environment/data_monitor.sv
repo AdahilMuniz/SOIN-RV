@@ -13,16 +13,14 @@ class data_monitor;
     endfunction
 
     task run();
-        if(this.vif.rstn) begin
-            $display("DATA_MONITOR: Waiting reset");
-            @(this.vif.rstn);
+        if(~this.vif.rstn) begin
+            $display("DATA_MONITOR: Reset");
         end
         this.mount();
     endtask 
 
 
     protected task mount();
-        @(this.vif.addr);
         this.data_trans.addr = this.vif.addr;
         if(this.vif.ren) begin
             this.data_trans.data      = this.vif.rdata;

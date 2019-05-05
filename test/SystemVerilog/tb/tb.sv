@@ -33,8 +33,8 @@ module tb;
     //Interfaces
     bind `INST_MEMORY_PATH memory_if memory_if0(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Instruction)); //Binding: Instruction Memory Interface
     bind `DATA_MEMORY_PATH memory_if memory_if1(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Rd), .wdata(i_Wd), .ren(i_Ren), .wen(i_Wen)); //Binding: Data Memory Interface
-    bind `REGISTER_FILE_PATH reg_file_if reg_file_if0(.clk(i_clk), .rn1(i_Rnum1), .rn2(i_Rnum2), .wn(i_Wnum), .rd1(o_Rd1), .rd2(o_Rd2), .wd(i_Wd), .wen(i_Wen)); //Binding: Register File Interface
-    test_if test_if0(.clk(clk), .rstn(rstn));
+    bind `REGISTER_FILE_PATH reg_file_if reg_file_if0(.clk(i_clk), .rstn(i_rstn), .rn1(i_Rnum1), .rn2(i_Rnum2), .wn(i_Wnum), .rd1(o_Rd1), .rd2(o_Rd2), .wd(i_Wd), .wen(i_Wen)); //Binding: Register File Interface
+    test_if test_if0(.clk(i_clk), .rstn(i_rstn), .pc(`CORE_PATH.pc));
     //DUT
     DATAPATH #(IM_FILE) dut (
         .i_clk(i_clk),
@@ -43,7 +43,7 @@ module tb;
 
     initial begin
         $display("IM_FILE: %s", IM_FILE);
-        test0 = new(test_if0, `INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1, `REGISTER_FILE_PATH.reg_file_if0, `CORE_PATH.pc);
+        test0 = new(test_if0, `INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1, `REGISTER_FILE_PATH.reg_file_if0);
         i_clk = 1'b0;
         test0.run();
         $display("End Simulation");
@@ -57,7 +57,7 @@ module tb;
 
     //Reset generation
     initial begin 
-        #5;
+        #30
         i_rstn <= 1'b0;
         #5;
         i_rstn <= 1'b1;

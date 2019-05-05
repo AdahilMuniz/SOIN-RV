@@ -19,11 +19,9 @@ class test;
    
     rv32i model;
 
-    addr_t pc;
 
-
-    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem, virtual reg_file_if vif_reg_file, addr_t pc);
-        this.vif           = vif;
+    function new(virtual test_if vif, virtual memory_if vif_inst_mem, virtual memory_if vif_data_mem, virtual reg_file_if vif_reg_file);
+        this.vif               = vif;
 
         this.inst_monitor0     = new(vif_inst_mem);
         this.data_monitor0     = new(vif_data_mem);
@@ -37,24 +35,26 @@ class test;
 
     task run();
         //Control Process communication
-        semaphore mutex = new(1);
+        semaphore mutex  = new(1);
+        semaphore mutex2 = new(1);
         event     get_data, check_data;
         event     get_reg, check_reg;
         
         fork
             begin : thread_inst_monitor
                 forever begin 
-                  mutex.get(1);
-                  this.inst_monitor0.run();
-                  this.inst_item = this.inst_monitor0.inst_item;
-                  if(this.inst_item.instruction == NO_INST) begin
-                      $display("No instruction fetch");
-                      //Is it the best way?
-                      break;
-                  end
-                  -> get_data;
-                  -> get_reg;
-                  mutex.put(1);
+                    mutex.get(1);
+                    this.inst_monitor0.run();
+                    this.inst_item = this.inst_monitor0.inst_item;
+                    if(this.inst_item.instruction == NO_INST) begin
+                        $display("No instruction fetch");
+                        //Is it the best way?
+                        break;
+                    end
+                    -> get_data;
+                    -> get_reg;
+                    mutex.put(1);
+                    @(posedge this.vif.clk or negedge this.vif.rstn);
                 end
             end
             begin : thread_data_monitor
@@ -66,8 +66,8 @@ class test;
                 end
             end
             begin : thread_reg_file_monitor
-                forever begin 
-                    @(get_reg);
+                forever begin
+                    @(get_reg); 
                     this.reg_file_monitor0.run();
                     this.dut_reg_file_trans = this.reg_file_monitor0.reg_trans;
                     ->check_reg;
@@ -75,30 +75,28 @@ class test;
             end
             begin : thread_model
                 forever begin 
-                    mutex.get(1);
-                    if(~vif.rstn) begin
-                        model.reset();
-                        $display("TEST: Waiting reset");
-                        @(vif.rstn);
+                    @(posedge this.vif.clk or negedge this.vif.rstn);
+                    //mutex.get(1);
+                    if(~this.vif.rstn) begin
+                        $display("TEST: Reset");
+                        this.model.reset();
+                        this.set_model_attributes();
+                        this.model.execute();
                     end
                     else begin 
-                        this.model.instruction = this.inst_item.instruction;
-                        this.model.rs1         = this.inst_item.rs1;
-                        this.model.rs2         = this.inst_item.rs2;
-                        this.model.rd          = this.inst_item.rd;
-                        this.model.imm         = this.inst_item.imm;
+                        this.set_model_attributes();
                         this.model.run();
-
-                        this.model_data_trans     = this.model.data_trans;
-                        this.model_reg_file_trans = this.model.reg_file_trans;
                     end
-                    mutex.put(1);
+                    this.model_data_trans     = this.model.data_trans;
+                    this.model_reg_file_trans = this.model.reg_file_trans;
+                    //mutex.put(1);
                 end
             end
 
             begin : thread_data_checker
                 forever begin 
                     @(check_data);
+                    //@(posedge this.vif.clk);
                     this.data_checker0.check(this.model_data_trans, this.dut_data_trans, this.inst_item);
                 end
             end
@@ -106,20 +104,33 @@ class test;
             begin : thread_reg_checker
                 forever begin 
                     @(check_reg);
+                    //@(posedge this.vif.clk);
                     this.reg_file_checker0.check(this.model_reg_file_trans, this.dut_reg_file_trans, this.inst_item);
                 end
             end
 
             begin : thread_pc_checker
                 forever begin
-                    @(vif.clk);
-                    if(this.pc !== this.model.pc) begin
-                        $display("PC are differente: \n |[DUT] pc: 0x%8x  |[MODEL] pc: 0x%8x", this.pc, this.model.pc);
+                    @(negedge vif.clk);//Is it the best solution and using clocking block?
+                    if(this.vif.pc !== this.model.pc) begin
+                        $display("PCs are differents: \n |[DUT] pc: 0x%8x  |[MODEL] pc: 0x%8x", this.vif.pc, this.model.pc);
                         //Is it the best way?
                         break;
                     end
                 end
             end
+
+            //begin : thread_reset
+            //    forever begin 
+            //        @(negedge this.vif.rstn);
+            //        $display("TEST: Reset");
+            //        this.model.reset();
+            //        this.set_model_attributes();
+            //        this.model.execute();
+            //        this.model_data_trans     = this.model.data_trans;
+            //        this.model_reg_file_trans = this.model.reg_file_trans;
+            //    end
+            //end
 
         join_any
 
@@ -127,5 +138,13 @@ class test;
         this.reg_file_checker0.print();
 
     endtask
+
+    function void set_model_attributes ();
+        this.model.instruction = this.inst_item.instruction;
+        this.model.rs1         = this.inst_item.rs1;
+        this.model.rs2         = this.inst_item.rs2;
+        this.model.rd          = this.inst_item.rd;
+        this.model.imm         = this.inst_item.imm;
+    endfunction
 
 endclass

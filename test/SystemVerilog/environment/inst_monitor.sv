@@ -18,9 +18,8 @@ class inst_monitor;
 
 
 	task run();
-        if(vif.rstn) begin
-            $display("INST_MONITOR: Waiting reset");
-            @(vif.rstn);
+        if(~this.vif.rstn) begin
+            $display("INST_MONITOR: Reset");
         end
 		@(this.vif.addr);
 		this.decode();
