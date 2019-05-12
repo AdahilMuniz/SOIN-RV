@@ -16,7 +16,7 @@ module BRANCH_JUMP_CONTROL (
 			endcase
 		end
 		else if(i_Jump) begin
-			u = 1'b1;
+			o_B_J_result = 1'b1;
 		end
 	end
 

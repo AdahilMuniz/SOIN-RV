@@ -202,41 +202,40 @@ class rv32i;
         if(rs1 === rs2 ) begin 
             this.pc = this.pc + signed'(imm << 1);
             this.branch_jump_flag = 1;
-            $display("PC: 0x%8x", this.pc);
         end
     endfunction
 
     protected function void bne(data_t rs1, data_t rs2, data_t imm);
         if(rs1 !== rs2 ) begin 
-            this.pc = this.pc + signed'(imm[11:0] << 1);
+            this.pc = this.pc + signed'(imm << 1);
             this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bltu(data_t rs1, data_t rs2, data_t imm);
         if(rs1 < rs2 ) begin 
-            this.pc = this.pc + signed'(imm[11:0] << 1);
+            this.pc = this.pc + signed'(imm << 1);
             this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void blt(data_t rs1, data_t rs2, data_t imm);
         if(signed'(rs1) === signed'(rs2) ) begin 
-           this.pc = this.pc + signed'(imm[11:0] << 1);
+           this.pc = this.pc + signed'(imm << 1);
            this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bgeu(data_t rs1, data_t rs2, data_t imm);
         if(rs1 >= rs2 ) begin 
-           this.pc = this.pc + signed'(imm[11:0] << 1);
+           this.pc = this.pc + signed'(imm << 1);
            this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bge(data_t rs1, data_t rs2, data_t imm);
         if(signed'(rs1) >= signed'(rs2) ) begin 
-           this.pc = this.pc + signed'(imm[11:0] << 1);
+           this.pc = this.pc + signed'(imm << 1);
            this.branch_jump_flag = 1;
         end
     endfunction
