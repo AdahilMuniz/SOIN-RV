@@ -14,6 +14,8 @@ class rv32i;
     data_item_t data_trans;
     reg_file_item_t reg_file_trans;
 
+    logic branch_jump_flag = 0;
+
     function new (string IM_FILE);
         this.pc = 0;
         this.reg_f = new;
@@ -45,6 +47,8 @@ class rv32i;
     //Simulation Methods
 
     function void execute();
+        this.branch_jump_flag = 0;
+
         this.reg_file_trans.regn[2] = this.rd;
         this.reg_file_trans.regn[1] = this.rs2;
         this.reg_file_trans.regn[0] = this.rs1;
@@ -188,43 +192,52 @@ class rv32i;
     endfunction
 
     function void update_pc();
-        this.pc = this.pc+4;
+        if(!this.branch_jump_flag) begin
+            this.pc = this.pc+4;
+        end
     endfunction
 
     //BRANCHES
     protected function void beq(data_t rs1, data_t rs2, data_t imm);
         if(rs1 === rs2 ) begin 
             this.pc = this.pc + signed'(imm << 1);
+            this.branch_jump_flag = 1;
+            $display("PC: 0x%8x", this.pc);
         end
     endfunction
 
     protected function void bne(data_t rs1, data_t rs2, data_t imm);
         if(rs1 !== rs2 ) begin 
             this.pc = this.pc + signed'(imm[11:0] << 1);
+            this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bltu(data_t rs1, data_t rs2, data_t imm);
         if(rs1 < rs2 ) begin 
             this.pc = this.pc + signed'(imm[11:0] << 1);
+            this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void blt(data_t rs1, data_t rs2, data_t imm);
         if(signed'(rs1) === signed'(rs2) ) begin 
            this.pc = this.pc + signed'(imm[11:0] << 1);
+           this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bgeu(data_t rs1, data_t rs2, data_t imm);
         if(rs1 >= rs2 ) begin 
            this.pc = this.pc + signed'(imm[11:0] << 1);
+           this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bge(data_t rs1, data_t rs2, data_t imm);
         if(signed'(rs1) >= signed'(rs2) ) begin 
            this.pc = this.pc + signed'(imm[11:0] << 1);
+           this.branch_jump_flag = 1;
         end
     endfunction
 
@@ -320,6 +333,7 @@ class rv32i;
         data_t current_pc;
         current_pc = this.pc + 4;
         this.pc = this.pc + signed'(imm[11:0] << 1);
+        this.branch_jump_flag = 1;
         return current_pc;
     endfunction 
 
@@ -327,6 +341,7 @@ class rv32i;
         data_t current_pc;
         current_pc = this.pc + 4;
         this.pc = this.pc + signed'(imm[11:0]) + signed'(rs1);
+        this.branch_jump_flag = 1;
         return current_pc;
     endfunction 
 

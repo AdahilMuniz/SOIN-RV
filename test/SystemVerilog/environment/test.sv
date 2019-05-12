@@ -76,7 +76,6 @@ class test;
             begin : thread_model
                 forever begin 
                     @(posedge this.vif.clk or negedge this.vif.rstn);
-                    //mutex.get(1);
                     if(~this.vif.rstn) begin
                         $display("TEST: Reset");
                         this.model.reset();
@@ -89,7 +88,6 @@ class test;
                     end
                     this.model_data_trans     = this.model.data_trans;
                     this.model_reg_file_trans = this.model.reg_file_trans;
-                    //mutex.put(1);
                 end
             end
 
@@ -119,18 +117,6 @@ class test;
                     end
                 end
             end
-
-            //begin : thread_reset
-            //    forever begin 
-            //        @(negedge this.vif.rstn);
-            //        $display("TEST: Reset");
-            //        this.model.reset();
-            //        this.set_model_attributes();
-            //        this.model.execute();
-            //        this.model_data_trans     = this.model.data_trans;
-            //        this.model_reg_file_trans = this.model.reg_file_trans;
-            //    end
-            //end
 
         join_any
 
