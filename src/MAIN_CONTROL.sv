@@ -14,92 +14,92 @@ module MAIN_CONTROL(
 
 		case(i_OPCode)
 			`OP_R_TYPE : begin
-				o_Branch = 0;
-				o_MemRead = 0;
-				o_MemWrite = 0;
-				o_MemToReg = 0;
-				o_ALUSrc1 = 0;
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 0;
-				o_RegWrite = 1;
-				o_ALUOp = 3'b010;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b0;
+				o_MemToReg = 1'b0;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b0;
+				o_RegWrite = 1'b1;
+				o_ALUOp    = 3'b010;
 			end
 
 			`OP_I_TYPE : begin
-				o_Branch = 0;
-				o_MemRead = 0;
-				o_MemWrite = 0;
-				o_MemToReg = 0;
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 1;
-				o_RegWrite = 1;
-				o_ALUOp = 3'b011;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b0;
+				o_MemToReg = 1'b0;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b1;
+				o_RegWrite = 1'b1;
+				o_ALUOp    = 3'b011;
 			end
 
 			`OP_I_L_TYPE : begin
-				o_Branch = 0;
-				o_MemRead = 1;
-				o_MemWrite = 0;
-				o_MemToReg = 1;
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 1;
-				o_RegWrite = 1;
-				o_ALUOp = 3'b000;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b1;
+				o_MemWrite = 1'b0;
+				o_MemToReg = 1'b1;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b1;
+				o_RegWrite = 1'b1;
+				o_ALUOp    = 3'b000;
 			end
 
 			`OP_S_TYPE : begin
-				o_Branch = 0;
-				o_MemRead = 0;
-				o_MemWrite = 1;
-				o_MemToReg = 1'bx; //Don't Care
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 1;
-				o_RegWrite = 0; 
-				o_ALUOp = 3'b000;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b1;
+				o_MemToReg = 1'b0;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b1;
+				o_RegWrite = 1'b0; 
+				o_ALUOp    = 3'b000;
 			end
 
 			`OP_B_TYPE : begin
-				o_Branch = 1;
-				o_MemRead = 0;
-				o_MemWrite = 0;
-				o_MemToReg = 1'bx; //Don't Care
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 0;
-				o_RegWrite = 0; 
-				o_ALUOp = 3'b001;
+				o_Branch   = 1'b1;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b0;
+				o_MemToReg = 1'b0;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b0;
+				o_RegWrite = 1'b0; 
+				o_ALUOp    = 3'b001;
 			end
 
 			`OP_LUI : begin
-				o_Branch = 0;
-				o_MemRead = 0;
-				o_MemWrite = 0;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b0;
 				o_MemToReg = 1'b0;
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 1;
-				o_RegWrite = 1; 
-				o_ALUOp = 3'b100;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b1;
+				o_RegWrite = 1'b1; 
+				o_ALUOp    = 3'b100;
 			end
 
 			`OP_AUIPC : begin
-				o_Branch = 0;
-				o_MemRead = 0;
-				o_MemWrite = 0;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b0;
 				o_MemToReg = 1'b0;
-				o_ALUSrc1 = 1;
-				o_ALUSrc2 = 1;
-				o_RegWrite = 1; 
-				o_ALUOp = 3'b101;
+				o_ALUSrc1  = 1'b1;
+				o_ALUSrc2  = 1'b1;
+				o_RegWrite = 1'b1; 
+				o_ALUOp    = 3'b101;
 			end
 
 			default : begin
-				o_Branch = 1'bx;
-				o_MemRead = 1'bx;
-				o_MemWrite = 1'bx;
+				o_Branch   = 1'b0;
+				o_MemRead  = 1'b0;
+				o_MemWrite = 1'b0;
 				o_MemToReg = 1'b0;
-				o_ALUSrc1 = 0;
-				o_ALUSrc2 = 1'b1;
-				o_RegWrite = 1'b1; 
-				o_ALUOp = 3'bx;
+				o_ALUSrc1  = 1'b0;
+				o_ALUSrc2  = 1'b0;
+				o_RegWrite = 1'b0; 
+				o_ALUOp    = 3'b0;
 			end
 
 		endcase
