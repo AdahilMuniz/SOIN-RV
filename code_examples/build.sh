@@ -4,9 +4,11 @@ BINARY_FILE="bin/$1.bin"
 OUTPUT_FILE="bin/$1.o"
 RV32I_FILE="RV32I/$1.rv32i"
 
-
 #Initializing
 cd $(dirname $0) #I must look for something more elegant
+mkdir -p "bin"
+mkdir -p "RV32I"
+
 
 if [ -f "$ASSEMBLY_FILE" ]
 then
@@ -30,10 +32,10 @@ fi
 
 
 #Assembling
-/opt/riscv/bin/riscv64-unknown-elf-as -march=rv32i $ASSEMBLY_FILE -o $OUTPUT_FILE
-/opt/riscv/bin/riscv64-unknown-elf-objcopy -S -O binary $OUTPUT_FILE $BINARY_FILE 
+riscv64-unknown-elf-as -march=rv32i $ASSEMBLY_FILE -o $OUTPUT_FILE
+riscv64-unknown-elf-objcopy -S -O binary $OUTPUT_FILE $BINARY_FILE 
 
-rm $OUTPUT_FILE
+rm -rf $OUTPUT_FILE
 
 
 #test=$(hexdump -e '16/1 "%02x " "\n"' $BINARY_FILE)
