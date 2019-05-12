@@ -14,6 +14,7 @@ import types_pkg::*;
 `include "IMM_GENERATOR.sv"
 `include "INSTRUCTION_MEMORY.sv"
 `include "MAIN_CONTROL.sv"
+`include "BRANCH_JUMP_CONTROL.sv"
 `include "REGISTER_FILE.sv"
 `include "DATAPATH.sv"
 `include "CORE.sv"

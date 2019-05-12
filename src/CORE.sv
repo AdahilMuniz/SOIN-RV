@@ -35,12 +35,9 @@ module CORE(
 	logic MC_ALUSrc1;
 	logic MC_ALUSrc2;
 	logic MC_regWrite;
-	logic [6:0] MC_OPCode;
 
     //ALU Control Signals
 	logic [3:0] ALUC_ALUControlLines;
-	logic [6:0] ALUC_Funct7;
-	logic [2:0] ALUC_Funct3;
 	logic [2:0] ALUC_ALUOP;
 
 	//ALU Signals
@@ -50,11 +47,20 @@ module CORE(
 	data_t ALU_Op1;
 	data_t ALU_Op2;
 
+	//Branch and Jump Control Signals
+	logic BJC_result;
+	logic BJC_branch;
+	logic BJC_jump;
+	logic BJC_zero;
+
+	//Decode Signals
+	logic [6:0] Funct7;
+	logic [2:0] Funct3;
+	logic [6:0] OPCode;
+
 	//PC
 	data_t pc;
 
-	//AND Branch
-	logic A_B;
 	//SHIFT Branch
 	data_t SH_B;
 	//SUM Branch
@@ -70,7 +76,7 @@ module CORE(
 			pc <= 0;
 		end
 		else begin 
-			if(A_B) begin
+			if(BJC_result) begin
 				pc <= S_B;
 			end
 			else begin
@@ -91,12 +97,12 @@ module CORE(
 	//"Decode" instruction (Immediate)
 	assign IG_instruction = i_IM_instruction;
 
-	//"Decode" instruction (ALU Control)
-	assign ALUC_Funct3 = i_IM_instruction[14:12];
-	assign ALUC_Funct7 = i_IM_instruction[31:25];
+	//"Decode" instruction (F7 and F3)
+	assign Funct3 = i_IM_instruction[14:12];
+	assign Funct7 = i_IM_instruction[31:25];
 
 	//"Decode" instruction (Main Control)
-	assign MC_OPCode = i_IM_instruction[6:0];
+	assign OPCode = i_IM_instruction[6:0];
 
 	//Main Control Signals attributions
 	assign RF_wen = MC_regWrite;
@@ -111,6 +117,10 @@ module CORE(
 	assign o_DM_wen  = MC_memWrite;
 	assign o_DM_ren  = MC_memRead;
 
+	//Branch and Jump Control Attributions
+	assign BJC_zero   = ALU_Zero;
+	assign BJC_branch = MC_branch;
+
 
 	/****Muxes****/
 	
@@ -121,8 +131,6 @@ module CORE(
 	//Write Data (Register File) Source
 	assign RF_wd = MC_memToReg ? i_DM_rd:ALU_Result;
 
-	/****AND-Branch****/
-	assign A_B = MC_branch & ALU_Zero;
 	/****SHIFT-Branch****/
 	assign SH_B = IG_extendedImmediate<<1;
 	/****SUM-Branch****/
@@ -155,8 +163,8 @@ module CORE(
 
     ALU_CONTROL alu_control (
 	    .o_ALUControlLines(ALUC_ALUControlLines), 
-	    .i_Funct7(ALUC_Funct7), 
-	    .i_Funct3(ALUC_Funct3), 
+	    .i_Funct7(Funct7), 
+	    .i_Funct3(Funct3), 
 	    .i_ALUOp(ALUC_ALUOP)
     );
 
@@ -169,7 +177,15 @@ module CORE(
     	.o_ALUSrc1(MC_ALUSrc1),  
     	.o_ALUSrc2(MC_ALUSrc2), 
     	.o_RegWrite(MC_regWrite), 
-    	.i_OPCode(MC_OPCode)
+    	.i_OPCode(OPCode)
+    );
+
+    BRANCH_JUMP_CONTROL branch_jump_control(
+    	.o_B_J_result(BJC_result),
+    	.i_Branch(BJC_branch),
+		.i_Jump(BJC_jump),
+		.i_Zero(BJC_zero),
+		.i_Funct3(Funct3)
     );
 
 endmodule
