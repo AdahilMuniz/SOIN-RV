@@ -38,7 +38,7 @@ module REGISTER_FILE(
 	always @(posedge i_clk or negedge i_rstn) begin
 		if(~i_rstn) begin
 			for(i=0;i<`WORD_SIZE;i=i+1) begin
-				x[i] = 0;
+				x[i] <= 0;
 			end
 		end
 		else begin 
