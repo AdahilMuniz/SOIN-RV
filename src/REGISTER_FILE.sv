@@ -23,7 +23,7 @@ module REGISTER_FILE(
 //Initializing registers for tests
 `ifdef TEST
 	initial begin
-		for(i=0;i<`WORD_SIZE;i=i+1) begin
+		for(i=0;i<`N_REG;i=i+1) begin
 			x[i] = i;
 		end
 	end
@@ -37,7 +37,7 @@ module REGISTER_FILE(
 	//Writing occurs just in the positive edge clk;
 	always @(posedge i_clk or negedge i_rstn) begin
 		if(~i_rstn) begin
-			for(i=0;i<`WORD_SIZE;i=i+1) begin
+			for(i=0;i<`N_REG;i=i+1) begin
 				x[i] <= 0;
 			end
 		end
