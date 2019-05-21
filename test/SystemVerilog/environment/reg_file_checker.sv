@@ -4,7 +4,7 @@ class reg_file_checker;
     static error_reg_file_item_t error_table [$];
 
     function void check (reg_file_item_t model_reg_file_trans, reg_file_item_t dut_reg_file_trans, instruction_item_t input_instruction);
-        bit flag;
+        bit flag = 0;
         error_reg_file_item_t error_item;
 
         foreach(model_reg_file_trans.data[i]) begin
@@ -15,7 +15,7 @@ class reg_file_checker;
                         error_item.error_champ[i] = 1;
                     end
                 end
-                if(i === 1) begin
+                else if(i === 1) begin
                     if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE})) begin
                         flag = 1;
                         error_item.error_champ[i] = 1;
@@ -38,7 +38,7 @@ class reg_file_checker;
                         error_item.error_champ[i] = 1;
                     end
                 end
-                if(i === 1) begin
+                else if(i === 1) begin
                     if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE})) begin
                         flag = 1;
                         error_item.error_champ[i] = 1;
@@ -69,6 +69,7 @@ class reg_file_checker;
         $display("================REG  ERRORS==================");
         $display("=============================================");
         if(error_table.size() > 0) begin
+            logic [2:0] error_champ;
             $display("Number of Errors: %d\n", this.wrong_transactions);
             
             foreach(error_table[i]) begin
@@ -76,6 +77,18 @@ class reg_file_checker;
                 error_table[i].input_instruction.instruction, error_table[i].dut_result.regn[0], error_table[i].dut_result.data[0], error_table[i].dut_result.regn[1], error_table[i].dut_result.data[1],error_table[i].dut_result.regn[2], error_table[i].dut_result.data[2]);
                 $display("                 |[MODEL] Rn1: %2d  |[MODEL] Rd1: 0x%8x  |[MODEL] Rn2:%2d  |[MODEL] Rd2: 0x%8x  |[MODEL] Wn:%2d  |[MODEL] Wd: 0x%8x  \n",
                 error_table[i].model_result.regn[0], error_table[i].model_result.data[0], error_table[i].model_result.regn[1], error_table[i].model_result.data[1],error_table[i].model_result.regn[2], error_table[i].model_result.data[2]);
+                error_champ = error_table[i].error_champ;
+                foreach(error_champ[j]) begin
+                    if(error_champ[j] === 1) begin
+                        case (j)
+                            'h0: $display("|There is an error in the RS1 field.");
+                            'h1: $display("|There is an error in the RS2 field.");
+                            'h2: $display("|There is an error in the RD  field.");
+                            default : /* default */;
+                        endcase
+                    end
+                end
+                $display("\n");
             end
         end
         else begin 
