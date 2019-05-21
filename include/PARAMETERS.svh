@@ -7,4 +7,5 @@
 `define DM_FILE "mem.rv32i" //File tha initialize Data Memory
 `define IM_FILE "Code_Examples/RV32I/I_Type_Test.rv32i" //File that initializes Instruction Memory
 
+`define N_REG 32
 //`define TEST
