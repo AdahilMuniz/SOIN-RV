@@ -213,21 +213,21 @@ class rv32i;
     endfunction
 
     protected function void bltu(data_t rs1, data_t rs2, data_t imm);
-        if(rs1 < rs2 ) begin 
+        if(unsigned'(rs1) < unsigned'(rs2) ) begin 
             this.pc = this.pc + signed'(imm << 1);
             this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void blt(data_t rs1, data_t rs2, data_t imm);
-        if(signed'(rs1) === signed'(rs2) ) begin 
+        if(signed'(rs1) < signed'(rs2) ) begin 
            this.pc = this.pc + signed'(imm << 1);
            this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bgeu(data_t rs1, data_t rs2, data_t imm);
-        if(rs1 >= rs2 ) begin 
+        if(unsigned'(rs1) >= unsigned'(rs2) ) begin 
            this.pc = this.pc + signed'(imm << 1);
            this.branch_jump_flag = 1;
         end
