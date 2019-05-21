@@ -9,7 +9,7 @@ fi
 ./code_examples/build.sh $1
 
 vlib work
-vlog -sv +acc +incdir+include src/RV32I.svh
+vlog -sv +acc +incdir+include src/RV32I.sv
 vlog -sv +acc +incdir+include include/types_pkg.svh
 vlog -sv +acc test/SystemVerilog/interfaces/test_if.sv
 vlog -sv +acc test/SystemVerilog/interfaces/memory_if.sv
