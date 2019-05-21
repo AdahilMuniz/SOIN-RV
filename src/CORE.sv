@@ -185,6 +185,7 @@ module CORE(
     	.i_Branch(BJC_branch),
 		.i_Jump(BJC_jump),
 		.i_Zero(BJC_zero),
+		.i_Sig(ALU_Result[`WORD_SIZE-1]),
 		.i_Funct3(Funct3)
     );
 

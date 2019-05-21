@@ -3,24 +3,56 @@
 .globl _start
 _start:
 
-addi x1, x0 , 0
-li x2, N
+addi x10, x0 , 0
+li x1, N
 _LOOP1:
-addi x1, x1, 1
-beq x1, x2, _END
+addi x10, x10, 1
+beq x10, x1, _END
 beq x0, x0, _LOOP1
 _END:
-li x2, 0xBEBA
-sw x2, 0(x1)
+;x10 = 10
 
-addi x1, x0 , 0
-li x3, N
+li x1, 0xBEBA
+sw x1, 0(x10)
+
+addi x11, x0 , 0
+li x2, N
 _LOOP2:
-addi x1, x1, 1
-bne x1, x3, _LOOP2
+addi x11, x11, 1
+bne x11, x2, _LOOP2
+;x11 = 10
 
-li x3, 0xCAFE
-slli x2, x2, 16
-or x2, x2, x3
-sw x2, 0(x1)
+li x2, 0xCAFE
+slli x1, x1, 16
+or x1, x1, x2
+sw x1, 0(x11)
+
+addi x12, x0 , 0
+li x3, N
+_LOOP3:
+addi x12, x12, 1
+blt x12, x3, _LOOP3
+;x12 = 10
+
+addi x13, x0 , -10
+li x4, N
+_LOOP4:
+addi x13, x13, 1
+blt x13, x4, _LOOP4
+;x13 = 10
+
+;It does not work yet:
+;addi x14, x0 , 0
+;li x5, N
+;_LOOP5:
+;addi x14, x14, 1
+;bltu x14, x5, _LOOP5
+;x14 = 10
+
+;addi x15, x0 , -10
+;li x6, N
+;_LOOP6:
+;addi x15, x15, 1
+;bltu x15, x6, _LOOP6
+;x15 = -9
 
