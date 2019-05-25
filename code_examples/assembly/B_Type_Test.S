@@ -10,7 +10,7 @@ addi x10, x10, 1
 beq x10, x1, _END
 beq x0, x0, _LOOP1
 _END:
-;x10 = 10
+#x10 = 10
 
 li x1, 0xBEBA
 sw x1, 0(x10)
@@ -20,7 +20,7 @@ li x2, N
 _LOOP2:
 addi x11, x11, 1
 bne x11, x2, _LOOP2
-;x11 = 10
+#x11 = 10
 
 li x2, 0xCAFE
 slli x1, x1, 16
@@ -32,27 +32,27 @@ li x3, N
 _LOOP3:
 addi x12, x12, 1
 blt x12, x3, _LOOP3
-;x12 = 10
+#x12 = 10
 
 addi x13, x0 , -10
 li x4, N
 _LOOP4:
 addi x13, x13, 1
 blt x13, x4, _LOOP4
-;x13 = 10
+#x13 = 10
 
-;It does not work yet:
-;addi x14, x0 , 0
-;li x5, N
-;_LOOP5:
-;addi x14, x14, 1
-;bltu x14, x5, _LOOP5
-;x14 = 10
+#It does not work yet:
+#addi x14, x0 , 0
+#li x5, N
+#_LOOP5:
+#addi x14, x14, 1
+#bltu x14, x5, _LOOP5
+#x14 = 10
 
-;addi x15, x0 , -10
-;li x6, N
-;_LOOP6:
-;addi x15, x15, 1
-;bltu x15, x6, _LOOP6
-;x15 = -9
+#addi x15, x0 , -10
+#li x6, N
+#_LOOP6:
+#addi x15, x15, 1
+#bltu x15, x6, _LOOP6
+#x15 = -9
 
