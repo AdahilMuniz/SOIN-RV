@@ -58,6 +58,11 @@ launch_simulation
 
 #Synthesis
 synth_design -top CORE -part $partname
+
+#Report Generation
 report_utilization    -file $reportdir/utilization.rpt
-report_timing_summary -file $reportdir/timming.rpt
+report_timing_summary -file $reportdir/timing.rpt
+report_io             -file $reportdir/io.xml -format xml
+report_io             -file $reportdir/io.rpt
+report_route_status   -file $reportdir/route.rpt
 
