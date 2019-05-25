@@ -14,9 +14,9 @@ module BRANCH_JUMP_CONTROL (
 				`F3_TYPE0: o_B_J_result =  i_Zero;
 				`F3_TYPE1: o_B_J_result = ~i_Zero;
 				`F3_TYPE4: o_B_J_result =  i_Sig;
-				//`F3_TYPE5: o_B_J_result = ~i_Sig;
-				//`F3_TYPE6: o_B_J_result = ~i_Sig;
-				//`F3_TYPE7: o_B_J_result = ~i_Sig;
+				`F3_TYPE5: o_B_J_result = ~i_Sig;
+				`F3_TYPE6: o_B_J_result =  i_Sig;
+				`F3_TYPE7: o_B_J_result = ~i_Sig;
 				default :  o_B_J_result = 1'b0;
 			endcase
 		end

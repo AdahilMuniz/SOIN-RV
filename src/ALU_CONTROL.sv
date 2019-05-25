@@ -8,7 +8,17 @@ module ALU_CONTROL(
 	always @(*) begin
 		case(i_ALUOp)
 			`ALUOP_I_L : o_ALUControlLines = `ALU_ADD;
-			`ALUOP_B :  o_ALUControlLines = `ALU_SUB;
+			`ALUOP_B :  begin
+				case (i_Funct3)
+					`F3_TYPE0 : o_ALUControlLines = `ALU_SUB;
+					`F3_TYPE1 : o_ALUControlLines = `ALU_SUB;
+					`F3_TYPE4 : o_ALUControlLines = `ALU_SLT;
+					`F3_TYPE5 : o_ALUControlLines = `ALU_SLT;
+					`F3_TYPE6 : o_ALUControlLines = `ALU_SLTU;
+					`F3_TYPE7 : o_ALUControlLines = `ALU_SLTU;
+					default : o_ALUControlLines = 4'bx;
+				endcase
+			end
 			`ALUOP_R :
 				case(i_Funct3)
 					`F3_TYPE0 : 
