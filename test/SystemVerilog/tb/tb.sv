@@ -57,9 +57,9 @@ module tb;
 
     //Reset generation
     initial begin 
-        #30
+        #(`CLK_PERIOD)
         i_rstn <= 1'b0;
-        #5;
+        #(`CLK_PERIOD/2) 
         i_rstn <= 1'b1;
     end
        

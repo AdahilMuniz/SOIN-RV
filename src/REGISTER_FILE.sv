@@ -35,7 +35,7 @@ module REGISTER_FILE(
 	assign o_Rd2 = |i_Rnum2 ? x[i_Rnum2] : 0;
 
 	//Writing occurs just in the positive edge clk;
-	always @(posedge i_clk or negedge i_rstn) begin
+	always @(posedge i_clk) begin
 		if(~i_rstn) begin
 			for(i=0;i<`N_REG;i=i+1) begin
 				x[i] <= 0;
