@@ -3,7 +3,6 @@ module BRANCH_JUMP_CONTROL (
 	input  logic i_Branch,
 	input  logic i_Jump,
 	input  logic i_Zero,
-	input  logic i_Sig,
 	input  logic [2:0] i_Funct3
 );
 
@@ -13,10 +12,12 @@ module BRANCH_JUMP_CONTROL (
 			case (i_Funct3)
 				`F3_TYPE0: o_B_J_result =  i_Zero;
 				`F3_TYPE1: o_B_J_result = ~i_Zero;
-				`F3_TYPE4: o_B_J_result =  i_Sig;
-				`F3_TYPE5: o_B_J_result = ~i_Sig;
-				`F3_TYPE6: o_B_J_result =  i_Sig;
-				`F3_TYPE7: o_B_J_result = ~i_Sig;
+
+
+				`F3_TYPE4: o_B_J_result = ~i_Zero;
+				`F3_TYPE5: o_B_J_result =  i_Zero;
+				`F3_TYPE6: o_B_J_result = ~i_Zero;
+				`F3_TYPE7: o_B_J_result =  i_Zero;
 				default :  o_B_J_result = 1'b0;
 			endcase
 		end
