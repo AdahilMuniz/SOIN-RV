@@ -55,10 +55,23 @@ addi x15, x15, 1
 bltu x15, x6, _LOOP6
 #x15 = 0xF7
 
-#It does not work yet:
 addi x16, x0 , N
 li x7, 0
 _LOOP7:
 addi x16, x16, -1
 bge x16, x7, _LOOP7
 #x16 = 0xFF
+
+addi x17, x0 , N
+li x8, 1
+_LOOP8:
+addi x17, x17, -1
+bgeu x17, x8, _LOOP8
+#x17 = 0x00
+
+addi x18, x0 , N
+li x9, -10
+_LOOP9:
+addi x18, x18, -1
+bgeu x18, x9, _LOOP9
+#x18 = 0x09
