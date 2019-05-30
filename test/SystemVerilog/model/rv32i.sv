@@ -178,11 +178,11 @@ class rv32i;
 
             JAL   : begin
                 this.reg_file_trans.data[2] = this.jal(this.imm);
-                this.reg_f.set_reg(this.rd, this.jal(this.imm));
+                this.reg_f.set_reg(this.rd, this.reg_file_trans.data[2]);
             end
             JALR  : begin
                 this.reg_file_trans.data[2] = this.jalr(this.reg_f.get_reg(rs1), this.imm);
-                this.reg_f.set_reg(this.rd, this.jalr(this.reg_f.get_reg(rs1), this.imm));
+                this.reg_f.set_reg(this.rd, this.reg_file_trans.data[2]);
             end
 
 
@@ -331,7 +331,8 @@ class rv32i;
     protected function data_t jal (data_t imm);
         data_t current_pc;
         current_pc = this.pc + 4;
-        this.pc = this.pc + signed'(imm[11:0] << 1);
+        this.pc = this.pc + signed'(imm<< 1);
+        $display("PC: %x", this.pc);
         this.branch_jump_flag = 1;
         return current_pc;
     endfunction 
@@ -339,7 +340,7 @@ class rv32i;
     protected function data_t jalr (data_t rs1, data_t imm);
         data_t current_pc;
         current_pc = this.pc + 4;
-        this.pc = this.pc + signed'(imm[11:0]) + signed'(rs1);
+        this.pc = this.pc + signed'(imm) + signed'(rs1);
         this.branch_jump_flag = 1;
         return current_pc;
     endfunction 
