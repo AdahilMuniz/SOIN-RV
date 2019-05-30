@@ -148,7 +148,7 @@ class rv32i;
             BNE   : this.bne (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
             BLT   : this.blt (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
             BLTU  : this.bltu(reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
-            BGE   : this.beq (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
+            BGE   : this.bge (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
             BGEU  : this.bgeu(reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
 
             LW    : begin 
@@ -228,15 +228,15 @@ class rv32i;
 
     protected function void bgeu(data_t rs1, data_t rs2, data_t imm);
         if(unsigned'(rs1) >= unsigned'(rs2) ) begin 
-           this.pc = this.pc + signed'(imm << 1);
-           this.branch_jump_flag = 1;
+            this.pc = this.pc + signed'(imm << 1);
+            this.branch_jump_flag = 1;
         end
     endfunction
 
     protected function void bge(data_t rs1, data_t rs2, data_t imm);
         if(signed'(rs1) >= signed'(rs2) ) begin 
-           this.pc = this.pc + signed'(imm << 1);
-           this.branch_jump_flag = 1;
+            this.pc = this.pc + signed'(imm << 1);
+            this.branch_jump_flag = 1;
         end
     endfunction
 

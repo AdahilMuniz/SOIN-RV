@@ -41,7 +41,6 @@ addi x13, x13, 1
 blt x13, x4, _LOOP4
 #x13 = 0x0A
 
-#It does not work yet:
 addi x14, x0 , 0
 li x5, N
 _LOOP5:
@@ -56,6 +55,7 @@ addi x15, x15, 1
 bltu x15, x6, _LOOP6
 #x15 = 0xF7
 
+#It does not work yet:
 addi x16, x0 , N
 li x7, 0
 _LOOP7:
