@@ -1,5 +1,5 @@
 module BRANCH_JUMP_CONTROL (
-    output logic o_B_J_result,
+    output logic [1:0] o_B_J_result,
     input  logic i_Branch,
     input  logic i_Jump,
     input  logic i_Zero,

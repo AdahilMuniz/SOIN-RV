@@ -49,7 +49,7 @@ module CORE(
     data_t ALU_Op2;
 
     //Branch and Jump Control Signals
-    logic BJC_result;
+    logic [1:0] BJC_result;
     logic BJC_branch;
     logic BJC_jump;
     logic BJC_zero;
@@ -66,6 +66,8 @@ module CORE(
     data_t SH_B;
     //SUM Branch
     data_t S_B;
+    //SUM 4
+    data_t S_FOUR;
 
     /****PC Update****/
     initial begin
@@ -77,11 +79,11 @@ module CORE(
             pc <= 0;
         end
         else begin 
-            if(BJC_result) begin
+            if(BJC_result[0]) begin
                 pc <= S_B;
             end
             else begin
-                pc <= pc + 4;
+                pc <= S_FOUR;
             end
         end
     end
@@ -131,13 +133,15 @@ module CORE(
     //ALU Source 2
     assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
     //Write Data (Register File) Source
-    assign RF_wd = MC_jump? (pc + 4): 
+    assign RF_wd = MC_jump? (S_FOUR): 
                             (MC_memToReg ? i_DM_rd:ALU_Result);
 
     /****SHIFT-Branch****/
     assign SH_B = IG_extendedImmediate<<1;
     /****SUM-Branch****/
-    assign S_B = pc + SH_B; //we have to use $sigend()?
+    assign S_B = pc + SH_B;
+    /****SUM-4-PC****/
+    assign S_FOUR = pc + 4;
 
     REGISTER_FILE register_file (
         .o_Rd1(RF_rd1), 
