@@ -111,7 +111,7 @@ module MAIN_CONTROL(
             end
 
             `OP_JALR : begin
-                o_Branch   = 1'b0;
+                o_Branch   = 1'b1;
                 o_Jump     = 1'b1;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;

@@ -1,3 +1,4 @@
+//@TODO: Use one adder and a mux to select the source
 module CORE(
         output addr_t o_IM_addr,
         output data_t o_DM_wd,
