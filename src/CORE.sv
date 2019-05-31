@@ -61,6 +61,8 @@ module CORE(
 
     //PC
     data_t pc;
+    //MUX PC
+    data_t mux_pc;
 
     //SHIFT Branch
     data_t SH_B;
@@ -79,12 +81,7 @@ module CORE(
             pc <= 0;
         end
         else begin 
-            if(BJC_result[0]) begin
-                pc <= S_B;
-            end
-            else begin
-                pc <= S_FOUR;
-            end
+            pc <= mux_pc;
         end
     end
 
@@ -135,6 +132,8 @@ module CORE(
     //Write Data (Register File) Source
     assign RF_wd = MC_jump? (S_FOUR): 
                             (MC_memToReg ? i_DM_rd:ALU_Result);
+    //PC Source
+    assign mux_pc = BJC_result[0] ? S_B : S_FOUR;
 
     /****SHIFT-Branch****/
     assign SH_B = IG_extendedImmediate<<1;
