@@ -15,6 +15,7 @@ module IMM_GENERATOR(
             `OP_LUI	     : ExtendedImmediate = {{12{i_Instruction[31]}}, i_Instruction[31:12]};
             `OP_AUIPC    : ExtendedImmediate = {{12{i_Instruction[31]}}, i_Instruction[31:12]};
             `OP_JAL      : ExtendedImmediate = {{12{i_Instruction[31]}}, i_Instruction[19:12], i_Instruction[20], i_Instruction[30:21]};
+            `OP_JALR     : ExtendedImmediate = {{20{i_Instruction[31]}}, i_Instruction[31:20]};
             default      : ExtendedImmediate = 32'b0;
         endcase
     end

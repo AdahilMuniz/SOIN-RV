@@ -339,8 +339,10 @@ class rv32i;
 
     protected function data_t jalr (data_t rs1, data_t imm);
         data_t current_pc;
+        data_t int_result;
         current_pc = this.pc + 4;
-        this.pc = this.pc + signed'(imm) + signed'(rs1);
+        int_result = signed'(imm) + signed'(rs1);
+        //this.pc = int_result[]
         this.branch_jump_flag = 1;
         return current_pc;
     endfunction 

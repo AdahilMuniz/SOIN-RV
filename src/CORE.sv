@@ -71,6 +71,8 @@ module CORE(
     data_t S_B;
     //SUM 4
     data_t S_FOUR;
+    //JALR Result
+    data_t JALR_RESULT;
 
     /****PC Update****/
     initial begin
@@ -134,7 +136,7 @@ module CORE(
     assign RF_wd = MC_jump? (S_FOUR): 
                             (MC_memToReg ? i_DM_rd:ALU_Result);
     //PC Source
-    assign mux_pc = BJC_result[0] ? S_B : S_FOUR;
+    assign mux_pc = BJC_result[1] ? JALR_RESULT : (BJC_result[0] ? S_B : S_FOUR);
 
     /****SHIFT-Branch****/
     assign SH_B = IG_extendedImmediate<<1;
@@ -142,6 +144,8 @@ module CORE(
     assign S_B = pc + SH_B;
     /****SUM-4-PC****/
     assign S_FOUR = pc + 4;
+    /***JALR_RESULT***/
+    assign JALR_RESULT = {ALU_Result[`WORD_SIZE-1:1], 1'b0};
 
     REGISTER_FILE register_file (
         .o_Rd1(RF_rd1), 
