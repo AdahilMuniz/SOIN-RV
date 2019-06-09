@@ -118,7 +118,7 @@ module MAIN_CONTROL(
                 o_MemToReg = 1'b0;
                 o_ALUSrc1  = 1'b0;
                 o_ALUSrc2  = 1'b1;
-                o_RegWrite = 1'b0; 
+                o_RegWrite = 1'b1; 
                 o_ALUOp    = 3'b011;
             end
 

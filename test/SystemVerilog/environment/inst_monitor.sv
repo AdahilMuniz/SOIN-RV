@@ -212,7 +212,8 @@ class inst_monitor;
             end
             `OP_JALR : begin 
                 this.instruction_type = I_TYPE;
-                this.imm    = 32'(signed'(this.vif.rdata[31:12]));
+                this.imm    = 32'(signed'(this.vif.rdata[31:20]));
+                this.rs1    = this.vif.rdata[19:15];
                 this.rd     = this.vif.rdata[11:7];
                 this.instruction   = JALR;
             end

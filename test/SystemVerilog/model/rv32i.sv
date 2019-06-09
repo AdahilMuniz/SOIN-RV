@@ -332,7 +332,6 @@ class rv32i;
         data_t current_pc;
         current_pc = this.pc + 4;
         this.pc = this.pc + signed'(imm<< 1);
-        $display("PC: %x", this.pc);
         this.branch_jump_flag = 1;
         return current_pc;
     endfunction 
@@ -343,6 +342,7 @@ class rv32i;
         current_pc = this.pc + 4;
         int_result = signed'(imm) + signed'(rs1);
         this.pc = {int_result[`WORD_SIZE-1:1], 1'b0};
+        $display("PC: %x", this.pc);
         this.branch_jump_flag = 1;
         return current_pc;
     endfunction 
