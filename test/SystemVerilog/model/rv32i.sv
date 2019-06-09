@@ -253,7 +253,7 @@ class rv32i;
     protected function data_t lh(data_t rs1, data_t imm);
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
-        temp_data = {{16{temp_data[31]}}, temp_data[15:0]};
+        temp_data = {{`HALF_SIZE{temp_data[`HALF_SIZE-1]}}, temp_data[`HALF_SIZE-1:0]};
 
         data_trans.addr      = signed'(imm)+rs1;
         data_trans.direction = READ;
@@ -265,8 +265,7 @@ class rv32i;
     protected function data_t lb(data_t rs1, data_t imm);
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
-        temp_data = {{24{temp_data[31]}}, temp_data[7:0]};
-
+        temp_data = {{(`WORD_SIZE-`BYTE_SIZE){temp_data[`BYTE_SIZE-1]}}, temp_data[`BYTE_SIZE-1:0]};
         data_trans.addr      = signed'(imm)+rs1;
         data_trans.direction = READ;
         data_trans.data      = temp_data;
@@ -277,7 +276,7 @@ class rv32i;
     protected function data_t lhu(data_t rs1, data_t imm);
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
-        temp_data = {16'h0, temp_data[15:0]};
+        temp_data = {{`HALF_SIZE{1'b0}}, temp_data[`HALF_SIZE-1:0]};
 
         data_trans.addr      = signed'(imm)+rs1;
         data_trans.direction = READ;
@@ -289,7 +288,7 @@ class rv32i;
     protected function data_t lbu(data_t rs1, data_t imm);
         data_t temp_data;
         temp_data = dmem.get_mem(signed'(imm)+rs1);
-        temp_data = {24'h0, temp_data[7:0]};
+        temp_data = {{(`WORD_SIZE-`BYTE_SIZE){1'b0}}, temp_data[`BYTE_SIZE-1:0]};
 
         data_trans.addr      = signed'(imm)+rs1;
         data_trans.direction = READ;
