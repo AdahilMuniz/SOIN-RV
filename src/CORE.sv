@@ -28,8 +28,7 @@ module CORE(
     data_t IG_instruction;
 
     //Main Control Signals
-    logic MC_branch;
-    logic MC_jump;
+    logic [1:0] MC_ctrl_jump;
     logic MC_memRead;
     logic MC_memWrite;
     logic MC_memToReg;
@@ -51,8 +50,7 @@ module CORE(
 
     //Branch and Jump Control Signals
     logic [1:0] BJC_result;
-    logic BJC_branch;
-    logic BJC_jump;
+    logic [1:0] BJC_ctrl_jump;
     logic BJC_zero;
 
     //Decode Signals
@@ -110,7 +108,6 @@ module CORE(
     //Main Control Signals attributions
     assign RF_wen = MC_regWrite;
     assign ALUC_ALUOP = MC_ALUOp;
-    assign BJC_jump   = MC_jump;
 
     //ALU Control Signals attributions
     assign ALU_Operation = ALUC_ALUControlLines;
@@ -122,8 +119,8 @@ module CORE(
     assign o_DM_ren  = MC_memRead;
 
     //Branch and Jump Control Attributions
-    assign BJC_zero   = ALU_Zero;
-    assign BJC_branch = MC_branch;
+    assign BJC_zero      = ALU_Zero;
+    assign BJC_ctrl_jump = MC_ctrl_jump;
 
 
     /****Muxes****/
@@ -133,8 +130,8 @@ module CORE(
     //ALU Source 2
     assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
     //Write Data (Register File) Source
-    assign RF_wd = MC_jump? (S_FOUR): 
-                            (MC_memToReg ? i_DM_rd:ALU_Result);
+    assign RF_wd = MC_ctrl_jump[1] ? (S_FOUR): 
+                                     (MC_memToReg ? i_DM_rd:ALU_Result);
     //PC Source
     assign mux_pc = BJC_result[1] ? JALR_RESULT : (BJC_result[0] ? S_B : S_FOUR);
 
@@ -180,8 +177,7 @@ module CORE(
     );
 
     MAIN_CONTROL main_control (
-        .o_Branch(MC_branch), 
-        .o_Jump(MC_jump),
+        .o_Ctrl_Jump(MC_ctrl_jump),
         .o_MemRead(MC_memRead), 
         .o_MemWrite(MC_memWrite), 
         .o_MemToReg(MC_memToReg), 
@@ -194,8 +190,7 @@ module CORE(
 
     BRANCH_JUMP_CONTROL branch_jump_control(
         .o_B_J_result(BJC_result),
-        .i_Branch(BJC_branch),
-        .i_Jump(BJC_jump),
+        .i_Ctrl_Jump(BJC_ctrl_jump),
         .i_Zero(BJC_zero),
         .i_Funct3(Funct3)
     );

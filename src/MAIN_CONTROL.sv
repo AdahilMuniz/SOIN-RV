@@ -1,22 +1,20 @@
 module MAIN_CONTROL(
-    output logic o_Branch,
-    output logic o_Jump,
-    output logic o_MemRead,
-    output logic o_MemWrite,
-    output logic o_MemToReg,
+    output logic [1:0] o_Ctrl_Jump,
+    output logic       o_MemRead,
+    output logic       o_MemWrite,
+    output logic       o_MemToReg,
     output logic [2:0] o_ALUOp,
-    output logic o_ALUSrc1,
-    output logic o_ALUSrc2,
-    output logic o_RegWrite,
-    input  [6:0] i_OPCode
+    output logic       o_ALUSrc1,
+    output logic       o_ALUSrc2,
+    output logic       o_RegWrite,
+    input  logic [6:0] i_OPCode
     );
 
     always @(*) begin
 
         case(i_OPCode)
             `OP_R_TYPE : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -27,8 +25,7 @@ module MAIN_CONTROL(
             end
 
             `OP_I_TYPE : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -39,8 +36,7 @@ module MAIN_CONTROL(
             end
 
             `OP_I_L_TYPE : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b1;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b1;
@@ -51,8 +47,7 @@ module MAIN_CONTROL(
             end
 
             `OP_S_TYPE : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b1;
                 o_MemToReg = 1'b0;
@@ -63,8 +58,7 @@ module MAIN_CONTROL(
             end
 
             `OP_B_TYPE : begin
-                o_Branch   = 1'b1;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b01;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -75,8 +69,7 @@ module MAIN_CONTROL(
             end
 
             `OP_LUI : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -87,8 +80,7 @@ module MAIN_CONTROL(
             end
 
             `OP_AUIPC : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -99,8 +91,7 @@ module MAIN_CONTROL(
             end
 
             `OP_JAL : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b1;
+                o_Ctrl_Jump= 2'b10;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -111,8 +102,7 @@ module MAIN_CONTROL(
             end
 
             `OP_JALR : begin
-                o_Branch   = 1'b1;
-                o_Jump     = 1'b1;
+                o_Ctrl_Jump= 2'b11;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
@@ -123,8 +113,7 @@ module MAIN_CONTROL(
             end
 
             default : begin
-                o_Branch   = 1'b0;
-                o_Jump     = 1'b0;
+                o_Ctrl_Jump= 2'b00;
                 o_MemRead  = 1'b0;
                 o_MemWrite = 1'b0;
                 o_MemToReg = 1'b0;
