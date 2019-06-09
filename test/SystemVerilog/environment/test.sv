@@ -78,9 +78,9 @@ class test;
                     @(posedge this.vif.clk);
                     if(~this.vif.rstn) begin
                         $display("TEST: Reset");
-                        this.model.reset();
                         this.set_model_attributes();
                         this.model.execute();
+                        this.model.reset();
                     end
                     else begin 
                         this.set_model_attributes();
