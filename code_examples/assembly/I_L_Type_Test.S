@@ -3,6 +3,12 @@
 _start:
 
 
+li x1, 1
+li x6, 6
+li x3, 3
+li x5, 5
+li x4, 4
+
 sw x1,  2(x0)
 sw x6, -2(x4)
 sw x3,  4(x0)

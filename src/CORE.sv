@@ -133,7 +133,7 @@ module CORE(
     assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
     //Write Data (Register File) Source
     assign RF_wd = MC_ctrl_jump[1] ? (S_FOUR): 
-                                     (MC_memToReg ? i_DM_rd:ALU_Result);
+                                     (MC_memToReg ? data_load:ALU_Result);
     //PC Source
     assign mux_pc = BJC_result[1] ? JALR_RESULT : (BJC_result[0] ? S_B : S_FOUR);
 
@@ -146,8 +146,13 @@ module CORE(
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result[`WORD_SIZE-1:1], 1'b0};
     /***DATA_LOAD***/
-    //assign data_load =   Funct3 == `F3_TYPE0  ? i_DM_rd:
-    //                    (Funct3 == `F3_TYPE1  ? {{`HALF_SIZE{i_DM_rd[`HALF_SIZE-1]}}, i_DM_rd[`HALF_SIZE-1:0]} : 'h0);
+    //Is it worth using the IMM_GENERATOR muxes?
+    assign data_load =   Funct3 == `F3_TYPE0  ? {{(`WORD_SIZE-`BYTE_SIZE){i_DM_rd[`BYTE_SIZE-1]}}, i_DM_rd[`BYTE_SIZE-1:0]}:
+                        (Funct3 == `F3_TYPE1  ? {{`HALF_SIZE{i_DM_rd[`HALF_SIZE-1]}}, i_DM_rd[`HALF_SIZE-1:0]} :
+                        (Funct3 == `F3_TYPE2  ? i_DM_rd:
+                        (Funct3 == `F3_TYPE4  ? {{(`WORD_SIZE-`BYTE_SIZE){1'b0}}, i_DM_rd[`BYTE_SIZE-1:0]}:
+                        (Funct3 == `F3_TYPE5  ? {{`HALF_SIZE{1'b0}}, i_DM_rd[`HALF_SIZE-1:0]} :
+                        'h0))));
 
     REGISTER_FILE register_file (
         .o_Rd1(RF_rd1), 
