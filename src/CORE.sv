@@ -71,13 +71,15 @@ module CORE(
     data_t S_FOUR;
     //JALR Result
     data_t JALR_RESULT;
+    //Data to be load
+    data_t data_load;
 
     /****PC Update****/
     initial begin
     	pc = 0;
     end
 
-    always @(posedge i_clk, negedge i_rstn) begin
+    always @(posedge i_clk) begin
         if(~i_rstn) begin
             pc <= 0;
         end
@@ -143,6 +145,9 @@ module CORE(
     assign S_FOUR = pc + 4;
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result[`WORD_SIZE-1:1], 1'b0};
+    /***DATA_LOAD***/
+    //assign data_load =   Funct3 == `F3_TYPE0  ? i_DM_rd:
+    //                    (Funct3 == `F3_TYPE1  ? {{`HALF_SIZE{i_DM_rd[`HALF_SIZE-1]}}, i_DM_rd[`HALF_SIZE-1:0]} : 'h0);
 
     REGISTER_FILE register_file (
         .o_Rd1(RF_rd1), 

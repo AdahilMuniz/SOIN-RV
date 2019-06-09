@@ -54,7 +54,7 @@ class test;
                     -> get_data;
                     -> get_reg;
                     mutex.put(1);
-                    @(posedge this.vif.clk or negedge this.vif.rstn);
+                    @(posedge this.vif.clk);
                 end
             end
             begin : thread_data_monitor
@@ -75,7 +75,7 @@ class test;
             end
             begin : thread_model
                 forever begin 
-                    @(posedge this.vif.clk or negedge this.vif.rstn);
+                    @(posedge this.vif.clk);
                     if(~this.vif.rstn) begin
                         $display("TEST: Reset");
                         this.model.reset();

@@ -2,7 +2,6 @@ class regFile;
     protected static data_t x [31:0];
 
     function new ();
-    	//this.reset();
         x[0] = 0;
     endfunction
 
