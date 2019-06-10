@@ -12,39 +12,35 @@ module DATA_MEMORY_V2(
     input  i_Ren,
     input  i_clk
     );
-	parameter HEIGHT = `DM_DEPTH;//Memory height
-	parameter FILE = `DM_FILE;
+    parameter HEIGHT = `DM_DEPTH;//Memory height
+    parameter FILE = `DM_FILE;
 
-	data_t mem [HEIGHT-1:0];//Memory: Word: 4byte
+    data_t mem [HEIGHT-1:0];//Memory: Word: 4byte
 
-	initial begin
-		$readmemh(FILE, mem);//Initialize Memory
-	end
+    initial begin
+        $readmemh(FILE, mem);//Initialize Memory
+    end
 
-	//Just one signal must be enabled (Wen or Ren) in one clock period(That's my solution),
-	//So, when the two signal are active, just the 'i_Wen' is considered.
-	always @(posedge i_clk) begin
-		if (i_Wen) begin
-			case(i_Wen) 
-				4'b1000 : mem[i_Addr>>2][31:24] <= i_Wd[31:24];
-				4'b0100 : mem[i_Addr>>2][23:16] <= i_Wd[23:16];
-				4'b0010 : mem[i_Addr>>2][15:8] <= i_Wd[15:8];
-				4'b0001 : mem[i_Addr>>2][7:0] <= i_Wd[7:0];
-				default: 
-					if (&i_Wen) begin
-						mem[i_Addr>>2] <= i_Wd;
-					end
-					else if(&i_Wen[2:0]) begin
-						mem[i_Addr>>2][23:0] <= i_Wd[23:0];
-					end
-					else if(&i_Wen[1:0]) begin
-						mem[i_Addr>>2][15:0] <= i_Wd[15:0];
-					end
-			endcase
-		end
-		else if(i_Ren) begin
-			o_Rd <= mem[i_Addr>>2];
-		end
-	end
+    always @(posedge i_clk) begin
+        if (|i_Wen) begin
+            case(i_Wen)
+                //Byte 
+                4'b1000 : mem[i_Addr>>2][31:24] <= i_Wd;
+                4'b0100 : mem[i_Addr>>2][23:16] <= i_Wd;
+                4'b0010 : mem[i_Addr>>2][15:8]  <= i_Wd;
+                4'b0001 : mem[i_Addr>>2][7:0]   <= i_Wd;
+                //Half-Word
+                4'b1100 : mem[i_Addr>>2][31:16] <= i_Wd;
+                4'b0110 : mem[i_Addr>>2][23:8]  <= i_Wd;
+                4'b0011 : mem[i_Addr>>2][15:0]  <= i_Wd;
+                //Word
+                4'b1111 : mem[i_Addr>>2]        <= i_Wd;
+
+                default : mem[i_Addr>>2]        <= i_Wd;
+            endcase
+        end
+    end
+
+    assign o_Rd = i_Ren ? mem[(i_Addr>>2)] : 32'b0;
 
 endmodule
