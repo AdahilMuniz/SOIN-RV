@@ -17,6 +17,7 @@ import types_pkg::*;
 `include "INSTRUCTION_MEMORY.sv"
 `include "MAIN_CONTROL.sv"
 `include "BRANCH_JUMP_CONTROL.sv"
+`include "LOAD_STORE_UNIT.sv"
 `include "REGISTER_FILE.sv"
 `include "DATAPATH.sv"
 `include "CORE.sv"

@@ -53,6 +53,14 @@ module CORE(
     logic [1:0] BJC_ctrl_jump;
     logic BJC_zero;
 
+    //Load Store Unit Signals
+    logic  [3:0] LSU_range_select;
+    data_t       LSU_data_load;
+    data_t       LSU_rd;
+    logic  [1:0] LSU_low_addr;
+    logic        LSU_wen;
+    logic        LSU_ren;
+
     //Decode Signals
     logic [6:0] Funct7;
     logic [2:0] Funct3;
@@ -124,6 +132,11 @@ module CORE(
     assign BJC_zero      = ALU_Zero;
     assign BJC_ctrl_jump = MC_ctrl_jump;
 
+    //Load Store Unit Attributions
+    assign LSU_rd  = i_DM_rd;
+    assign LSU_wen = MC_memWrite;
+    assign LSU_ren = MC_memRead;
+
 
     /****Muxes****/
     
@@ -133,7 +146,7 @@ module CORE(
     assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
     //Write Data (Register File) Source
     assign RF_wd = MC_ctrl_jump[1] ? (S_FOUR): 
-                                     (MC_memToReg ? data_load:ALU_Result);
+                                     (MC_memToReg ? LSU_data_load:ALU_Result);
     //PC Source
     assign mux_pc = BJC_result[1] ? JALR_RESULT : (BJC_result[0] ? S_B : S_FOUR);
 
@@ -145,6 +158,7 @@ module CORE(
     assign S_FOUR = pc + 4;
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result[`WORD_SIZE-1:1], 1'b0};
+
     /***DATA_LOAD***/
     //Is it worth using the IMM_GENERATOR muxes?
     assign data_load =   Funct3 == `F3_TYPE0  ? {{(`WORD_SIZE-`BYTE_SIZE){i_DM_rd[`BYTE_SIZE-1]}}, i_DM_rd[`BYTE_SIZE-1:0]}:
@@ -203,6 +217,16 @@ module CORE(
         .i_Ctrl_Jump(BJC_ctrl_jump),
         .i_Zero(BJC_zero),
         .i_Funct3(Funct3)
+    );
+
+    LOAD_STORE_UNIT load_store_unit(
+        .o_range_select(LSU_range_select),
+        .o_data_load(LSU_data_load),
+        .i_rd(LSU_rd),
+        .i_low_addr(LSU_low_addr),
+        .i_Func3(Funct3),
+        .i_wen(LSU_wen),
+        .i_ren(LSU_ren)
     );
 
 endmodule
