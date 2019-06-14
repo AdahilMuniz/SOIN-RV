@@ -20,31 +20,31 @@ sw x5,  10(x8)
 sw x7,  20(x31)
 
 lw x1,  2(x0)   #0x0ABA_CA7E
-lw x1, -2(x16)   #0xBEBA_CAFE
+lw x1, -2(x16)  #0xBEBA_CAFE
 lw x1,  4(x0)   #0x00BA_7A7A
 lw x1,  10(x8)  #0x0000_B0DE
 lw x1,  20(x31) #0x0000_B0CA
 
 lh x1,  2(x0)   #0xFFFF_CA7E
-lh x1, -2(x16)   #0xFFFF_CAFE
+lh x1, -2(x16)  #0xFFFF_CAFE
 lh x1,  4(x0)   #0x0000_7A7A
 lh x1,  10(x8)  #0xFFFF_B0DE
-lh x1,  20(x31) #0xFFFF_B0CA
+#lh x1,  20(x31) #0xFFFF_B0CA # Misaligned
 
 lhu x1,  2(x0)   #0x0000_CA7E
-lhu x1, -2(x16)   #0x0000_CAFE
+lhu x1, -2(x16)  #0x0000_CAFE
 lhu x1,  4(x0)   #0x0000_7A7A
 lhu x1,  10(x8)  #0x0000_B0DE
-lhu x1,  20(x31) #0x0000_B0CA
+#lhu x1,  20(x31) #0x0000_B0CA # Misaligned
 
-lb x1,  2(x0)   #0x0000_007E
-lb x1, -2(x16)   #0xFFFF_FFFE
+lb x1,  2(x0)   #0xFFFF_FFBA
+lb x1, -2(x16)  #0xFFFF_FFBA
 lb x1,  4(x0)   #0x0000_007A
-lb x1,  10(x8)  #0xFFFF_FFDE
-lb x1,  20(x31) #0xFFFF_FFCA
+lb x1,  10(x8)  #0x0000_0000
+lb x1,  20(x31) #0x0000_0000
 
 lbu x1,  2(x0)   #0x0000_007E
-lbu x1, -2(x16)   #0x0000_00FE
+lbu x1, -2(x16)  #0x0000_00FE
 lbu x1,  4(x0)   #0x0000_007A
 lbu x1,  10(x8)  #0x0000_00DE
 lbu x1,  20(x31) #0x0000_00CA
