@@ -9,6 +9,10 @@ module LOAD_STORE_UNIT (
 );
 
     always @(*) begin
+        
+        o_range_select = 4'b0000;
+        o_data_load = 'h0;
+
         if(i_wen) begin
             case (i_Func3)
                 `F3_TYPE0: begin //SB
@@ -25,7 +29,7 @@ module LOAD_STORE_UNIT (
                         2'b00   : o_range_select = 4'b0011;
                         2'b01   : o_range_select = 4'b0110;
                         2'b10   : o_range_select = 4'b1100;
-                        2'b11   : o_range_select = 4'b1000;
+                        //2'b11 -> Misaligned
                         default : o_range_select = 4'b0000;
                     endcase
                 end

@@ -125,7 +125,7 @@ module CORE(
     //Data Memory attributions
     assign o_DM_addr = ALU_Result;
     assign o_DM_wd   = RF_rd2;
-    assign o_DM_wen  = {4{MC_memWrite}};
+    assign o_DM_wen  = LSU_range_select;
     assign o_DM_ren  = MC_memRead;
 
     //Branch and Jump Control Attributions
