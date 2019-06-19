@@ -136,6 +136,7 @@ module CORE(
     assign LSU_rd  = i_DM_rd;
     assign LSU_wen = MC_memWrite;
     assign LSU_ren = MC_memRead;
+    assign LSU_low_addr = ALU_Result[1:0];
 
 
     /****Muxes****/
