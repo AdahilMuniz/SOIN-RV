@@ -1,10 +1,10 @@
 //@TODO: Use one adder and a mux to select the source
 module CORE(
-        output addr_t o_IM_addr,
-        output data_t o_DM_wd,
-        output addr_t o_DM_addr,
-        output o_DM_wen,
-        output o_DM_ren,
+        output addr_t       o_IM_addr,
+        output data_t       o_DM_wd,
+        output addr_t       o_DM_addr,
+        output logic  [3:0] o_DM_wen,
+        output              o_DM_ren,
 
         input data_t i_IM_instruction,
         input data_t i_DM_rd,
@@ -125,7 +125,7 @@ module CORE(
     //Data Memory attributions
     assign o_DM_addr = ALU_Result;
     assign o_DM_wd   = RF_rd2;
-    assign o_DM_wen  = MC_memWrite;
+    assign o_DM_wen  = {4{MC_memWrite}};
     assign o_DM_ren  = MC_memRead;
 
     //Branch and Jump Control Attributions

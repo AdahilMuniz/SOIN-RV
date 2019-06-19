@@ -1,8 +1,4 @@
 //@TODO: Fix it
-/*
-		This Data Memory version has a signal 'i_Wen' with 4 bits. The signal
-	is used to select the byte or word/halfword of the memory that will be written.
-*/
 
 module DATA_MEMORY_V2(
     output data_t o_Rd,
