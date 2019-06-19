@@ -258,7 +258,7 @@ class rv32i;
         temp_data = dmem.get_mem(temp_addr);
         temp_addr = temp_addr[1:0];
 
-        temp_data = {{(`HALF_SIZE){temp_data[(temp_addr*`HALF_SIZE+`HALF_SIZE)-1]}}, temp_data[temp_addr*`HALF_SIZE +: `HALF_SIZE]};
+        temp_data = {{(`HALF_SIZE){temp_data[(temp_addr*`BYTE_SIZE+`HALF_SIZE)-1]}}, temp_data[temp_addr*`BYTE_SIZE +: `HALF_SIZE]};
 
         data_trans.addr      = signed'(imm)+rs1;
         data_trans.direction = READ;
@@ -292,8 +292,7 @@ class rv32i;
         temp_data = dmem.get_mem(temp_addr);
         temp_addr = temp_addr[1:0];
 
-        temp_data = {{(`HALF_SIZE){1'b0}}, temp_data[temp_addr*`HALF_SIZE +: `HALF_SIZE]};
-
+        temp_data = {{(`HALF_SIZE){1'b0}}, temp_data[temp_addr*`BYTE_SIZE +: `HALF_SIZE]};
         data_trans.addr      = signed'(imm)+rs1;
         data_trans.direction = READ;
         data_trans.data      = temp_data;
