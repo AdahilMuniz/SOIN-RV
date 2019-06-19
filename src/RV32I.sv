@@ -11,7 +11,7 @@ import types_pkg::*;
 //RV32I Files
 `include "ALU.sv"
 `include "ALU_CONTROL.sv"
-`include "DATA_MEMORY.sv"
+`include "DATA_MEMORY_V2.sv"
 `include "DATAPATH.sv"
 `include "IMM_GENERATOR.sv"
 `include "INSTRUCTION_MEMORY.sv"
