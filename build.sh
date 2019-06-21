@@ -1,16 +1,9 @@
-FILE="code_examples/RV32I/$1.rv32i"
+FILE="code_examples/RV32I/$2.rv32i"
 
-if [ -z "$1" ]
-then
-    echo "Please supply the file name without extension"
-    exit 0
-fi
-
-./code_examples/build.sh $1
+./code_examples/build.sh $1 $2
 
 vlib work
 vlog -sv +acc +incdir+include src/RV32I.sv
-vlog -sv +acc +incdir+include include/types_pkg.svh
 vlog -sv +acc test/SystemVerilog/interfaces/test_if.sv
 vlog -sv +acc test/SystemVerilog/interfaces/memory_if.sv
 vlog -sv +acc test/SystemVerilog/interfaces/reg_file_if.sv
