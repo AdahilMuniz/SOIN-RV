@@ -1,4 +1,4 @@
-source "../common/list_design.tcl"
-source "../mentor/compile.tcl"
-
+#Compiling Design
 compile_design
+compile_tb
+load
