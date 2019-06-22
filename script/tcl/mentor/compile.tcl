@@ -1,4 +1,4 @@
-proc compile {args} {
+proc compile_hdl {args} {
 
     set LIST [ lindex $args 0 ]
 
@@ -22,10 +22,10 @@ proc compile {args} {
 
 proc compile_design {args} {
     global LIST_DESIGN
-    compile $LIST_DESIGN
+    compile_hdl $LIST_DESIGN
 }
 
 proc compile_tb {args} {
     global LIST_TB
-    compile $LIST_TB
+    compile_hdl $LIST_TB
 }

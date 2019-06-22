@@ -1,6 +1,6 @@
 ROOT_DIR="$(pwd)"
 
-FILE="$ROOT_DIR/code_examples/RV32I/$2.rv32i"
+FILE="$ROOT_DIR/sw/RV32I/$2.rv32i"
 
 SCRIPT_DIR="$ROOT_DIR/script"
 
@@ -12,7 +12,7 @@ if [[ $GUI -eq "0" ]]; then
 	ARGS="$ARGS -c"
 fi
 
-./code_examples/build.sh $1 $2
+./sw/build.sh $1 $2
 
 if [ ! -d "work" ]
 then
@@ -29,4 +29,4 @@ vsim $ARGS \
 -do "script/tcl/common/list_tb.tcl" \
 -do "script/tcl/mentor/compile.tcl" \
 -do "script/tcl/mentor/load.tcl" \
--do "script/tcl/mentor/run.tcl"
+-do "script/tcl/mentor/build_hdl.tcl"
