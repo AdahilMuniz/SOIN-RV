@@ -7,7 +7,7 @@ proc compile {args} {
 
     foreach element $LIST {
         array set module $element
-        puts "\n> Compiling $module(name)\n"
+        print "\n> Compiling $module(name)\n"
 
         set INCDIR_LIST [ list ]; #Include dir list with '+incdir+' string
         foreach inc $module(incdir) {
@@ -15,7 +15,7 @@ proc compile {args} {
         }
 
         foreach file $module(files) {
-            puts [ exec $COMPILER {*}$ARGS {*}$INCDIR_LIST "$module(dir)/$file" ]
+            print [ exec $COMPILER {*}$ARGS {*}$INCDIR_LIST "$module(dir)/$file" ]
         }
     }
 }
