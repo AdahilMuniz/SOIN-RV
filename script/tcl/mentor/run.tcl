@@ -1,4 +1,4 @@
 #Compiling Design
 compile_design
 compile_tb
-load
+load_sim
