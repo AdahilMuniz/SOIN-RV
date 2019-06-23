@@ -80,7 +80,7 @@ proc set_env {args} {
     puts [ exec mkdir -p $RV_FILE_DIR]
 }
 
-proc compile {args} {
+proc compile_sw {args} {
     global FILE
 
     set FILE [ lindex $args 0]
@@ -111,4 +111,4 @@ if {![ info exists SCRIPT_DIR]} {
     set SCRIPT_DIR [ file normalize "../../[ file dirname [ info script ] ]" ] 
 }
 
-compile $FILE_TO_COMPILE
+compile_sw $FILE_TO_COMPILE
