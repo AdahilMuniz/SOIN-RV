@@ -2,7 +2,25 @@
 
 package require Tk
 
+proc file_browse {args} {
+    #SET
+    global file_path
+
+    set types {
+        {"All Source Files"     {.S .s .c .h}    }
+        {"All files"            *}
+    }
+
+    set file_path [tk_getOpenFile -filetypes $types -parent .]
+}
+
+proc bt_cmd_compile {args} {
+    set file_to_compile [.file_box get]
+    compile_sw $file_to_compile
+}
+
 proc panel_run {args} {
+
     #Main Window Dimensions
     set main_width 650
     set main_height 300
@@ -29,19 +47,19 @@ proc panel_run {args} {
     . configure -width $main_width -height $main_height
     
     #Soin Logo
-    image create photo logo         -file "resources/soin.png" -width $logo_width -height $logo_height
-    image create photo logo_16_x_16 -file "resources/soin_16X16.png"
-    image create photo logo_32_x_32 -file "resources/soin_32X32.png"
+    image create photo logo         -file "resources/logo/soin.png" -width $logo_width -height $logo_height
+    image create photo logo_16_x_16 -file "resources/logo/soin_16X16.png"
+    image create photo logo_32_x_32 -file "resources/logo/soin_32X32.png"
 
     #File Box
-    entry .file_box -width $fb_width
+    entry .file_box -width $fb_width -textvariable file_path 
     place .file_box -x 30 -y 15 
 
     #Buttons
-    button .browser_bt -text "Browse" -width $bb_width -height $bb_height
+    button .browser_bt -text "Browse" -width $bb_width -height $bb_height -command "file_browse"
     place .browser_bt -x 550 -y 12
 
-    button .compile_sw_bt -text "Compile SW" -width $bt_width -height $bt_height
+    button .compile_sw_bt -text "Compile SW" -width $bt_width -height $bt_height -command "bt_cmd_compile"
     place .compile_sw_bt -x 30 -y $fb_to_bts
 
     button .compile_d_bt -text "Compile Design" -width $bt_width -height $bt_height
@@ -62,5 +80,3 @@ proc panel_run {args} {
     .logo_label configure -image logo 
 
 }
-
-panel_run

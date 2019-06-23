@@ -25,6 +25,7 @@ vsim $ARGS \
 -do "set ROOT_DIR $ROOT_DIR" \
 -do "set SCRIPT_DIR $SCRIPT_DIR" \
 -do "script/tcl/sw/compile.tcl" \
+-do "script/tcl/sw/build_sw.tcl" \
 -do "script/tcl/mentor/env.tcl" \
 -do "script/tcl/common/list_design.tcl" \
 -do "script/tcl/common/list_tb.tcl" \
