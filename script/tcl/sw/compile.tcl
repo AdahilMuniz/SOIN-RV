@@ -7,11 +7,30 @@ proc compile_s {args} {
     #SET
     global OBJ_FILE
 
+    #Assembler Switch
     set ARCH "rv32i"
 
     set OBJ_FILE "$BIN_DIR/$FILE_NAME.o"
 
-    puts [ exec riscv64-unknown-elf-as -march=rv32i $FILE -o $OBJ_FILE ]
+    puts [ exec riscv64-unknown-elf-as -march=$ARCH $FILE -o $OBJ_FILE ]
+}
+
+proc compile_c {args} {
+    #GET
+    global FILE
+    global FILE_NAME
+    global BIN_DIR
+
+    #SET
+    global OBJ_FILE
+
+    #Compiler Switches
+    set ARCH "rv32i"
+    set ABI "ilp32"
+
+    set OBJ_FILE "$BIN_DIR/$FILE_NAME.o"
+
+    puts [ exec riscv64-unknown-elf-gcc -march=$ARCH -mabi=$ABI $FILE -o $OBJ_FILE ]
 }
 
 proc gen_rv_file {args} {
@@ -72,7 +91,7 @@ proc compile {args} {
     if {$FILE_EXTENSION == ".S"} {
         compile_s
     } elseif {$FILE_EXTENSION == ".c"} {
-        puts "> Compile C"
+        compile_c
     } else {
         puts "> No valid extension."
         exit 1
@@ -82,5 +101,14 @@ proc compile {args} {
 }
 
 global FILE_TO_COMPILE
-#set FILE [ file normalize [ lindex $argv 0 ] ]
+global SCRIPT_DIR
+
+if {![ info exists FILE_TO_COMPILE]} {
+    set FILE_TO_COMPILE [ file normalize [ lindex $argv 0 ] ]   
+}
+
+if {![ info exists SCRIPT_DIR]} {
+    set SCRIPT_DIR [ file normalize "../../[ file dirname [ info script ] ]" ] 
+}
+
 compile $FILE_TO_COMPILE
