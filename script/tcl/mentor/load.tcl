@@ -1,9 +1,9 @@
 proc load_sim {args} {
-    global FILE_TO_LOAD
     global ROOT_DIR
     global GUI
+    global RV_FILE
 
-    set ARGS [ list "-classdebug" "-gIM_FILE=$FILE_TO_LOAD" ]
+    set ARGS [ list "-classdebug" "-gIM_FILE=$RV_FILE" ]
     set WAVE ""
 
     if {$GUI == "0"} {

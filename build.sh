@@ -1,8 +1,8 @@
 ROOT_DIR="$(pwd)"
 
-FILE_TO_LOAD="$ROOT_DIR/sw/RV32I/$2.rv32i"
-FILE_TO_COMPILE="$ROOT_DIR/sw/assembly/$2.S"
+FILE_TO_COMPILE="$1"
 
+FILE_TO_LOAD="$RV32I_DIR/$1.rv32i"
 SCRIPT_DIR="$ROOT_DIR/script"
 
 GUI="1" #Enable ModelSim GUI
@@ -10,10 +10,8 @@ GUI="1" #Enable ModelSim GUI
 ARGS=""
 
 if [[ $GUI -eq "0" ]]; then
-	ARGS="$ARGS -c"
+    ARGS="$ARGS -c"
 fi
-
-#./sw/build.sh $1 $2
 
 if [ ! -d "work" ]
 then
