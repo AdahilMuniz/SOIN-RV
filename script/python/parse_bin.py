@@ -21,6 +21,6 @@ def parse (in_file, out_file):
 
 
 if (len(sys.argv) < 2):
-    print("> There are no enough elements to parse the bin file.")
+    sys.exit("> There are no enough elements to parse the bin file.")
 
 parse(sys.argv[1], sys.argv[2])

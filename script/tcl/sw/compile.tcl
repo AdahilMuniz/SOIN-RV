@@ -18,6 +18,7 @@ proc gen_rv_file {args} {
     #GET
     global FILE_NAME
     global OBJ_FILE
+    global SCRIPT_DIR
     global BIN_DIR
     global RV_FILE_DIR
 
@@ -26,11 +27,11 @@ proc gen_rv_file {args} {
     global RV_FILE
 
     #Python Script
-    set PYTHON_SCRIPT_DIR [ file normalize "../../python" ]; # TODO: Look for something more elegant
+    set PYTHON_SCRIPT_DIR [ file normalize "$SCRIPT_DIR/python" ]; # TODO: Look for something more elegant
     set PYTHON_PARSE "$PYTHON_SCRIPT_DIR/parse_bin.py"
 
     set BIN_FILE "$BIN_DIR/$FILE_NAME.bin"
-    set RV_FILE  "$RV_FILE_DIR/RV_FILE_DIR.rv32i"
+    set RV_FILE  "$RV_FILE_DIR/$FILE_NAME.rv32i"
 
     puts [ exec riscv64-unknown-elf-objcopy -S -O binary $OBJ_FILE $BIN_FILE  ]
     puts [ exec python $PYTHON_PARSE $BIN_FILE $RV_FILE ]
@@ -74,11 +75,12 @@ proc compile {args} {
         puts "> Compile C"
     } else {
         puts "> No valid extension."
+        exit 1
     }
 
     gen_rv_file
 }
 
-#global FILE
-set FILE [ file normalize [ lindex $argv 0 ] ]
-compile $FILE
+global FILE_TO_COMPILE
+#set FILE [ file normalize [ lindex $argv 0 ] ]
+compile $FILE_TO_COMPILE
