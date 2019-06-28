@@ -1,5 +1,6 @@
 global SCRIPT_DIR
 global ROOT_DIR
+global RV_FILE
 global GUI
 
 if {![ info exists SCRIPT_DIR]} {
@@ -8,6 +9,10 @@ if {![ info exists SCRIPT_DIR]} {
 
 if {![ info exists ROOT_DIR]} {
     set ROOT_DIR [ file normalize "../../../[ file dirname [ info script ] ]" ] 
+}
+
+if {![ info exists RV_FILE]} {
+    set RV_FILE [ file normalize [ file normalize [ lindex $argv 0 ] ] ]
 }
 
 if {![ info exists GUI]} {

@@ -8,9 +8,11 @@ proc load_sim {args} {
 
     if {$GUI == "0"} {
         lappend ARGS "-c"
+        set CMD exec
     } else {
         set WAVE "$ROOT_DIR/test/wave.do"
+        set CMD eval
     }
 
-    vsim {*}$ARGS -do $WAVE tb
+    $CMD vsim {*}$ARGS -do $WAVE tb
 }

@@ -9,4 +9,7 @@ if {![ info exists SCRIPT_DIR]} {
     set SCRIPT_DIR [ file normalize "../../[ file dirname [ info script ] ]" ] 
 }
 
+#Source Procedures
+source $SCRIPT_DIR/tcl/sw/compile.tcl
+
 compile_sw $FILE_TO_COMPILE
