@@ -5,10 +5,10 @@ proc load_sim {args} {
 
     set ARGS [ list "-classdebug" "-gIM_FILE=$RV_FILE" ]
     set WAVE ""
+    set CMD exec
 
     if {$GUI == "0"} {
         lappend ARGS "-c"
-        set CMD exec
     } else {
         set WAVE "$ROOT_DIR/test/wave.do"
         set CMD eval

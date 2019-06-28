@@ -19,6 +19,13 @@ if {![ info exists GUI]} {
     set GUI "0" 
 }
 
+if { ! [file exist "work"]} {
+    exec vlib work
+} else {
+    if {! [file isdirectory "work"]} {
+        vlib work
+    }
+}
 
 #Source List
 source $SCRIPT_DIR/tcl/common/list_design.tcl

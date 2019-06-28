@@ -62,13 +62,13 @@ proc panel_run {args} {
     button .compile_sw_bt -text "Compile SW" -width $bt_width -height $bt_height -command "bt_cmd_compile"
     place .compile_sw_bt -x 30 -y $fb_to_bts
 
-    button .compile_d_bt -text "Compile Design" -width $bt_width -height $bt_height
+    button .compile_d_bt -text "Compile Design" -width $bt_width -height $bt_height -command "compile_design"
     place .compile_d_bt -x 30 -y [ expr $fb_to_bts + 45 ]
 
-    button .compile_tb_bt -text "Compile TB" -width $bt_width -height $bt_height
+    button .compile_tb_bt -text "Compile TB" -width $bt_width -height $bt_height -command "compile_tb"
     place .compile_tb_bt -x 30 -y [ expr $fb_to_bts + 90 ]
 
-    button .load_sim_bt -text "Load Simulation" -width $bt_width -height $bt_height
+    button .load_sim_bt -text "Load Simulation" -width $bt_width -height $bt_height -command "load_sim"
     place .load_sim_bt -x 30 -y [ expr $fb_to_bts + 130 ]
 
     #Icon
