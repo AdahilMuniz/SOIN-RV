@@ -1,4 +1,5 @@
 global LIST_TB
+global ROOT_DIR
 
 set LIST_TB [ list ]
 

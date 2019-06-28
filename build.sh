@@ -24,11 +24,5 @@ vsim $ARGS \
 -do "set FILE_TO_LOAD $FILE_TO_LOAD" \
 -do "set ROOT_DIR $ROOT_DIR" \
 -do "set SCRIPT_DIR $SCRIPT_DIR" \
--do "script/tcl/sw/compile.tcl" \
--do "script/tcl/sw/build_sw.tcl" \
--do "script/tcl/mentor/env.tcl" \
--do "script/tcl/common/list_design.tcl" \
--do "script/tcl/common/list_tb.tcl" \
--do "script/tcl/mentor/compile.tcl" \
--do "script/tcl/mentor/load.tcl" \
--do "script/tcl/mentor/build_hdl.tcl"
+-do "script/tcl/sw/run.tcl" \
+-do "script/tcl/mentor/run.tcl"

@@ -94,7 +94,7 @@ proc compile_sw {args} {
         compile_c
     } else {
         puts "> No valid extension."
-        exit 1
+        return 1
     }
 
     gen_rv_file

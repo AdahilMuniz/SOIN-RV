@@ -1,4 +1,5 @@
 global LIST_DESIGN
+global ROOT_DIR
 
 set LIST_DESIGN [ list ]
 

@@ -11,5 +11,3 @@ if {![ info exists SCRIPT_DIR]} {
 
 #Source Procedures
 source $SCRIPT_DIR/tcl/sw/compile.tcl
-
-compile_sw $FILE_TO_COMPILE

@@ -8,7 +8,7 @@ if {![ info exists SCRIPT_DIR]} {
 }
 
 if {![ info exists ROOT_DIR]} {
-    set ROOT_DIR [ file normalize "../../../[ file dirname [ info script ] ]" ] 
+    set ROOT_DIR [ file normalize "$SCRIPT_DIR../../" ] 
 }
 
 if {![ info exists RV_FILE]} {
@@ -28,7 +28,3 @@ source $SCRIPT_DIR/tcl/common/list_tb.tcl
 source $SCRIPT_DIR/tcl/mentor/env.tcl
 source $SCRIPT_DIR/tcl/mentor/compile.tcl
 source $SCRIPT_DIR/tcl/mentor/load.tcl
-
-compile_design
-compile_tb
-load_sim
