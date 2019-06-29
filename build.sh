@@ -18,11 +18,19 @@ then
     vlib work
 fi
 
+#vsim $ARGS \
+#-do "set GUI $GUI" \
+#-do "set FILE_TO_COMPILE $FILE_TO_COMPILE" \
+#-do "set FILE_TO_LOAD $FILE_TO_LOAD" \
+#-do "set ROOT_DIR $ROOT_DIR" \
+#-do "set SCRIPT_DIR $SCRIPT_DIR" \
+#-do "script/tcl/sw/run.tcl" \
+#-do "script/tcl/mentor/run.tcl"
+
 vsim $ARGS \
 -do "set GUI $GUI" \
 -do "set FILE_TO_COMPILE $FILE_TO_COMPILE" \
 -do "set FILE_TO_LOAD $FILE_TO_LOAD" \
 -do "set ROOT_DIR $ROOT_DIR" \
 -do "set SCRIPT_DIR $SCRIPT_DIR" \
--do "script/tcl/sw/run.tcl" \
--do "script/tcl/mentor/run.tcl"
+-do "script/tcl/gui/run.tcl" \
