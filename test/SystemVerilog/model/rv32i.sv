@@ -140,8 +140,8 @@ class rv32i;
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_LUI, null, this.imm));
             end
             AUIPC : begin
-                this.reg_file_trans.data[2] = this.alu.operation(ALU_AUIPC, this.reg_f.get_reg(this.rs1), this.pc); 
-                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AUIPC, this.reg_f.get_reg(this.rs1), this.pc));
+                this.reg_file_trans.data[2] = this.alu.operation(ALU_AUIPC, this.pc, this.imm); 
+                this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AUIPC, this.pc, this.imm));
             end
 
             BEQ   : this.beq (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
