@@ -25,6 +25,7 @@ proc bt_cmd_load_sim {args} {
 
 proc panel_run {args} {
     global SCRIPT_DIR
+    global ROOT_DIR
 
     #Main Window Dimensions
     set main_width 650
@@ -55,9 +56,10 @@ proc panel_run {args} {
     .ww configure -width $main_width -height $main_height -background gray
     
     #Soin Logo
-    image create photo logo         -file "$SCRIPT_DIR/tcl/gui/resources/logo/soin.png" -width $logo_width -height $logo_height
-    image create photo logo_16_x_16 -file "$SCRIPT_DIR/tcl/gui/resources/logo/soin_16X16.png"
-    image create photo logo_32_x_32 -file "$SCRIPT_DIR/tcl/gui/resources/logo/soin_32X32.png"
+    image create photo logo         -file "$ROOT_DIR/resources/logo/soin_logo_200X200.png" -width $logo_width -height $logo_height
+    image create photo logo_16_x_16 -file "$ROOT_DIR/resources/logo/soin_logo_16X16.png"
+    image create photo logo_32_x_32 -file "$ROOT_DIR/resources/logo/soin_logo_32X32.png"
+    image create photo logo_64_x_64 -file "$ROOT_DIR/resources/logo/soin_logo_64X64.png"
 
     #File Box
     entry .ww.file_box -width $fb_width -textvariable file_path 
@@ -80,11 +82,11 @@ proc panel_run {args} {
     place .ww.load_sim_bt -x 200 -y $fb_to_bts 
 
     #Icon
-    wm iconphoto . -default logo_16_x_16 logo_32_x_32
+    wm iconphoto . -default logo_16_x_16 logo_32_x_32 logo_64_x_64
 
     #Logo
     label .ww.logo_label -width $logo_width -height $logo_height -background gray
-    place .ww.logo_label -x 450 -y 150
+    place .ww.logo_label -x 440 -y 130
     .ww.logo_label configure -image logo 
 
     wm withdraw .
