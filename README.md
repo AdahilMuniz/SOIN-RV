@@ -33,6 +33,3 @@ It is possible follow the flow using the TCL commands in the ModelSim transcript
 * **compile_design**: It compiles the processor design.
 * **compile_tb**: It compiles the testbench.
 * **load_sim**: It loads the simulation for *tb* passing the compiled software path as the **IM_FILE** variables.
-
-To compile the codes present in the *Code_Examples* repository and run the simulation loading the generated binary in the core instruction memory execute the *build.sh* script passing the file name as argument. 
-
