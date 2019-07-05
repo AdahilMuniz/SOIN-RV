@@ -31,11 +31,12 @@ module CORE(
     logic [1:0] MC_ctrl_jump;
     logic MC_memRead;
     logic MC_memWrite;
-    logic MC_memToReg;
+    logic [1:0] MC_regSrc;
     logic [2:0] MC_ALUOp;
     logic MC_ALUSrc1;
     logic MC_ALUSrc2;
     logic MC_regWrite;
+    logic MC_CSR_en;
 
     //ALU Control Signals
     logic [3:0] ALUC_ALUControlLines;
@@ -61,6 +62,7 @@ module CORE(
     logic        LSU_wen;
     logic        LSU_ren;
 
+    //CSR
     reg_t        CSR_rd;
     logic [11:0] CSR_addr;
     reg_t        CSR_wd;
@@ -86,8 +88,6 @@ module CORE(
     data_t S_FOUR;
     //JALR Result
     data_t JALR_RESULT;
-    //Data to be load
-    data_t data_load;
 
     /****PC Update****/
     initial begin
@@ -122,6 +122,9 @@ module CORE(
     //"Decode" instruction (Main Control)
     assign OPCode = i_IM_instruction[6:0];
 
+    //"Decode" instruction (CSR)
+    assign CSR_addr = i_IM_instruction[31:20];
+
     //Main Control Signals attributions
     assign RF_wen = MC_regWrite;
     assign ALUC_ALUOP = MC_ALUOp;
@@ -145,6 +148,9 @@ module CORE(
     assign LSU_ren = MC_memRead;
     assign LSU_low_addr = ALU_Result[1:0];
 
+    //CSR
+    assign CSR_en = MC_CSR_en;
+    assign CSR_wd = RF_rd1;
 
     /****Muxes****/
     
@@ -153,8 +159,8 @@ module CORE(
     //ALU Source 2
     assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
     //Write Data (Register File) Source
-    assign RF_wd = MC_ctrl_jump[1] ? (S_FOUR): 
-                                     (MC_memToReg ? LSU_data_load:ALU_Result);
+    assign RF_wd = MC_regSrc[1] ? (MC_regSrc[0] ? CSR_rd:S_FOUR) : 
+                                  (MC_regSrc[0] ? LSU_data_load  : ALU_Result);
     //PC Source
     assign mux_pc = BJC_result[1] ? JALR_RESULT : (BJC_result[0] ? S_B : S_FOUR);
 
@@ -166,15 +172,6 @@ module CORE(
     assign S_FOUR = pc + 4;
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result[`WORD_SIZE-1:1], 1'b0};
-
-    /***DATA_LOAD***/
-    //Is it worth using the IMM_GENERATOR muxes?
-    assign data_load =   Funct3 == `F3_TYPE0  ? {{(`WORD_SIZE-`BYTE_SIZE){i_DM_rd[`BYTE_SIZE-1]}}, i_DM_rd[`BYTE_SIZE-1:0]}:
-                        (Funct3 == `F3_TYPE1  ? {{`HALF_SIZE{i_DM_rd[`HALF_SIZE-1]}}, i_DM_rd[`HALF_SIZE-1:0]} :
-                        (Funct3 == `F3_TYPE2  ? i_DM_rd:
-                        (Funct3 == `F3_TYPE4  ? {{(`WORD_SIZE-`BYTE_SIZE){1'b0}}, i_DM_rd[`BYTE_SIZE-1:0]}:
-                        (Funct3 == `F3_TYPE5  ? {{`HALF_SIZE{1'b0}}, i_DM_rd[`HALF_SIZE-1:0]} :
-                        'h0))));
 
     REGISTER_FILE register_file (
         .o_Rd1(RF_rd1), 
@@ -212,11 +209,12 @@ module CORE(
         .o_Ctrl_Jump(MC_ctrl_jump),
         .o_MemRead(MC_memRead), 
         .o_MemWrite(MC_memWrite), 
-        .o_MemToReg(MC_memToReg), 
+        .o_RegSrc(MC_regSrc), 
         .o_ALUOp(MC_ALUOp),
         .o_ALUSrc1(MC_ALUSrc1),  
         .o_ALUSrc2(MC_ALUSrc2), 
         .o_RegWrite(MC_regWrite), 
+        .o_CSR_en(MC_CSR_en),
         .i_OPCode(OPCode)
     );
 

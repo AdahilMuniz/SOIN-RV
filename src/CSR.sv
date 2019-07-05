@@ -10,10 +10,15 @@ module CSR (
 
     //Read
     always@(*) begin
-        case (i_addr)
-            `MISA_ADDR: o_rd = {`MISA_MXL, {(`WORD_SIZE-28){1'b0}}, `MISA_EXTENSION}; 
-            default : /* default */;
-        endcase
+        if(i_en) begin //Is it better do the selection or let the output floating?
+            case (i_addr)
+                `MISA_ADDR: o_rd = {`MISA_MXL, {(`WORD_SIZE-28){1'b0}}, `MISA_EXTENSION}; 
+                default : o_rd = 'h0;
+            endcase
+        end
+        else begin
+            o_rd = 'h0;
+        end
     end
 
 
