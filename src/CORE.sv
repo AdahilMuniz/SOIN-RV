@@ -61,6 +61,13 @@ module CORE(
     logic        LSU_wen;
     logic        LSU_ren;
 
+    reg_t        CSR_rd;
+    logic [11:0] CSR_addr;
+    reg_t        CSR_wd;
+    logic        CSR_en;
+    logic [2:0]  CSR_Funct3;
+
+
     //Decode Signals
     logic [6:0] Funct7;
     logic [2:0] Funct3;
@@ -228,6 +235,16 @@ module CORE(
         .i_Func3(Funct3),
         .i_wen(LSU_wen),
         .i_ren(LSU_ren)
+    );
+
+    CSR csr (
+        .o_rd(CSR_rd),
+        .i_addr(CSR_addr),
+        .i_wd(CSR_wd),
+        .i_en(CSR_en),
+        .i_Funct3(Funct3),
+        .i_clk(i_clk),
+        .i_rstn(i_rstn)
     );
 
 endmodule

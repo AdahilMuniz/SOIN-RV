@@ -7,6 +7,7 @@ import types_pkg::*;
 `include "OPCODES_DEFINES.svh"
 `include "PARAMETERS.svh"
 `include "PROJECT_CONFIG.svh"
+`include "CSR_DEFINES.svh"
 
 //RV32I Files
 `include "ALU.sv"
@@ -19,5 +20,6 @@ import types_pkg::*;
 `include "BRANCH_JUMP_CONTROL.sv"
 `include "LOAD_STORE_UNIT.sv"
 `include "REGISTER_FILE.sv"
+`include "CSR.sv"
 `include "DATAPATH.sv"
 `include "CORE.sv"
