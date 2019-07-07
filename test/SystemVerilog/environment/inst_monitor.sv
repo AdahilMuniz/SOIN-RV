@@ -230,6 +230,35 @@ class inst_monitor;
                 this.imm              = this.vif.rdata[31:12];
                 this.instruction      = AUIPC;
             end
+
+            `OP_SYSTEM : begin 
+                this.instruction_type = SYSTEM_TYPE;
+                this.rd               = this.vif.rdata[11:7];
+                this.rs1              = this.vif.rdata[19:15];
+                funct3 = this.vif.rdata[14:12];
+                case (funct3)
+                    `F3_TYPE1: begin
+                        this.instruction = CSRRW;
+                    end
+                    `F3_TYPE2: begin
+                        this.instruction = CSRRS;
+                    end
+                    `F3_TYPE3: begin
+                        this.instruction = CSRRC;
+                    end
+                    `F3_TYPE5: begin
+                        this.instruction = CSRRWI;
+                    end
+                    `F3_TYPE6: begin
+                        this.instruction = CSRRSI;
+                    end
+                    `F3_TYPE7: begin
+                        this.instruction = CSRRCI;
+                    end
+                    default : /* default */;
+                endcase
+            end
+
             default : this.instruction = NO_INST;
         endcase
 

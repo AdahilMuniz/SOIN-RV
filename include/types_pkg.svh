@@ -10,8 +10,8 @@ package types_pkg;
     typedef logic [`WORD_SIZE -1:0] data_t;
     typedef logic [`WORD_SIZE -1:0] addr_t;
     typedef enum logic [3:0] {ALU_ADD, ALU_SUB, ALU_SLL, ALU_SLT, ALU_SLTU, ALU_XOR, ALU_SRL, ALU_SRA, ALU_OR, ALU_AND, ALU_LUI, ALU_AUIPC} alu_operation_t;
-    typedef enum logic [5:0] {ADDI, SLTI, SLTIU, ORI, XORI, ANDI, SLLI, SRLI, SRAI, JALR, LW, LB, LH, LBU, LHU, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND, LUI, AUIPC, JAL, SW, SB, SH, BEQ, BNE, BLT, BLTU, BGE, BGEU, NO_INST} instruction_t;
-    typedef enum logic [3:0] {R_TYPE, I_TYPE, I_L_TYPE, S_TYPE, B_TYPE, U_TYPE, J_TYPE, NO_TYPE} instruction_type_t;
+    typedef enum logic [6:0] {ADDI, SLTI, SLTIU, ORI, XORI, ANDI, SLLI, SRLI, SRAI, JALR, LW, LB, LH, LBU, LHU, ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND, LUI, AUIPC, JAL, SW, SB, SH, BEQ, BNE, BLT, BLTU, BGE, BGEU, CSRRW, CSRRS, CSRRC, CSRRWI, CSRRSI, CSRRCI, NO_INST} instruction_t;
+    typedef enum logic [4:0] {R_TYPE, I_TYPE, I_L_TYPE, S_TYPE, B_TYPE, U_TYPE, J_TYPE, SYSTEM_TYPE, NO_TYPE} instruction_type_t;
     typedef enum logic       {READ, WRITE} direction_t;
 
     typedef struct {

@@ -9,7 +9,7 @@
 `define OP_JALR     7'b1100111 //JALR OPCode
 `define OP_LUI      7'b0110111 //LUI OPCode
 `define OP_AUIPC    7'b0010111 //AUIPC OPCode
-`define OP_SYSTEM   7'b1110011 //AUIPC OPCode
+`define OP_SYSTEM   7'b1110011 //SYSTEM OPCode
 
 //Funct7 Defines
 `define F7_TYPE0 7'b0000000
