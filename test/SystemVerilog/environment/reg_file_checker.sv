@@ -7,50 +7,55 @@ class reg_file_checker;
         bit flag = 0;
         error_reg_file_item_t error_item;
 
-        foreach(model_reg_file_trans.data[i]) begin
-            if(model_reg_file_trans.data[i] !== dut_reg_file_trans.data[i]) begin
-                if(i === 0) begin
-                    if(!(input_instruction.instruction_type inside {U_TYPE, J_TYPE})) begin
-                        flag = 1;
-                        error_item.error_champ[i] = 1;
+        if(!(input_instruction.instruction_type inside {SYSTEM_TYPE})) begin // Not implemented instructions
+            foreach(model_reg_file_trans.data[i]) begin
+                if(model_reg_file_trans.data[i] !== dut_reg_file_trans.data[i]) begin
+                    if(i === 0) begin
+                        if(!(input_instruction.instruction_type inside {U_TYPE, J_TYPE})) begin
+                            flag = 1;
+                            error_item.error_champ[i] = 1;
+                        end
+                    end
+                    else if(i === 1) begin
+                        if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE, SYSTEM_TYPE})) begin
+                            flag = 1;
+                            error_item.error_champ[i] = 1;
+                        end
+                    end
+                    else begin 
+                        if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
+                            flag = 1;
+                            error_item.error_champ[i] = 1;
+                        end
                     end
                 end
-                else if(i === 1) begin
-                    if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE})) begin
-                        flag = 1;
-                        error_item.error_champ[i] = 1;
+            end
+    
+            foreach(model_reg_file_trans.regn[i]) begin
+                if(model_reg_file_trans.regn[i] !== dut_reg_file_trans.regn[i]) begin
+                    if(i === 0) begin
+                        if(!(input_instruction.instruction_type inside {U_TYPE, J_TYPE})) begin
+                            flag = 1;
+                            error_item.error_champ[i] = 1;
+                        end
                     end
-                end
-                else begin 
-                    if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
-                        flag = 1;
-                        error_item.error_champ[i] = 1;
+                    else if(i === 1) begin
+                        if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE, SYSTEM_TYPE})) begin
+                            flag = 1;
+                            error_item.error_champ[i] = 1;
+                        end
+                    end
+                    else begin 
+                        if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
+                            flag = 1;
+                            error_item.error_champ[i] = 1;
+                        end
                     end
                 end
             end
         end
-
-        foreach(model_reg_file_trans.regn[i]) begin
-            if(model_reg_file_trans.regn[i] !== dut_reg_file_trans.regn[i]) begin
-                if(i === 0) begin
-                    if(!(input_instruction.instruction_type inside {U_TYPE, J_TYPE})) begin
-                        flag = 1;
-                        error_item.error_champ[i] = 1;
-                    end
-                end
-                else if(i === 1) begin
-                    if(!(input_instruction.instruction_type inside {I_L_TYPE, I_TYPE , U_TYPE, J_TYPE})) begin
-                        flag = 1;
-                        error_item.error_champ[i] = 1;
-                    end
-                end
-                else begin 
-                    if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
-                        flag = 1;
-                        error_item.error_champ[i] = 1;
-                    end
-                end
-            end
+        else begin 
+            $display("%s instruction is not implemented.", input_instruction.instruction);
         end
 
         if(flag) begin
