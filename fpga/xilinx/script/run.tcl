@@ -8,7 +8,7 @@
 #Project
 set design CORE
 
-set projdir [file normalize ./../..]
+set projdir [file normalize ./../../]
 
 set filetop $projdir/src/RV32I.sv
 
