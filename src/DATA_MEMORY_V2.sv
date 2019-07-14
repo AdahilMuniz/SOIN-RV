@@ -1,17 +1,27 @@
 //@TODO: Fix it
 
 module DATA_MEMORY_V2(
+`ifndef YOSYS
     output data_t o_Rd,
     input  data_t i_Wd,
     input  addr_t i_Addr,
+`else 
+    output logic [`WORD_SIZE -1:0] o_Rd,
+    input  logic [`WORD_SIZE -1:0] i_Wd,
+    input  logic [`WORD_SIZE -1:0] i_Addr,
+`endif
     input  [3:0]i_Wen,
     input  i_Ren,
     input  i_clk
     );
     parameter HEIGHT = `DM_DEPTH;//Memory height
     parameter FILE = `DM_FILE;
-
+    
+`ifndef YOSYS
     data_t mem [HEIGHT-1:0];//Memory: Word: 4byte
+`else 
+    logic [`WORD_SIZE -1:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
+`endif
 
     initial begin
         $readmemh(FILE, mem);//Initialize Memory

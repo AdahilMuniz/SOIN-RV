@@ -1,3 +1,4 @@
+//`include "types_pkg.svh"
 import types_pkg::*;
 
 interface memory_if(

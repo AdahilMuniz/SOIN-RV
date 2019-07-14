@@ -1,7 +1,12 @@
 module LOAD_STORE_UNIT (
     output logic  [3:0] o_range_select,
+`ifndef YOSYS
     output data_t       o_data_load,
     input  data_t       i_rd,
+`else 
+    output logic [`WORD_SIZE -1:0] o_data_load,
+    input  logic [`WORD_SIZE -1:0] i_rd,
+`endif
     input  logic  [1:0] i_low_addr,
     input  logic  [2:0] i_Func3,
     input  logic        i_wen,

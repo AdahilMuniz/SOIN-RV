@@ -1,21 +1,21 @@
-`include "types_pkg.svh"
-
-import types_pkg::*;
-
 //DEFINES
+`include "PROJECT_CONFIG.svh"
 `include "ALU_CONTROL.svh"
 `include "OPCODES_DEFINES.svh"
 `include "PARAMETERS.svh"
-`include "PROJECT_CONFIG.svh"
 `include "CSR_DEFINES.svh"
+
+`ifndef YOSYS
+`include "types_pkg.svh"
+import types_pkg::*;
+`endif
 
 //RV32I Files
 `include "ALU.sv"
 `include "ALU_CONTROL.sv"
-`include "DATA_MEMORY_V2.sv"
-`include "DATAPATH.sv"
 `include "IMM_GENERATOR.sv"
 `include "INSTRUCTION_MEMORY.sv"
+`include "DATA_MEMORY_V2.sv"
 `include "MAIN_CONTROL.sv"
 `include "BRANCH_JUMP_CONTROL.sv"
 `include "LOAD_STORE_UNIT.sv"

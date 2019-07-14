@@ -1,7 +1,12 @@
 module CSR (
+`ifndef YOSYS
     output reg_t        o_rd,
-    input  logic [11:0] i_addr,
     input  reg_t        i_wd,
+`else 
+    output logic [4:0]  o_rd,
+    input  logic [4:0]  i_wd,
+`endif
+    input  logic [11:0] i_addr,
     input               i_en,
     input  logic [2:0]  i_Funct3,
     input               i_clk,

@@ -7,13 +7,26 @@ module DATAPATH(
     parameter IM_FILE = `IM_FILE;
 
     //Instruction Memory Signals
+`ifndef YOSYS
     data_t IM_instruction;
     addr_t IM_addr;
+`else 
+    logic [`WORD_SIZE -1:0] IM_instruction;
+    logic [`WORD_SIZE -1:0] IM_addr;
+`endif
 
     //Data Memory Signals
+
+`ifndef YOSYS
     data_t       DM_rd;
     data_t       DM_wd;
-    addr_t 		 DM_addr;
+    addr_t       DM_addr;
+`else 
+    logic [`WORD_SIZE -1:0] DM_rd;
+    logic [`WORD_SIZE -1:0] DM_wd;
+    logic [`WORD_SIZE -1:0] DM_addr;
+`endif
+
     logic  [3:0] DM_wen;
     logic        DM_ren;
 

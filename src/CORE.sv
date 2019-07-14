@@ -1,31 +1,52 @@
 //@TODO: Use one adder and a mux to select the source
 module CORE(
+`ifndef YOSYS
         output addr_t       o_IM_addr,
         output data_t       o_DM_wd,
         output addr_t       o_DM_addr,
+`else 
+        output logic [`WORD_SIZE -1:0] o_IM_addr,
+        output logic [`WORD_SIZE -1:0] o_DM_wd,
+        output logic [`WORD_SIZE -1:0] o_DM_addr,
+`endif
         output logic  [3:0] o_DM_wen,
         output              o_DM_ren,
 
+`ifndef YOSYS
         input data_t i_IM_instruction,
         input data_t i_DM_rd,
-
+`else 
+        input logic [`WORD_SIZE -1:0] i_IM_instruction,
+        input logic [`WORD_SIZE -1:0] i_DM_rd,
+`endif
         input i_clk,
         input i_rstn
     );
 
 
     //Register File Signals
+`ifndef YOSYS
     data_t RF_rd1;
     data_t RF_rd2;
+    data_t RF_wd;
+`else 
+    logic [`WORD_SIZE -1:0] RF_rd1;
+    logic [`WORD_SIZE -1:0] RF_rd2;
+    logic [`WORD_SIZE -1:0] RF_wd;
+`endif
     logic [4:0] RF_rnum1;
     logic [4:0] RF_rnum2;
     logic RF_wen;
     logic [4:0] RF_wnum;
-    data_t RF_wd;
 
     //Immediate Generator Signals
+`ifndef YOSYS
     data_t IG_extendedImmediate;
     data_t IG_instruction;
+`else 
+    logic [`WORD_SIZE -1:0] IG_extendedImmediate;
+    logic [`WORD_SIZE -1:0] IG_instruction;
+`endif
 
     //Main Control Signals
     logic [1:0] MC_ctrl_jump;
@@ -43,11 +64,17 @@ module CORE(
     logic [2:0] ALUC_ALUOP;
 
     //ALU Signals
+`ifndef YOSYS
     data_t ALU_Result;
-    logic ALU_Zero;
-    logic [3:0] ALU_Operation;
     data_t ALU_Op1;
     data_t ALU_Op2;
+`else 
+    logic [`WORD_SIZE -1:0] ALU_Result;
+    logic [`WORD_SIZE -1:0] ALU_Op1;
+    logic [`WORD_SIZE -1:0] ALU_Op2;
+`endif
+    logic ALU_Zero;
+    logic [3:0] ALU_Operation;
 
     //Branch and Jump Control Signals
     logic [1:0] BJC_result;
@@ -55,17 +82,27 @@ module CORE(
     logic BJC_zero;
 
     //Load Store Unit Signals
-    logic  [3:0] LSU_range_select;
+`ifndef YOSYS
     data_t       LSU_data_load;
     data_t       LSU_rd;
+`else 
+    logic [`WORD_SIZE -1:0] LSU_data_load;
+    logic [`WORD_SIZE -1:0] LSU_rd;
+`endif
+    logic  [3:0] LSU_range_select;
     logic  [1:0] LSU_low_addr;
     logic        LSU_wen;
     logic        LSU_ren;
 
     //CSR
+`ifndef YOSYS
     reg_t        CSR_rd;
-    logic [11:0] CSR_addr;
     reg_t        CSR_wd;
+`else 
+    logic [4:0]  CSR_rd;
+    logic [4:0]  CSR_wd;
+`endif
+    logic [11:0] CSR_addr;
     logic        CSR_en;
     logic [2:0]  CSR_Funct3;
 
@@ -76,18 +113,45 @@ module CORE(
     logic [6:0] OPCode;
 
     //PC
+`ifndef YOSYS
     data_t pc;
+`else 
+    logic [`WORD_SIZE -1:0] pc;
+`endif
     //MUX PC
+`ifndef YOSYS
     data_t mux_pc;
+`else 
+    logic [`WORD_SIZE -1:0] mux_pc;
+`endif
 
     //SHIFT Branch
+`ifndef YOSYS
     data_t SH_B;
+`else 
+    logic [`WORD_SIZE -1:0] SH_B;
+`endif
+    
     //SUM Branch
+`ifndef YOSYS
     data_t S_B;
+`else 
+    logic [`WORD_SIZE -1:0] S_B;
+`endif
+
     //SUM 4
+`ifndef YOSYS
     data_t S_FOUR;
+`else 
+    logic [`WORD_SIZE -1:0] S_FOUR;
+`endif
+
     //JALR Result
+`ifndef YOSYS
     data_t JALR_RESULT;
+`else 
+    logic [`WORD_SIZE -1:0] JALR_RESULT;
+`endif
 
     /****PC Update****/
     initial begin
