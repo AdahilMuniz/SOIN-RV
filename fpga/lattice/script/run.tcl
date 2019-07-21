@@ -1,9 +1,9 @@
 #Files
 
-set PRJ_DIR   [file normalize ./../../../]
-set FPGA_DIR  [file normalize ./../../   ]
-set SRC_DIR   [file normalize $PRJ_DIR/src]
-set INC_DIR   [file normalize $PRJ_DIR/include]
+set PRJ_DIR    [file normalize ./../../../]
+set LATTIC_DIR [file normalize ./../      ]
+set SRC_DIR    [file normalize $PRJ_DIR/src]
+set INC_DIR    [file normalize $PRJ_DIR/include]
 
 set FILE "RV32I.sv"
 set FILE_NAME [file rootname [file tail $FILE]]
@@ -13,17 +13,17 @@ set OUT_DIR "output"
 
 #Paramenters
 #set IM_FILE {$PRJ_DIR/sw/RV32I/I_Type_Test.rv32i}
-set IM_FILE {"../../../sw/RV32I/I_Type_Test.rv32i"}
-set DM_FILE {"../../../sw/RV32I/I_Type_Test.rv32i"}
+set IM_FILE {"../../../sw/RV32I/blink.rv32i"}
+set DM_FILE {"../../../sw/RV32I/blink.rv32i"}
 
 #Synthesis
-set TOP_MODULE CORE
+set TOP_MODULE DATAPATH
 set ARGS "-sv"
 
 #FPGA
 set PKG "sg48"
 set DEVICE "5k"
-set PCF_FILE "../common/io.pcf"
+set PCF_FILE "$LATTIC_DIR/constraint.pcf"
 
 
 proc run_synthesis {args} {
@@ -78,5 +78,5 @@ proc run_bin {args} {
 puts [ exec mkdir -p $OUT_DIR]
 
 run_synthesis
-#run_place_route
+run_place_route
 #run_bin
