@@ -1,0 +1,17 @@
+#iCE40 UltraPlus Breakout Board (iCE40UP5K)
+
+#Low Addr bits to the RGB LED
+set_io LEDS[0] 41
+set_io LEDS[1] 40
+set_io LEDS[2] 39
+
+set_io i_clk 35
+set_io i_rstn 28
+
+set_io IOT_39A 26
+set_io IOT_38B 27
+set_io IOT_42B 31
+set_io IOT_43A 32
+set_io IOT_45A_G1 37
+set_io IOT_51A 42
+set_io IOT_50B 38
