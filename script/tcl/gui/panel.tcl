@@ -26,6 +26,7 @@ proc bt_cmd_load_sim {args} {
 proc panel_run {args} {
     global SCRIPT_DIR
     global ROOT_DIR
+    global GUI
 
     #Main Window Dimensions
     set main_width 650
@@ -89,11 +90,14 @@ proc panel_run {args} {
     place .ww.logo_label -x 440 -y 130
     .ww.logo_label configure -image logo 
 
-    wm withdraw .
+    if {$GUI != "1"} {
+        wm withdraw .   
+    }
 
+    #Quit
     wm protocol .ww WM_DELETE_WINDOW {
         if {[tk_messageBox -message "Quit?" -type yesno] eq "yes"} {
-           exit
+           wm withdraw .ww
         }
     }
 
