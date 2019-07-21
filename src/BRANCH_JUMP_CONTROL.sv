@@ -10,13 +10,13 @@ module BRANCH_JUMP_CONTROL (
         case (i_Ctrl_Jump)
             2'b01: begin 
                 case (i_Funct3)
-                    `F3_TYPE0: o_B_J_result =  i_Zero;
-                    `F3_TYPE1: o_B_J_result = ~i_Zero;
-                    `F3_TYPE4: o_B_J_result = ~i_Zero;
-                    `F3_TYPE5: o_B_J_result =  i_Zero;
-                    `F3_TYPE6: o_B_J_result = ~i_Zero;
-                    `F3_TYPE7: o_B_J_result =  i_Zero;
-                    default :  o_B_J_result = 2'b0;
+                    `F3_TYPE0: o_B_J_result[0] =  i_Zero;
+                    `F3_TYPE1: o_B_J_result[0] = ~i_Zero;
+                    `F3_TYPE4: o_B_J_result[0] = ~i_Zero;
+                    `F3_TYPE5: o_B_J_result[0] =  i_Zero;
+                    `F3_TYPE6: o_B_J_result[0] = ~i_Zero;
+                    `F3_TYPE7: o_B_J_result[0] =  i_Zero;
+                    default :  o_B_J_result[0] = 1'b0;
                 endcase
             end
             2'b10: o_B_J_result = 2'b01;
