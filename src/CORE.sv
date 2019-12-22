@@ -96,11 +96,11 @@ module CORE(
 
     //CSR
 `ifndef YOSYS
-    reg_t        CSR_rd;
-    reg_t        CSR_wd;
+    data_t   CSR_rd;
+    data_t   CSR_wd;
 `else 
-    logic [4:0]  CSR_rd;
-    logic [4:0]  CSR_wd;
+    logic [WORD_SIZE-1:0]  CSR_rd;
+    logic [WORD_SIZE-1:0]  CSR_wd;
 `endif
     logic [11:0] CSR_addr;
     logic        CSR_en;
