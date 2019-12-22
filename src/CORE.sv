@@ -154,9 +154,9 @@ module CORE(
 `endif
 
     /****PC Update****/
-    initial begin
-    	pc = 0;
-    end
+    //initial begin
+    //	pc = 0;
+    //end
 
     always @(posedge i_clk) begin
         if(~i_rstn) begin

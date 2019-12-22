@@ -17,7 +17,7 @@ class rv32i;
     logic branch_jump_flag = 0;
 
     function new (string IM_FILE);
-        this.pc = 0;
+        //this.pc = 0;
         this.reg_f = new;
         this.alu = new;
         this.imem = new(IM_FILE);

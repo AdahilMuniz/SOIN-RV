@@ -45,6 +45,7 @@ module tb;
         $display("IM_FILE: %s", IM_FILE);
         test0 = new(test_if0, `INST_MEMORY_PATH.memory_if0, `DATA_MEMORY_PATH.memory_if1, `REGISTER_FILE_PATH.reg_file_if0);
         i_clk = 1'b0;
+        i_rstn = 1'b1;
         test0.run();
         $display("End Simulation");
         $finish;
@@ -58,9 +59,9 @@ module tb;
     //Reset generation
     initial begin 
         #(`CLK_PERIOD)
-        i_rstn <= 1'b0;
-        #(`CLK_PERIOD/2) 
-        i_rstn <= 1'b1;
+        i_rstn = 1'b0;
+        #(`CLK_PERIOD) 
+        i_rstn = 1'b1;
     end
        
 endmodule
