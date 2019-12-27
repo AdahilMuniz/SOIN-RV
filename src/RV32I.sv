@@ -21,5 +21,13 @@ import types_pkg::*;
 `include "LOAD_STORE_UNIT.sv"
 `include "REGISTER_FILE.sv"
 `include "CSR.sv"
-`include "DATAPATH.sv"
+
+`include "IF.sv"
+`include "ID.sv"
+`include "EX.sv"
+`include "MEM.sv"
+`include "WB.sv"
+
 `include "CORE.sv"
+
+`include "DATAPATH.sv"

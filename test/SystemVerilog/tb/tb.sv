@@ -11,7 +11,8 @@
 
 `define CLK_PERIOD 40 //25MHz
 
-`define REGISTER_FILE_PATH dut.core.register_file
+//`define REGISTER_FILE_PATH dut.core.register_file
+`define REGISTER_FILE_PATH dut.core.id_stage.register_file
 `define DATA_MEMORY_PATH   dut.data_memory
 `define INST_MEMORY_PATH   dut.instruction_memory
 `define CORE_PATH          dut.core

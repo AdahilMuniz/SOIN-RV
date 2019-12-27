@@ -1,4 +1,3 @@
-//@TODO: Use one adder and a mux to select the source
 module CORE(
 `ifndef YOSYS
         output addr_t       o_IM_addr,
@@ -22,6 +21,18 @@ module CORE(
         input i_clk,
         input i_rstn
     );
+
+
+    //SUM 4
+`ifndef YOSYS
+    data_t S_FOUR;
+`else 
+    logic [`WORD_SIZE -1:0] S_FOUR;
+`endif
+
+    //Branch and Jump Control Signals
+    logic [1:0] BJC_result;
+    logic BJC_zero;
 
 
     //Register File Signals
@@ -59,10 +70,6 @@ module CORE(
     logic MC_regWrite;
     logic MC_CSR_en;
 
-    //ALU Control Signals
-    logic [3:0] ALUC_ALUControlLines;
-    logic [2:0] ALUC_ALUOP;
-
     //ALU Signals
 `ifndef YOSYS
     data_t ALU_Result;
@@ -76,10 +83,9 @@ module CORE(
     logic ALU_Zero;
     logic [3:0] ALU_Operation;
 
-    //Branch and Jump Control Signals
-    logic [1:0] BJC_result;
-    logic [1:0] BJC_ctrl_jump;
-    logic BJC_zero;
+
+    //ALU Control Signals
+    logic [2:0] ALUC_ALUOP;
 
     //Load Store Unit Signals
 `ifndef YOSYS
@@ -91,21 +97,14 @@ module CORE(
 `endif
     logic  [3:0] LSU_range_select;
     logic  [1:0] LSU_low_addr;
-    logic        LSU_wen;
-    logic        LSU_ren;
 
     //CSR
 `ifndef YOSYS
     data_t   CSR_rd;
-    data_t   CSR_wd;
 `else 
     logic [WORD_SIZE-1:0]  CSR_rd;
-    logic [WORD_SIZE-1:0]  CSR_wd;
 `endif
-    logic [11:0] CSR_addr;
     logic        CSR_en;
-    logic [2:0]  CSR_Funct3;
-
 
     //Decode Signals
     logic [6:0] Funct7;
@@ -118,32 +117,12 @@ module CORE(
 `else 
     logic [`WORD_SIZE -1:0] pc;
 `endif
-    //MUX PC
-`ifndef YOSYS
-    data_t mux_pc;
-`else 
-    logic [`WORD_SIZE -1:0] mux_pc;
-`endif
-
-    //SHIFT Branch
-`ifndef YOSYS
-    data_t SH_B;
-`else 
-    logic [`WORD_SIZE -1:0] SH_B;
-`endif
     
     //SUM Branch
 `ifndef YOSYS
     data_t S_B;
 `else 
     logic [`WORD_SIZE -1:0] S_B;
-`endif
-
-    //SUM 4
-`ifndef YOSYS
-    data_t S_FOUR;
-`else 
-    logic [`WORD_SIZE -1:0] S_FOUR;
 `endif
 
     //JALR Result
@@ -153,19 +132,6 @@ module CORE(
     logic [`WORD_SIZE -1:0] JALR_RESULT;
 `endif
 
-    /****PC Update****/
-    //initial begin
-    //	pc = 0;
-    //end
-
-    always @(posedge i_clk) begin
-        if(~i_rstn) begin
-            pc <= 0;
-        end
-        else begin 
-            pc <= mux_pc;
-        end
-    end
 
     /****Attributions****/
 
@@ -179,22 +145,22 @@ module CORE(
     //"Decode" instruction (Immediate)
     assign IG_instruction = i_IM_instruction;
 
-    //"Decode" instruction (F7 and F3)
-    assign Funct3 = i_IM_instruction[14:12];
-    assign Funct7 = i_IM_instruction[31:25];
-
-    //"Decode" instruction (Main Control)
-    assign OPCode = i_IM_instruction[6:0];
-
     //"Decode" instruction (CSR)
     assign CSR_addr = i_IM_instruction[31:20];
 
     //Main Control Signals attributions
-    assign RF_wen = MC_regWrite;
     assign ALUC_ALUOP = MC_ALUOp;
+    assign RF_wen = MC_regWrite;
 
-    //ALU Control Signals attributions
-    assign ALU_Operation = ALUC_ALUControlLines;
+    //CSR
+    assign CSR_en = MC_CSR_en;
+
+    //Branch and Jump Control Attributions
+    assign BJC_zero = ALU_Zero;
+
+    //Load Store Unit Attributions
+    assign LSU_rd  = i_DM_rd;
+    assign LSU_low_addr = ALU_Result[1:0];
 
     //Data Memory attributions
     assign o_DM_addr = ALU_Result;
@@ -202,71 +168,92 @@ module CORE(
     assign o_DM_wen  = LSU_range_select;
     assign o_DM_ren  = MC_memRead;
 
-    //Branch and Jump Control Attributions
-    assign BJC_zero      = ALU_Zero;
-    assign BJC_ctrl_jump = MC_ctrl_jump;
-
-    //Load Store Unit Attributions
-    assign LSU_rd  = i_DM_rd;
-    assign LSU_wen = MC_memWrite;
-    assign LSU_ren = MC_memRead;
-    assign LSU_low_addr = ALU_Result[1:0];
-
-    //CSR
-    assign CSR_en = MC_CSR_en;
-    assign CSR_wd = RF_rd1;
-
-    /****Muxes****/
-    
-    //ALU Source 1
-    assign ALU_Op1 = MC_ALUSrc1 ? pc:RF_rd1;
-    //ALU Source 2
-    assign ALU_Op2 = MC_ALUSrc2 ? IG_extendedImmediate:RF_rd2;
-    //Write Data (Register File) Source
-    assign RF_wd = MC_regSrc[1] ? (MC_regSrc[0] ? CSR_rd:S_FOUR) : 
-                                  (MC_regSrc[0] ? LSU_data_load  : ALU_Result);
-    //PC Source
-    assign mux_pc = BJC_result[1] ? JALR_RESULT : (BJC_result[0] ? S_B : S_FOUR);
-
-    /****SHIFT-Branch****/
-    assign SH_B = IG_extendedImmediate<<1;
-    /****SUM-Branch****/
-    assign S_B = pc + SH_B;
-    /****SUM-4-PC****/
-    assign S_FOUR = pc + 4;
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result[`WORD_SIZE-1:1], 1'b0};
+    
+    IF if_stage (
+       .o_pc(pc),
+       .o_S_FOUR(S_FOUR),
 
-    REGISTER_FILE register_file (
-        .o_Rd1(RF_rd1), 
-        .o_Rd2(RF_rd2), 
-        .i_Rnum1(RF_rnum1), 
-        .i_Rnum2(RF_rnum2), 
-        .i_Wen(RF_wen), 
-        .i_Wnum(RF_wnum), 
-        .i_Wd(RF_wd), 
-        .i_clk(i_clk),
-        .i_rstn(i_rstn)
+       .i_sel(BJC_result),
+       .i_sum_branch_r(S_B),
+       .i_jalr_r(JALR_RESULT),
+       .i_clk(i_clk),
+       .i_rstn(i_rstn)
     );
 
-    IMM_GENERATOR imm_generator (
-        .o_ExtendedImmediate(IG_extendedImmediate), 
-        .i_Instruction(IG_instruction)
+    ID id_stage (
+
+      //Decode Signals
+      .o_Funct7(Funct7),
+      .o_Funct3(Funct3),
+      .o_OPCode(OPCode),
+      
+      .o_CSR_rd(CSR_rd),
+      .i_CSR_en(CSR_en),
+
+      .o_IG_extendedImmediate(IG_extendedImmediate),
+
+      .o_RF_rd1(RF_rd1),
+      .o_RF_rd2(RF_rd2),
+      .i_RF_wd(RF_wd),
+      .i_RF_wen(RF_wen),
+
+      .i_instruction(i_IM_instruction),
+      .i_clk(i_clk),
+      .i_rstn(i_rstn)
     );
 
-    ALU alu (
-        .o_Result(ALU_Result), 
-        .o_Zero(ALU_Zero), 
-        .i_Operation(ALU_Operation), 
-        .i_Op1(ALU_Op1), 
-        .i_Op2(ALU_Op2)
+    EX ex_stage (
+      .o_S_B(S_B),
+    
+      .o_ALU_Zero(ALU_Zero),
+      .o_ALU_Result(ALU_Result),
+      //.o_CSR_rd(CSR_rd),
+      //.i_CSR_en(CSR_en),
+    
+      .i_Funct3(Funct3),
+      .i_Funct7(Funct7),
+    
+      .i_ALU_sel_src1(MC_ALUSrc1),
+      .i_ALU_sel_src2(MC_ALUSrc2),
+
+      .i_ALUC_ALUOP(ALUC_ALUOP),
+    
+      .i_pc(pc),
+    
+      .i_RF_rd1(RF_rd1),
+      .i_RF_rd2(RF_rd2),
+    
+      .i_IG_extendedImmediate(IG_extendedImmediate)
     );
 
-    ALU_CONTROL alu_control (
-        .o_ALUControlLines(ALUC_ALUControlLines), 
-        .i_Funct7(Funct7), 
-        .i_Funct3(Funct3), 
-        .i_ALUOp(ALUC_ALUOP)
+    MEM mem_stage (
+        //Branch and Jump Control Signals
+        .o_BJC_result(BJC_result),
+        .i_BJC_ctrl_jump(MC_ctrl_jump),
+        .i_BJC_zero(BJC_zero),
+
+        //Load Store Unit Signals
+        .o_LSU_range_select(LSU_range_select),
+        .o_LSU_data_load(LSU_data_load),
+        .i_LSU_rd(LSU_rd),
+        .i_LSU_low_addr(LSU_low_addr),
+        .i_LSU_wen(MC_memWrite),
+        .i_LSU_ren(MC_memRead),
+
+        .i_Func3(Funct3)
+    );
+
+    WB wb_stage (
+    .o_RF_wd(RF_wd),
+    .i_regSrc(MC_regSrc),
+
+    .i_CSR_rd(CSR_rd),
+    .i_S_FOUR(S_FOUR),
+    .i_LSU_data_load(LSU_data_load),
+    .i_ALU_Result(ALU_Result)
+
     );
 
     MAIN_CONTROL main_control (
@@ -280,33 +267,6 @@ module CORE(
         .o_RegWrite(MC_regWrite), 
         .o_CSR_en(MC_CSR_en),
         .i_OPCode(OPCode)
-    );
-
-    BRANCH_JUMP_CONTROL branch_jump_control(
-        .o_B_J_result(BJC_result),
-        .i_Ctrl_Jump(BJC_ctrl_jump),
-        .i_Zero(BJC_zero),
-        .i_Funct3(Funct3)
-    );
-
-    LOAD_STORE_UNIT load_store_unit(
-        .o_range_select(LSU_range_select),
-        .o_data_load(LSU_data_load),
-        .i_rd(LSU_rd),
-        .i_low_addr(LSU_low_addr),
-        .i_Func3(Funct3),
-        .i_wen(LSU_wen),
-        .i_ren(LSU_ren)
-    );
-
-    CSR csr (
-        .o_rd(CSR_rd),
-        .i_addr(CSR_addr),
-        .i_wd(CSR_wd),
-        .i_en(CSR_en),
-        .i_Funct3(Funct3),
-        .i_clk(i_clk),
-        .i_rstn(i_rstn)
     );
 
 endmodule
