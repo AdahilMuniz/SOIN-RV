@@ -33,6 +33,7 @@ class rv32i;
     function void reset ();
         this.pc = 0;
         this.reg_f.reset();
+        this.dmem.reset();
     endfunction
 
     //Get Methods

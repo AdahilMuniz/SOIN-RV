@@ -12,7 +12,8 @@ module DATA_MEMORY_V2(
 `endif
     input  [3:0]i_Wen,
     input  i_Ren,
-    input  i_clk
+    input  i_clk,
+    input  i_rstn
     );
     parameter HEIGHT = `DM_DEPTH;//Memory height
     parameter FILE = `DM_FILE;
@@ -22,28 +23,36 @@ module DATA_MEMORY_V2(
 `else 
     logic [`WORD_SIZE -1:0] mem [HEIGHT-1:0];//Memory: Word: 4byte
 `endif
+    integer i; // Syntetizable?
 
     initial begin
         $readmemh(FILE, mem);//Initialize Memory
     end
 
     always @(posedge i_clk) begin
-        if (|i_Wen) begin
-            case(i_Wen)
-                //Byte 
-                4'b1000 : mem[i_Addr>>2][31:24] <= i_Wd;
-                4'b0100 : mem[i_Addr>>2][23:16] <= i_Wd;
-                4'b0010 : mem[i_Addr>>2][15:8]  <= i_Wd;
-                4'b0001 : mem[i_Addr>>2][7:0]   <= i_Wd;
-                //Half-Word
-                4'b1100 : mem[i_Addr>>2][31:16] <= i_Wd;
-                4'b0110 : mem[i_Addr>>2][23:8]  <= i_Wd;
-                4'b0011 : mem[i_Addr>>2][15:0]  <= i_Wd;
-                //Word
-                4'b1111 : mem[i_Addr>>2]        <= i_Wd;
-
-                default : mem[i_Addr>>2]        <= i_Wd;
-            endcase
+        if(~i_rstn) begin
+            for(i=0;i<HEIGHT;i=i+1) begin
+                mem[i] <= 0;
+            end
+        end
+        else begin 
+            if (|i_Wen) begin
+                case(i_Wen)
+                    //Byte 
+                    4'b1000 : mem[i_Addr>>2][31:24] <= i_Wd;
+                    4'b0100 : mem[i_Addr>>2][23:16] <= i_Wd;
+                    4'b0010 : mem[i_Addr>>2][15:8]  <= i_Wd;
+                    4'b0001 : mem[i_Addr>>2][7:0]   <= i_Wd;
+                    //Half-Word
+                    4'b1100 : mem[i_Addr>>2][31:16] <= i_Wd;
+                    4'b0110 : mem[i_Addr>>2][23:8]  <= i_Wd;
+                    4'b0011 : mem[i_Addr>>2][15:0]  <= i_Wd;
+                    //Word
+                    4'b1111 : mem[i_Addr>>2]        <= i_Wd;
+    
+                    default : mem[i_Addr>>2]        <= i_Wd;
+                endcase
+            end
         end
     end
 

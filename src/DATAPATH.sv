@@ -55,7 +55,8 @@ module DATAPATH(
         .i_Addr(DM_addr), 
         .i_Wen(DM_wen), 
         .i_Ren(DM_ren), 
-        .i_clk(i_clk)
+        .i_clk(i_clk),
+        .i_rstn(i_rstn)
     );
 
 endmodule

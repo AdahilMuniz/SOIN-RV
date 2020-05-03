@@ -20,6 +20,7 @@ proc compile_c {args} {
     global FILE
     global FILE_NAME
     global BIN_DIR
+    global OUT_ROOT_DIR
 
     #SET
     global OBJ_FILE
@@ -30,7 +31,7 @@ proc compile_c {args} {
 
     set OBJ_FILE "$BIN_DIR/$FILE_NAME.o"
 
-    puts [ exec riscv64-unknown-elf-gcc -march=$ARCH -mabi=$ABI $FILE -o $OBJ_FILE ]
+    puts [ exec riscv64-unknown-elf-gcc -nostartfiles -nodefaultlibs -nostdlib -march=$ARCH -mabi=$ABI $OUT_ROOT_DIR/ref/ctr0.S $FILE $OUT_ROOT_DIR/ref/exit.S -o $OBJ_FILE ]
 }
 
 proc gen_rv_file {args} {
@@ -65,6 +66,7 @@ proc set_env {args} {
     global FILE_DIR
     global BIN_DIR
     global RV_FILE_DIR
+    global OUT_ROOT_DIR
 
     #Handle File
     set FILE_NAME [file rootname [file tail $FILE]]
