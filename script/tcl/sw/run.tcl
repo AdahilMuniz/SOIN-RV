@@ -6,7 +6,7 @@ if {![ info exists FILE_TO_COMPILE]} {
 }
 
 if {![ info exists SCRIPT_DIR]} {
-    set SCRIPT_DIR [ file normalize "../../[ file dirname [ info script ] ]" ] 
+    set SCRIPT_DIR [ file normalize "[ file normalize [ info script ] ]../../../../" ] 
 }
 
 source $SCRIPT_DIR/tcl/sw/build_sw.tcl

@@ -8,20 +8,16 @@ int main () {
 }
 
 void print_hello(){
-    int * addr;
-    int i;
-    addr  = (int*)PRINT_ADDR;
-
     
-    *(addr+0x00) = 'H';
-    *(addr+0x01) = 'E';
-    *(addr+0x02) = 'L';
-    *(addr+0x03) = 'L';
-    *(addr+0x04) = 'O';
-    *(addr+0x05) = ' ';
-    *(addr+0x06) = 'W';
-    *(addr+0x07) = 'O';
-    *(addr+0x08) = 'R';
-    *(addr+0x09) = 'L';
-    *(addr+0x0A) = 'D';
+    *((int*)PRINT_ADDR+0x00) = 'H';
+    *((int*)PRINT_ADDR+0x01) = 'E';
+    *((int*)PRINT_ADDR+0x02) = 'L';
+    *((int*)PRINT_ADDR+0x03) = 'L';
+    *((int*)PRINT_ADDR+0x04) = 'O';
+    *((int*)PRINT_ADDR+0x05) = ' ';
+    *((int*)PRINT_ADDR+0x06) = 'W';
+    *((int*)PRINT_ADDR+0x07) = 'O';
+    *((int*)PRINT_ADDR+0x08) = 'R';
+    *((int*)PRINT_ADDR+0x09) = 'L';
+    *((int*)PRINT_ADDR+0x0A) = 'D';
 }
