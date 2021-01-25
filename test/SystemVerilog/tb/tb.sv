@@ -35,7 +35,7 @@ module tb;
     bind `INST_MEMORY_PATH memory_if memory_if0(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Instruction)); //Binding: Instruction Memory Interface
     bind `DATA_MEMORY_PATH memory_if memory_if1(.clk(i_clk), .rstn(i_rstn), .addr(i_Addr), .rdata(o_Rd), .wdata(i_Wd), .ren(i_Ren), .wen(i_Wen)); //Binding: Data Memory Interface
     bind `REGISTER_FILE_PATH reg_file_if reg_file_if0(.clk(i_clk), .rstn(i_rstn), .rn1(i_Rnum1), .rn2(i_Rnum2), .wn(i_Wnum), .rd1(o_Rd1), .rd2(o_Rd2), .wd(i_Wd), .wen(i_Wen)); //Binding: Register File Interface
-    test_if test_if0(.clk(i_clk), .rstn(i_rstn), .pc(`CORE_PATH.pc));
+    test_if test_if0(.clk(i_clk), .rstn(i_rstn), .pc(`CORE_PATH.pc[2]));
     //DUT
     DATAPATH #(IM_FILE) dut (
         .i_clk(i_clk),
@@ -59,7 +59,7 @@ module tb;
 
     //Reset generation
     initial begin 
-        #(`CLK_PERIOD)
+        //#(`CLK_PERIOD)
         i_rstn = 1'b0;
         #(`CLK_PERIOD) 
         i_rstn = 1'b1;
