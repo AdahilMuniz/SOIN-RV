@@ -39,7 +39,7 @@ class test;
         semaphore mutex2 = new(1);
         event     get_data, check_data;
         event     get_reg, check_reg;
-        
+        //@(posedge this.vif.rstn);
         fork
             begin : thread_inst_monitor
                 forever begin 
@@ -54,7 +54,9 @@ class test;
                     -> get_data;
                     -> get_reg;
                     mutex.put(1);
-                    @(posedge this.vif.clk);
+                    for (int i = 0; i < 5; i++) begin
+                        @(posedge this.vif.clk);
+                    end
                 end
             end
             begin : thread_data_monitor
@@ -67,7 +69,10 @@ class test;
             end
             begin : thread_reg_file_monitor
                 forever begin
-                    @(get_reg); 
+                    @(get_reg);
+                    for (int i = 0; i < 2; i++) begin
+                        @(posedge this.vif.clk);
+                    end
                     this.reg_file_monitor0.run();
                     this.dut_reg_file_trans = this.reg_file_monitor0.reg_trans;
                     ->check_reg;
@@ -85,6 +90,9 @@ class test;
                     else begin 
                         this.set_model_attributes();
                         this.model.run();
+                        for (int i = 0; i < 5; i++) begin
+                            @(posedge this.vif.clk);
+                        end
                     end
                     this.model_data_trans     = this.model.data_trans;
                     this.model_reg_file_trans = this.model.reg_file_trans;
@@ -109,7 +117,9 @@ class test;
 
             begin : thread_pc_checker
                 forever begin
-                    @(negedge vif.clk);//Is it the best solution and using clocking block?
+                    for (int i = 0; i < 5; i++) begin
+                        @(negedge vif.clk);//Is it the best solution and using clocking block?
+                    end
                     if(this.vif.pc !== this.model.pc) begin
                         $display("PCs are differents: \n |[DUT] pc: 0x%8x  |[MODEL] pc: 0x%8x", this.vif.pc, this.model.pc);
                         //Is it the best way?
