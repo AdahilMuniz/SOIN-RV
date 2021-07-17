@@ -16,7 +16,9 @@ class test;
 
     data_checker data_checker0;
     reg_file_checker reg_file_checker0;
-   
+    
+    integer inst_cnt = 0;
+
     rv32i model;
 
 
@@ -51,10 +53,16 @@ class test;
                         //Is it the best way?
                         break;
                     end
+                    this.inst_cnt += 1;
                     -> get_data;
                     -> get_reg;
                     mutex.put(1);
-                    for (int i = 0; i < 5; i++) begin
+                    if (this.inst_cnt == 1) begin
+                        for (int i = 0; i < 5; i++) begin
+                            @(posedge this.vif.clk);
+                        end
+                    end
+                    else begin 
                         @(posedge this.vif.clk);
                     end
                 end
@@ -70,8 +78,10 @@ class test;
             begin : thread_reg_file_monitor
                 forever begin
                     @(get_reg);
-                    for (int i = 0; i < 2; i++) begin
-                        @(posedge this.vif.clk);
+                    if (this.inst_cnt) begin
+                        for (int i = 0; i < 2; i++) begin
+                            @(posedge this.vif.clk);
+                        end
                     end
                     this.reg_file_monitor0.run();
                     this.dut_reg_file_trans = this.reg_file_monitor0.reg_trans;
@@ -90,8 +100,10 @@ class test;
                     else begin 
                         this.set_model_attributes();
                         this.model.run();
-                        for (int i = 0; i < 5; i++) begin
-                            @(posedge this.vif.clk);
+                        if (this.inst_cnt) begin
+                            for (int i = 0; i < 5; i++) begin
+                                @(posedge this.vif.clk);
+                            end
                         end
                     end
                     this.model_data_trans     = this.model.data_trans;
