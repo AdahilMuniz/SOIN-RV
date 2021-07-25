@@ -22,12 +22,14 @@ class reg_file_checker;
                             error_item.error_champ[i] = 1;
                         end
                     end
+                    /*
                     else begin 
-                        if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
+                        if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE}) && dut_reg_file_trans.direction == WRITE) begin
                             flag = 1;
                             error_item.error_champ[i] = 1;
                         end
                     end
+                    */
                 end
             end
     
@@ -45,12 +47,14 @@ class reg_file_checker;
                             error_item.error_champ[i] = 1;
                         end
                     end
+                    /*
                     else begin 
-                        if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE})) begin
-                            flag = 1;
+                        if(!(input_instruction.instruction_type inside {S_TYPE, B_TYPE}) && dut_reg_file_trans.direction == WRITE) begin
+                            //flag = 1;
                             error_item.error_champ[i] = 1;
                         end
                     end
+                    */
                 end
             end
         end

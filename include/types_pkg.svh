@@ -30,8 +30,9 @@ package types_pkg;
     }data_item_t;
 
     typedef struct {
-        data_t     data[3];
-        reg_t      regn[3];
+        data_t      data[3];
+        reg_t       regn[3];
+        direction_t direction;
     }reg_file_item_t;
 
     typedef struct{
