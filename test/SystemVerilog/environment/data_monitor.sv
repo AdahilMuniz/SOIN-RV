@@ -13,10 +13,13 @@ class data_monitor;
     endfunction
 
     task run();
+        @(this.vif.wen, this.vif.ren);
         if(~this.vif.rstn) begin
             $display("DATA_MONITOR: Reset");
         end
-        this.mount();
+        else begin
+            this.mount();
+        end
     endtask 
 
 

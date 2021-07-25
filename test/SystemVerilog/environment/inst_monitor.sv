@@ -85,6 +85,7 @@ class inst_monitor;
             `OP_I_TYPE : begin 
                 this.instruction_type = I_TYPE;
                 this.rs1 = this.vif.rdata[19:15];
+                this.rs2 = this.vif.rdata[24:20]; //Just to be aligned with design
                 this.imm = 32'(signed'(this.vif.rdata[31:20]));
                 this.rd  = this.vif.rdata[11:7];
                 funct3 = this.vif.rdata[14:12];

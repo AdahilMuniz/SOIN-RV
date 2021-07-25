@@ -125,6 +125,8 @@ module CORE(
     logic [6:0] funct7_ex;
     logic [2:0] funct3_ex;
 
+    logic [2:0] funct3_mem;
+
     logic [6:0] opcode;
 
     //PC
@@ -260,7 +262,7 @@ module CORE(
         .i_LSU_wen(MC_memWrite[2]),
         .i_LSU_ren(MC_memRead[2]),
 
-        .i_Func3(Funct3)
+        .i_Func3(funct3_mem)
     );
 
     WB wb_stage (
@@ -321,6 +323,7 @@ module CORE(
             IG_extendedImmediate_ex <= 0;
 
             //MEM
+            funct3_mem              <= 0;
             RF_rd2_mem              <= 0;
             BJC_zero                <= 0;
             ALU_Result_mem          <= 0;
@@ -388,6 +391,7 @@ module CORE(
             IG_extendedImmediate_ex <= IG_extendedImmediate_id;
 
             //EX to MEM
+            funct3_mem              <= funct3_ex;
             RF_rd2_mem              <= RF_rd2_ex;
             BJC_zero                <= ALU_Zero;
             LSU_low_addr            <= ALU_Result_ex[1:0];

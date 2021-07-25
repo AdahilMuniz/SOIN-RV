@@ -57,92 +57,115 @@ class rv32i;
         this.reg_file_trans.data[1] = this.reg_f.get_reg(rs2);
         this.reg_file_trans.data[0] = this.reg_f.get_reg(rs1);
 
+        this.reg_file_trans.direction = READ;
+
         case (this.instruction)
             ADDI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             SLLI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             SLTI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             SLTIU : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SLTU , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             XORI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             SRLI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             SRAI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             ORI   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_OR , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_OR  , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             ANDI  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
 
             ADD   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_ADD , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             SUB   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SUB , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SUB , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             SLL   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             SLT   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLT , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             SLTU  : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SLTU , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SLTU, this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             XOR   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_XOR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             SRL   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRL , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             SRA   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_SRA , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             OR    : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_OR , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_OR  , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
             AND   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2));
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AND , this.reg_f.get_reg(this.rs1), this.reg_f.get_reg(this.rs2)));
+                this.reg_file_trans.direction = WRITE;
             end
 
             LUI   : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_LUI, null, this.imm);
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_LUI, null, this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             AUIPC : begin
                 this.reg_file_trans.data[2] = this.alu.operation(ALU_AUIPC, this.pc, this.imm); 
                 this.reg_f.set_reg(this.rd, this.alu.operation(ALU_AUIPC, this.pc, this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
 
             BEQ   : this.beq (reg_f.get_reg(this.rs1), reg_f.get_reg(this.rs2), this.imm);
@@ -155,22 +178,27 @@ class rv32i;
             LW    : begin 
                 this.reg_file_trans.data[2] = this.lw (reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.lw (reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             LH    : begin 
                 this.reg_file_trans.data[2] = this.lh (reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.lh (reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             LHU   : begin 
                 this.reg_file_trans.data[2] = this.lhu (reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.lhu(reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             LB    : begin 
                 this.reg_file_trans.data[2] = this.lb (reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.lb (reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
             LBU   : begin 
                 this.reg_file_trans.data[2] = this.lbu (reg_f.get_reg(this.rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.lbu(reg_f.get_reg(this.rs1), this.imm));
+                this.reg_file_trans.direction = WRITE;
             end
 
             SW    : this.sw(this.reg_f.get_reg(rs1), this.reg_f.get_reg(rs2), this.imm);
@@ -180,12 +208,13 @@ class rv32i;
             JAL   : begin
                 this.reg_file_trans.data[2] = this.jal(this.imm);
                 this.reg_f.set_reg(this.rd, this.reg_file_trans.data[2]);
+                this.reg_file_trans.direction = WRITE;
             end
             JALR  : begin
                 this.reg_file_trans.data[2] = this.jalr(this.reg_f.get_reg(rs1), this.imm);
                 this.reg_f.set_reg(this.rd, this.reg_file_trans.data[2]);
+                this.reg_file_trans.direction = WRITE;
             end
-
 
             default : /* default */;
         endcase
