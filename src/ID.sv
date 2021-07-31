@@ -5,6 +5,8 @@ module ID (
     output logic [2:0] o_Funct3,
     output logic [6:0] o_OPCode,
     output logic [4:0] o_RF_wnum, //Write register number output
+    output logic [4:0] o_RF_rnum1,
+    output logic [4:0] o_RF_rnum2,
 
 
     //Immediate Generator Signals
@@ -20,7 +22,8 @@ module ID (
 `else 
     output logic [WORD_SIZE-1:0] o_CSR_rd,
 `endif
-    input  logic        i_CSR_en,
+
+    input  logic       i_CSR_en,
     
 //Register File Signals
 `ifdef YOSYS
@@ -74,6 +77,10 @@ module ID (
 
     //CSR
     //assign CSR_wd =;
+
+    //Register Numbers output
+    assign o_RF_rnum1  = RF_rnum1;
+    assign o_RF_rnum2  = RF_rnum2;
 
     REGISTER_FILE register_file (
         .o_Rd1(o_RF_rd1), 

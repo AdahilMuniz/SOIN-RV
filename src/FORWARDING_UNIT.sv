@@ -1,13 +1,13 @@
 module FORWARDING_UNIT (
     output logic [1:0] o_foward1_sel,
     output logic [1:0] o_foward2_sel,
-    //Read register numbers from EX stage
+    //Read register signals from EX stage
     input  reg_t       i_EX_rnum1,
     input  reg_t       i_EX_rnum2,
-    //Write register number from MEM stage
+    //Write register signals from MEM stage
     input  reg_t       i_MEM_wnum,
     input  logic       i_MEM_wen,
-    //Write register number from WB stage
+    //Write register signals from WB stage
     input  reg_t       i_WB_wnum,
     input  logic       i_WB_wen
 );

@@ -51,7 +51,10 @@ module CORE(
     logic [`WORD_SIZE -1:0] RF_rd2_mem;
     logic [`WORD_SIZE -1:0] RF_wd;
 `endif
-    logic [4:0] RF_wnum [4];
+    logic [4:0] RF_wnum  [4];
+    logic [4:0] RF_rnum1 [4];
+    logic [4:0] RF_rnum2 [4];
+
     logic RF_wen;
 
     //Immediate Generator Signals
@@ -213,7 +216,11 @@ module CORE(
 
       .o_RF_rd1(RF_rd1_id),
       .o_RF_rd2(RF_rd2_id),
+
+
       .o_RF_wnum(RF_wnum[0]),
+      .o_RF_rnum1(RF_rnum1[0]),
+      .o_RF_rnum2(RF_rnum2[0]),
 
       .i_RF_wd(RF_wd),
       .i_RF_wnum(RF_wnum[3]),
@@ -245,7 +252,18 @@ module CORE(
       .i_RF_rd1(RF_rd1_ex),
       .i_RF_rd2(RF_rd2_ex),
     
-      .i_IG_extendedImmediate(IG_extendedImmediate_ex)
+      .i_IG_extendedImmediate(IG_extendedImmediate_ex),
+
+      .i_EX_rnum1(RF_rnum1[1]),
+      .i_EX_rnum2(RF_rnum2[1]),
+
+      .i_MEM_wnum (RF_wnum[2]),
+      .i_MEM_wd (ALU_Result_mem),
+      .i_MEM_wen(MC_regWrite[2]),
+
+      .i_WB_wnum(RF_wnum[3]),
+      .i_WB_wd(ALU_Result_wb),
+      .i_WB_wen(MC_regWrite[3])
     );
 
     MEM mem_stage (
@@ -266,13 +284,13 @@ module CORE(
     );
 
     WB wb_stage (
-    .o_RF_wd(RF_wd),
-    .i_regSrc(MC_regSrc[3]),
+        .o_RF_wd(RF_wd),
+        .i_regSrc(MC_regSrc[3]),
 
-    .i_CSR_rd(CSR_rd[3]),
-    .i_S_FOUR(S_FOUR[4]),
-    .i_LSU_data_load(LSU_data_load_wb),
-    .i_ALU_Result(ALU_Result_wb)
+        .i_CSR_rd(CSR_rd[3]),
+        .i_S_FOUR(S_FOUR[4]),
+        .i_LSU_data_load(LSU_data_load_wb),
+        .i_ALU_Result(ALU_Result_wb)
 
     );
 
@@ -304,6 +322,14 @@ module CORE(
             RF_wnum[1]              <= 0;//EX
             RF_wnum[2]              <= 0;//MEM
             RF_wnum[3]              <= 0;//ID
+
+            RF_rnum1[1]             <= 0;//EX
+            RF_rnum1[2]             <= 0;//MEM
+            RF_rnum1[3]             <= 0;//ID
+
+            RF_rnum2[1]             <= 0;//EX
+            RF_rnum2[2]             <= 0;//MEM
+            RF_rnum2[3]             <= 0;//ID
 
             CSR_rd[1]               <= 0;//EX
             CSR_rd[2]               <= 0;//MEM
@@ -374,6 +400,15 @@ module CORE(
             RF_wnum[1]              <= RF_wnum[0];//ID to EX
             RF_wnum[2]              <= RF_wnum[1];//EX to MEM
             RF_wnum[3]              <= RF_wnum[2];//MEM to ID
+
+            //Write Register Number
+            RF_rnum1[1]             <= RF_rnum1[0];//ID to EX
+            RF_rnum1[2]             <= RF_rnum1[1];//EX to MEM
+            RF_rnum1[3]             <= RF_rnum1[2];//MEM to ID
+
+            RF_rnum2[1]             <= RF_rnum2[0];//ID to EX
+            RF_rnum2[2]             <= RF_rnum2[1];//EX to MEM
+            RF_rnum2[3]             <= RF_rnum2[2];//MEM to ID
 
             //CSR rd
             CSR_rd[1]               <= CSR_rd[0];//ID to EX
