@@ -16,7 +16,7 @@ I intend to work on this project for the time necessary to learn and to get skil
 <h2>Dependencies</h2>
 
 * ModelSim
-* Risc-V Compilator
+* Risc-V Compiler
 * TCL/TK
 * Python > 3
 
