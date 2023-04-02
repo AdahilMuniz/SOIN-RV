@@ -163,6 +163,9 @@ module CORE(
         logic [`WORD_SIZE -1:0] IM_instruction_id;
 `endif
 
+    //Forwarding Selector Signals
+    logic FORW_sel3;
+
     /****Attributions****/
 
     assign o_IM_addr = pc[0]; // PC to IM_addr
@@ -184,9 +187,9 @@ module CORE(
 
     //Data Memory attributions
     assign o_DM_addr = ALU_Result_mem;
-    assign o_DM_wd   = RF_rd2_mem;
-    assign o_DM_wen  = LSU_range_select;
     assign o_DM_ren  = MC_memRead[2];
+    assign o_DM_wen  = LSU_range_select;
+    assign o_DM_wd   = FORW_sel3 ? RF_wd: RF_rd2_mem;
 
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result_mem[`WORD_SIZE-1:1], 1'b0};
@@ -236,6 +239,9 @@ module CORE(
     
       .o_ALU_Zero(ALU_Zero),
       .o_ALU_Result(ALU_Result_ex),
+
+      .FORW_sel3(FORW_sel3),
+
       //.o_CSR_rd(CSR_rd),
       //.i_CSR_en(CSR_en),
     
@@ -263,7 +269,9 @@ module CORE(
 
       .i_WB_wnum(RF_wnum[3]),
       .i_WB_wd(ALU_Result_wb),
-      .i_WB_wen(MC_regWrite[3])
+      .i_WB_wen(MC_regWrite[3]),
+      
+      .i_MEM_memWrite(MC_memWrite[2])
     );
 
     MEM mem_stage (

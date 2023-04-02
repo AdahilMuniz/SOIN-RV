@@ -14,6 +14,9 @@ module EX (
 `else 
     output logic [`WORD_SIZE -1:0] o_ALU_Result,
 `endif
+    //Forward Selector
+    output logic FORW_sel3,
+
     input i_ALU_sel_src1,
     input i_ALU_sel_src2,
 
@@ -58,7 +61,9 @@ module EX (
     //Write register signals from WB stage
     input  reg_t       i_WB_wnum,
     input  data_t      i_WB_wd,
-    input  logic       i_WB_wen
+    input  logic       i_WB_wen,
+    //Write memory signals from MEM Stage
+    input  logic       i_MEM_memWrite
 
 );
 
@@ -123,12 +128,14 @@ module EX (
     FORWARDING_UNIT forwarding_unit (
         .o_foward1_sel(FORW_sel1),
         .o_foward2_sel(FORW_sel2),
+        .o_foward3_sel(FORW_sel3),
         .i_EX_rnum1(i_EX_rnum1),
         .i_EX_rnum2(i_EX_rnum2),
         .i_MEM_wnum(i_MEM_wnum),
         .i_MEM_wen(i_MEM_wen),
         .i_WB_wnum(i_WB_wnum),
-        .i_WB_wen(i_WB_wen)
+        .i_WB_wen(i_WB_wen),
+        .i_MEM_memWrite(i_MEM_memWrite)
     );
 
 endmodule
