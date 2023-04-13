@@ -20,6 +20,7 @@ module IF (
     input  logic [`WORD_SIZE -1:0] i_sum_branch_r, //Sum Branch Result
     input  logic [`WORD_SIZE -1:0] i_jalr_r, // JALR Result
 `endif
+    input  logic        i_stall,
     input               i_clk,  // Clock
     input               i_rstn  // Asynchronous reset active low
 );
@@ -43,7 +44,12 @@ module IF (
             pc <= 0;
         end
         else begin 
-            pc <= mux_pc;
+            if (i_stall) begin
+                pc <= pc;
+            end
+            else begin
+                pc <= mux_pc;
+            end
         end
     end
 

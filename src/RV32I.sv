@@ -22,6 +22,7 @@ import types_pkg::*;
 `include "LOAD_STORE_UNIT.sv"
 `include "REGISTER_FILE.sv"
 `include "CSR.sv"
+`include "HAZARD_DETEC_UNIT.sv"
 
 `include "IF.sv"
 `include "ID.sv"

@@ -22,7 +22,9 @@ module ID (
 `else 
     output logic [WORD_SIZE-1:0] o_CSR_rd,
 `endif
-
+    //Stall Signal
+    output logic       o_stall,
+    
     input  logic       i_CSR_en,
     
 //Register File Signals
@@ -44,6 +46,11 @@ module ID (
 `else 
     input  logic [`WORD_SIZE -1:0] i_instruction,
 `endif
+
+    //Read register signals from EX stage
+    input  logic       i_EX_memRead,
+    input  reg_t       i_EX_wnum,
+    input  logic       i_EX_wen,
     
     input i_clk,    // Clock
     input i_rstn  // Asynchronous reset active low
@@ -107,6 +114,15 @@ module ID (
     IMM_GENERATOR imm_generator (
         .o_ExtendedImmediate(o_IG_extendedImmediate), 
         .i_Instruction(i_instruction)
+    );
+
+    HAZARD_DETEC_UNIT hazard_detc_unit (
+        .o_stall(o_stall),
+        .i_ID_rnum1(RF_rnum1),
+        .i_ID_rnum2(RF_rnum2),
+        .i_EX_memRead(i_EX_memRead),
+        .i_EX_wnum(i_EX_wnum),
+        .i_EX_wen(i_EX_wen)
     );
 
 endmodule

@@ -8,6 +8,7 @@ module FORWARDING_UNIT (
     //Write register signals from MEM stage
     input  reg_t       i_MEM_wnum,
     input  logic       i_MEM_wen,
+    input  reg_t       i_MEM_rnum2,
     //Write register signals from WB stage
     input  reg_t       i_WB_wnum,
     input  logic       i_WB_wen,
@@ -44,9 +45,9 @@ module FORWARDING_UNIT (
         end
 
         //Write data memory fowarding selector definition
-        if (i_WB_wen  == 1'b1       &
-            i_WB_wnum != 1'b0       &
-            i_WB_wnum == i_EX_rnum2 &
+        if (i_WB_wen  == 1'b1        &
+            i_WB_wnum != 1'b0        &
+            i_WB_wnum == i_MEM_rnum2 &
             i_MEM_memWrite == 1'b1) begin
             o_foward3_sel = 1'b1;
         end

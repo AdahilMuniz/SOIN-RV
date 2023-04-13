@@ -132,6 +132,9 @@ module CORE(
 
     logic [6:0] opcode;
 
+    //Hazard Signal
+    logic stall_id;
+
     //PC
 `ifndef YOSYS
     data_t pc [3];
@@ -201,6 +204,7 @@ module CORE(
        .i_sel(BJC_result),
        .i_sum_branch_r(S_B_if),
        .i_jalr_r(JALR_RESULT),
+       .i_stall(stall_id),
        .i_clk(i_clk),
        .i_rstn(i_rstn)
     );
@@ -213,6 +217,9 @@ module CORE(
       .o_OPCode(opcode),
       
       .o_CSR_rd(CSR_rd[0]),
+
+      .o_stall(stall_id),
+
       .i_CSR_en(CSR_en),
 
       .o_IG_extendedImmediate(IG_extendedImmediate_id),
@@ -230,6 +237,11 @@ module CORE(
       .i_RF_wen(RF_wen),
 
       .i_instruction(IM_instruction_id),
+
+      .i_EX_memRead(MC_memRead[1]),
+      .i_EX_wnum(RF_wnum[1]),
+      .i_EX_wen(MC_regWrite[1]),
+
       .i_clk(i_clk),
       .i_rstn(i_rstn)
     );
@@ -266,9 +278,10 @@ module CORE(
       .i_MEM_wnum (RF_wnum[2]),
       .i_MEM_wd (ALU_Result_mem),
       .i_MEM_wen(MC_regWrite[2]),
+      .i_MEM_rnum2(RF_rnum2[2]),
 
       .i_WB_wnum(RF_wnum[3]),
-      .i_WB_wd(ALU_Result_wb),
+      .i_WB_wd(RF_wd),
       .i_WB_wen(MC_regWrite[3]),
       
       .i_MEM_memWrite(MC_memWrite[2])
@@ -424,7 +437,13 @@ module CORE(
             CSR_rd[3]               <= CSR_rd[2];//MEM to WB
 
             //IF to ID
-            IM_instruction_id       <= i_IM_instruction;
+            //IM_instruction_id       <= i_IM_instruction;
+            if (stall_id) begin
+                IM_instruction_id   <= IM_instruction_id;
+            end
+            else begin
+                IM_instruction_id   <= i_IM_instruction;
+            end
 
             //ID to EX
             funct7_ex               <= funct7_id;
@@ -454,7 +473,13 @@ module CORE(
             MC_memRead[1]           <= MC_memRead[0];
             MC_memRead[2]           <= MC_memRead[1];
 
-            MC_memWrite[1]          <= MC_memWrite[0];
+            if (stall_id) begin
+                MC_memWrite[1]       <= 0;
+            end
+            else begin
+                MC_memWrite[1]       <= MC_memWrite[0];
+            end
+
             MC_memWrite[2]          <= MC_memWrite[1];
 
             MC_regSrc[1]            <= MC_regSrc[0];
@@ -467,7 +492,13 @@ module CORE(
             MC_ALUSrc1[1]           <= MC_ALUSrc1[0];
             MC_ALUSrc2[1]           <= MC_ALUSrc2[0];
 
-            MC_regWrite[1]          <= MC_regWrite[0];
+            if (stall_id) begin
+                MC_regWrite[1]       <= 0;
+            end
+            else begin
+                MC_regWrite[1]       <= MC_regWrite[0];
+            end
+
             MC_regWrite[2]          <= MC_regWrite[1];
             MC_regWrite[3]          <= MC_regWrite[2];
 

@@ -58,6 +58,7 @@ module EX (
     input  reg_t       i_MEM_wnum,
     input  data_t      i_MEM_wd,
     input  logic       i_MEM_wen,
+    input  reg_t       i_MEM_rnum2,
     //Write register signals from WB stage
     input  reg_t       i_WB_wnum,
     input  data_t      i_WB_wd,
@@ -133,6 +134,7 @@ module EX (
         .i_EX_rnum2(i_EX_rnum2),
         .i_MEM_wnum(i_MEM_wnum),
         .i_MEM_wen(i_MEM_wen),
+        .i_MEM_rnum2(i_MEM_rnum2),
         .i_WB_wnum(i_WB_wnum),
         .i_WB_wen(i_WB_wen),
         .i_MEM_memWrite(i_MEM_memWrite)
