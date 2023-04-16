@@ -2,6 +2,7 @@ module FORWARDING_UNIT (
     output logic [1:0] o_foward1_sel,
     output logic [1:0] o_foward2_sel,
     output logic       o_foward3_sel,
+    output logic       o_foward4_sel,
     //Read register signals from EX stage
     input  reg_t       i_EX_rnum1,
     input  reg_t       i_EX_rnum2,
@@ -13,7 +14,9 @@ module FORWARDING_UNIT (
     input  reg_t       i_WB_wnum,
     input  logic       i_WB_wen,
     //Write memory signals from MEM Stage
-    input  logic       i_MEM_memWrite
+    input  logic       i_MEM_memWrite,
+    //Read registers signals from ID Stage
+    input  reg_t       i_ID_rnum1
 );
 
 
@@ -53,6 +56,16 @@ module FORWARDING_UNIT (
         end
         else begin
             o_foward3_sel = 1'b0;
+        end
+
+        //RNUM1 fowarding selector definition
+        if (i_WB_wen  == 1'b1       &
+            i_WB_wnum != 1'b0       &
+            i_WB_wnum == i_ID_rnum1) begin
+            o_foward4_sel = 1'b1;
+        end
+        else begin
+            o_foward4_sel = 1'b0;
         end
     end
 

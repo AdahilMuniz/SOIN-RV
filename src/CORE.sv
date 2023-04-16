@@ -168,6 +168,7 @@ module CORE(
 
     //Forwarding Selector Signals
     logic FORW_sel3;
+    logic FORW_sel4;
 
     /****Attributions****/
 
@@ -242,6 +243,8 @@ module CORE(
       .i_EX_wnum(RF_wnum[1]),
       .i_EX_wen(MC_regWrite[1]),
 
+      .i_FORW_sel4(FORW_sel4),
+
       .i_clk(i_clk),
       .i_rstn(i_rstn)
     );
@@ -252,7 +255,8 @@ module CORE(
       .o_ALU_Zero(ALU_Zero),
       .o_ALU_Result(ALU_Result_ex),
 
-      .FORW_sel3(FORW_sel3),
+      .o_FORW_sel3(FORW_sel3),
+      .o_FORW_sel4(FORW_sel4),
 
       //.o_CSR_rd(CSR_rd),
       //.i_CSR_en(CSR_en),
@@ -284,7 +288,8 @@ module CORE(
       .i_WB_wd(RF_wd),
       .i_WB_wen(MC_regWrite[3]),
       
-      .i_MEM_memWrite(MC_memWrite[2])
+      .i_MEM_memWrite(MC_memWrite[2]),
+      .i_ID_rnum1(RF_rnum1[0])
     );
 
     MEM mem_stage (
@@ -422,7 +427,7 @@ module CORE(
             RF_wnum[2]              <= RF_wnum[1];//EX to MEM
             RF_wnum[3]              <= RF_wnum[2];//MEM to ID
 
-            //Write Register Number
+            //Read Register Number
             RF_rnum1[1]             <= RF_rnum1[0];//ID to EX
             RF_rnum1[2]             <= RF_rnum1[1];//EX to MEM
             RF_rnum1[3]             <= RF_rnum1[2];//MEM to ID

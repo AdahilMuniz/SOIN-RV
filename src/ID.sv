@@ -51,6 +51,9 @@ module ID (
     input  logic       i_EX_memRead,
     input  reg_t       i_EX_wnum,
     input  logic       i_EX_wen,
+
+    //Forwarding selector signal from Forwarding Unit
+    input logic        i_FORW_sel4,
     
     input i_clk,    // Clock
     input i_rstn  // Asynchronous reset active low
@@ -64,8 +67,10 @@ module ID (
         //CSR
 `ifndef YOSYS
     data_t   CSR_wd;
+    data_t   RF_rd1;
 `else 
     logic [WORD_SIZE-1:0]  CSR_wd;
+    logic [WORD_SIZE-1:0]  RF_rd1;
 `endif
     logic [11:0] CSR_addr;
     logic [2:0]  CSR_Funct3;
@@ -89,8 +94,11 @@ module ID (
     assign o_RF_rnum1  = RF_rnum1;
     assign o_RF_rnum2  = RF_rnum2;
 
+    //Register Read Selector
+    assign o_RF_rd1 = (i_FORW_sel4==1'b1) ? i_RF_wd : RF_rd1;
+
     REGISTER_FILE register_file (
-        .o_Rd1(o_RF_rd1), 
+        .o_Rd1(RF_rd1), 
         .o_Rd2(o_RF_rd2), 
         .i_Rnum1(RF_rnum1), 
         .i_Rnum2(RF_rnum2), 
