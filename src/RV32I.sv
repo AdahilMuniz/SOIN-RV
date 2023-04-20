@@ -11,6 +11,7 @@ import types_pkg::*;
 `endif
 
 //RV32I Files
+`include "FORWARDING_UNIT.sv"
 `include "ALU.sv"
 `include "ALU_CONTROL.sv"
 `include "IMM_GENERATOR.sv"
@@ -21,6 +22,7 @@ import types_pkg::*;
 `include "LOAD_STORE_UNIT.sv"
 `include "REGISTER_FILE.sv"
 `include "CSR.sv"
+`include "HAZARD_DETEC_UNIT.sv"
 
 `include "IF.sv"
 `include "ID.sv"

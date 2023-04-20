@@ -14,6 +14,10 @@ module EX (
 `else 
     output logic [`WORD_SIZE -1:0] o_ALU_Result,
 `endif
+    //Forward Selector
+    output logic o_FORW_sel3,
+    output logic o_FORW_sel4,
+
     input i_ALU_sel_src1,
     input i_ALU_sel_src2,
 
@@ -43,11 +47,27 @@ module EX (
 
     //Immediate Generator Signals
 `ifndef YOSYS
-    input data_t i_IG_extendedImmediate
+    input data_t i_IG_extendedImmediate,
 `else 
-    input logic [`WORD_SIZE -1:0] i_IG_extendedImmediate
+    input logic [`WORD_SIZE -1:0] i_IG_extendedImmediate,
 `endif
 
+    //Read register signals from EX stage
+    input  reg_t       i_EX_rnum1,
+    input  reg_t       i_EX_rnum2,
+    //Write register signals from MEM stage
+    input  reg_t       i_MEM_wnum,
+    input  data_t      i_MEM_wd,
+    input  logic       i_MEM_wen,
+    input  reg_t       i_MEM_rnum2,
+    //Write register signals from WB stage
+    input  reg_t       i_WB_wnum,
+    input  data_t      i_WB_wd,
+    input  logic       i_WB_wen,
+    //Write memory signals from MEM Stage
+    input  logic       i_MEM_memWrite,
+    //Read registers signals from ID Stage
+    input  reg_t       i_ID_rnum1
 );
 
     //SHIFT Branch
@@ -67,12 +87,12 @@ module EX (
 `endif
     logic [3:0] ALU_Operation;
 
-
     //ALU Control Signals
     logic [3:0] ALUC_ALUControlLines;
 
-    //Branch and Jump Control Signals
-    //logic [1:0] BJC_result;
+    //Forwarding Unit Signals
+    logic [1:0] FORW_sel1;
+    logic [1:0] FORW_sel2;
 
     /****SHIFT-Branch****/
     assign SH_B = i_IG_extendedImmediate<<1;
@@ -80,9 +100,15 @@ module EX (
     assign o_S_B = i_pc + SH_B;
 
     //ALU Source 1
-    assign ALU_Op1 = i_ALU_sel_src1 ? i_pc:i_RF_rd1;
+    assign ALU_Op1 = i_ALU_sel_src1     ? i_pc                  :
+                     FORW_sel1 == 2'b10 ? i_MEM_wd              :
+                     FORW_sel1 == 2'b01 ? i_WB_wd               :
+                                         i_RF_rd1;
     //ALU Source 2
-    assign ALU_Op2 = i_ALU_sel_src2 ? i_IG_extendedImmediate:i_RF_rd2;
+    assign ALU_Op2 = i_ALU_sel_src2     ? i_IG_extendedImmediate:
+                     FORW_sel2 == 2'b10 ? i_MEM_wd              :
+                     FORW_sel2 == 2'b01 ? i_WB_wd               :
+                                         i_RF_rd2;
     //ALU Operation
     assign ALU_Operation = ALUC_ALUControlLines;
 
@@ -102,11 +128,20 @@ module EX (
         .i_ALUOp(i_ALUC_ALUOP)
     );
 
-    /*BRANCH_JUMP_CONTROL branch_jump_control(
-        .o_B_J_result(BJC_result),
-        .i_Ctrl_Jump(i_BJC_ctrl_jump),
-        .i_Zero(o_ALU_Zero),
-        .i_Funct3(i_Funct3)
-    );*/
+    FORWARDING_UNIT forwarding_unit (
+        .o_foward1_sel(FORW_sel1),
+        .o_foward2_sel(FORW_sel2),
+        .o_foward3_sel(o_FORW_sel3),
+        .o_foward4_sel(o_FORW_sel4),
+        .i_EX_rnum1(i_EX_rnum1),
+        .i_EX_rnum2(i_EX_rnum2),
+        .i_MEM_wnum(i_MEM_wnum),
+        .i_MEM_wen(i_MEM_wen),
+        .i_MEM_rnum2(i_MEM_rnum2),
+        .i_WB_wnum(i_WB_wnum),
+        .i_WB_wen(i_WB_wen),
+        .i_MEM_memWrite(i_MEM_memWrite),
+        .i_ID_rnum1(i_ID_rnum1)
+    );
 
 endmodule

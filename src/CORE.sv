@@ -51,7 +51,10 @@ module CORE(
     logic [`WORD_SIZE -1:0] RF_rd2_mem;
     logic [`WORD_SIZE -1:0] RF_wd;
 `endif
-    logic [4:0] RF_wnum [4];
+    logic [4:0] RF_wnum  [4];
+    logic [4:0] RF_rnum1 [4];
+    logic [4:0] RF_rnum2 [4];
+
     logic RF_wen;
 
     //Immediate Generator Signals
@@ -129,6 +132,9 @@ module CORE(
 
     logic [6:0] opcode;
 
+    //Hazard Signal
+    logic stall_id;
+
     //PC
 `ifndef YOSYS
     data_t pc [3];
@@ -160,6 +166,10 @@ module CORE(
         logic [`WORD_SIZE -1:0] IM_instruction_id;
 `endif
 
+    //Forwarding Selector Signals
+    logic FORW_sel3;
+    logic FORW_sel4;
+
     /****Attributions****/
 
     assign o_IM_addr = pc[0]; // PC to IM_addr
@@ -181,9 +191,9 @@ module CORE(
 
     //Data Memory attributions
     assign o_DM_addr = ALU_Result_mem;
-    assign o_DM_wd   = RF_rd2_mem;
-    assign o_DM_wen  = LSU_range_select;
     assign o_DM_ren  = MC_memRead[2];
+    assign o_DM_wen  = LSU_range_select;
+    assign o_DM_wd   = FORW_sel3 ? RF_wd: RF_rd2_mem;
 
     /***JALR_RESULT***/
     assign JALR_RESULT = {ALU_Result_mem[`WORD_SIZE-1:1], 1'b0};
@@ -195,6 +205,7 @@ module CORE(
        .i_sel(BJC_result),
        .i_sum_branch_r(S_B_if),
        .i_jalr_r(JALR_RESULT),
+       .i_stall(stall_id),
        .i_clk(i_clk),
        .i_rstn(i_rstn)
     );
@@ -207,19 +218,33 @@ module CORE(
       .o_OPCode(opcode),
       
       .o_CSR_rd(CSR_rd[0]),
+
+      .o_stall(stall_id),
+
       .i_CSR_en(CSR_en),
 
       .o_IG_extendedImmediate(IG_extendedImmediate_id),
 
       .o_RF_rd1(RF_rd1_id),
       .o_RF_rd2(RF_rd2_id),
+
+
       .o_RF_wnum(RF_wnum[0]),
+      .o_RF_rnum1(RF_rnum1[0]),
+      .o_RF_rnum2(RF_rnum2[0]),
 
       .i_RF_wd(RF_wd),
       .i_RF_wnum(RF_wnum[3]),
       .i_RF_wen(RF_wen),
 
       .i_instruction(IM_instruction_id),
+
+      .i_EX_memRead(MC_memRead[1]),
+      .i_EX_wnum(RF_wnum[1]),
+      .i_EX_wen(MC_regWrite[1]),
+
+      .i_FORW_sel4(FORW_sel4),
+
       .i_clk(i_clk),
       .i_rstn(i_rstn)
     );
@@ -229,6 +254,10 @@ module CORE(
     
       .o_ALU_Zero(ALU_Zero),
       .o_ALU_Result(ALU_Result_ex),
+
+      .o_FORW_sel3(FORW_sel3),
+      .o_FORW_sel4(FORW_sel4),
+
       //.o_CSR_rd(CSR_rd),
       //.i_CSR_en(CSR_en),
     
@@ -245,7 +274,22 @@ module CORE(
       .i_RF_rd1(RF_rd1_ex),
       .i_RF_rd2(RF_rd2_ex),
     
-      .i_IG_extendedImmediate(IG_extendedImmediate_ex)
+      .i_IG_extendedImmediate(IG_extendedImmediate_ex),
+
+      .i_EX_rnum1(RF_rnum1[1]),
+      .i_EX_rnum2(RF_rnum2[1]),
+
+      .i_MEM_wnum (RF_wnum[2]),
+      .i_MEM_wd (ALU_Result_mem),
+      .i_MEM_wen(MC_regWrite[2]),
+      .i_MEM_rnum2(RF_rnum2[2]),
+
+      .i_WB_wnum(RF_wnum[3]),
+      .i_WB_wd(RF_wd),
+      .i_WB_wen(MC_regWrite[3]),
+      
+      .i_MEM_memWrite(MC_memWrite[2]),
+      .i_ID_rnum1(RF_rnum1[0])
     );
 
     MEM mem_stage (
@@ -266,13 +310,13 @@ module CORE(
     );
 
     WB wb_stage (
-    .o_RF_wd(RF_wd),
-    .i_regSrc(MC_regSrc[3]),
+        .o_RF_wd(RF_wd),
+        .i_regSrc(MC_regSrc[3]),
 
-    .i_CSR_rd(CSR_rd[3]),
-    .i_S_FOUR(S_FOUR[4]),
-    .i_LSU_data_load(LSU_data_load_wb),
-    .i_ALU_Result(ALU_Result_wb)
+        .i_CSR_rd(CSR_rd[3]),
+        .i_S_FOUR(S_FOUR[4]),
+        .i_LSU_data_load(LSU_data_load_wb),
+        .i_ALU_Result(ALU_Result_wb)
 
     );
 
@@ -304,6 +348,14 @@ module CORE(
             RF_wnum[1]              <= 0;//EX
             RF_wnum[2]              <= 0;//MEM
             RF_wnum[3]              <= 0;//ID
+
+            RF_rnum1[1]             <= 0;//EX
+            RF_rnum1[2]             <= 0;//MEM
+            RF_rnum1[3]             <= 0;//ID
+
+            RF_rnum2[1]             <= 0;//EX
+            RF_rnum2[2]             <= 0;//MEM
+            RF_rnum2[3]             <= 0;//ID
 
             CSR_rd[1]               <= 0;//EX
             CSR_rd[2]               <= 0;//MEM
@@ -375,13 +427,28 @@ module CORE(
             RF_wnum[2]              <= RF_wnum[1];//EX to MEM
             RF_wnum[3]              <= RF_wnum[2];//MEM to ID
 
+            //Read Register Number
+            RF_rnum1[1]             <= RF_rnum1[0];//ID to EX
+            RF_rnum1[2]             <= RF_rnum1[1];//EX to MEM
+            RF_rnum1[3]             <= RF_rnum1[2];//MEM to ID
+
+            RF_rnum2[1]             <= RF_rnum2[0];//ID to EX
+            RF_rnum2[2]             <= RF_rnum2[1];//EX to MEM
+            RF_rnum2[3]             <= RF_rnum2[2];//MEM to ID
+
             //CSR rd
             CSR_rd[1]               <= CSR_rd[0];//ID to EX
             CSR_rd[2]               <= CSR_rd[1];//EX to MEM
             CSR_rd[3]               <= CSR_rd[2];//MEM to WB
 
             //IF to ID
-            IM_instruction_id       <= i_IM_instruction;
+            //IM_instruction_id       <= i_IM_instruction;
+            if (stall_id) begin
+                IM_instruction_id   <= IM_instruction_id;
+            end
+            else begin
+                IM_instruction_id   <= i_IM_instruction;
+            end
 
             //ID to EX
             funct7_ex               <= funct7_id;
@@ -411,7 +478,13 @@ module CORE(
             MC_memRead[1]           <= MC_memRead[0];
             MC_memRead[2]           <= MC_memRead[1];
 
-            MC_memWrite[1]          <= MC_memWrite[0];
+            if (stall_id) begin
+                MC_memWrite[1]       <= 0;
+            end
+            else begin
+                MC_memWrite[1]       <= MC_memWrite[0];
+            end
+
             MC_memWrite[2]          <= MC_memWrite[1];
 
             MC_regSrc[1]            <= MC_regSrc[0];
@@ -424,7 +497,13 @@ module CORE(
             MC_ALUSrc1[1]           <= MC_ALUSrc1[0];
             MC_ALUSrc2[1]           <= MC_ALUSrc2[0];
 
-            MC_regWrite[1]          <= MC_regWrite[0];
+            if (stall_id) begin
+                MC_regWrite[1]       <= 0;
+            end
+            else begin
+                MC_regWrite[1]       <= MC_regWrite[0];
+            end
+
             MC_regWrite[2]          <= MC_regWrite[1];
             MC_regWrite[3]          <= MC_regWrite[2];
 
